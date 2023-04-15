@@ -1,0 +1,32 @@
+{
+  "extends": "@tsconfig/strictest",
+  "compilerOptions": {
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "target": "ES2021",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    // override extra strict rules
+    "verbatimModuleSyntax": false,
+    "exactOptionalPropertyTypes": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "strictPropertyInitialization": false,
+    // enable required features
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    // output
+    "outDir": "out-tsc",
+    "rootDir": "./",
+    "incremental": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "noEmitOnError": true,
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}
