@@ -9,7 +9,7 @@
     "module": "ESNext",
     "moduleResolution": "node",
     // override extra strict rules
-    "verbatimModuleSyntax": false,
+    // "verbatimModuleSyntax": false,
     "exactOptionalPropertyTypes": false,
     "noPropertyAccessFromIndexSignature": false,
     "strictPropertyInitialization": false,

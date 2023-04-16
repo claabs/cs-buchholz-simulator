@@ -2,7 +2,7 @@ import { LitElement, PropertyValueMap, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import '@vaadin/grid/theme/material/vaadin-grid.js';
 import type { GridBodyRenderer } from '@vaadin/grid';
-import { MatchupProbability } from './settings.js';
+import type { MatchupProbability } from './settings.js';
 
 interface MatchupGridRowCell {
   bo1TeamAWinrate: number;
@@ -80,7 +80,7 @@ export class MatchupTable<T extends string> extends LitElement {
             id=${`col-${teamName}`}
             width="2em"
             flex-grow="2"
-            header=${teamName}
+            header=${teamName as string}
             index=${index}
             .renderer=${this.matchupRowRenderer}
           ></vaadin-grid-column>`
