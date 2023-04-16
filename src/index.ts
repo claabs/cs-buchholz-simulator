@@ -29,7 +29,7 @@ interface TeamResultsCounts<T extends string> {
   allLosses: Map<T, number>;
 }
 
-const generateEasyProbabilities = <T extends string>(
+export const generateEasyProbabilities = <T extends string>(
   ratings: Record<T, number>
 ): MatchupProbability<T>[] =>
   Object.entries<number>(ratings).reduce((acc, [team, rating], index, ratingEntries) => {
@@ -111,6 +111,11 @@ const categorizeResults = <T extends string>(
   });
   return teamResultsCounts;
 };
+
+export const getSeedOrder = <T extends string>(seeding: Record<string, T>) =>
+  Object.entries(seeding)
+    .sort(([seedA], [seedB]) => parseInt(seedA, 10) - parseInt(seedB, 10))
+    .map(([, teamName]) => teamName);
 
 const matchRecordGroup = <T extends string>(
   recordGroup: TeamStandingWithDifficulty<T>[]

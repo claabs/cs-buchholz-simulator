@@ -1,14 +1,16 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
-
-const logo = new URL('../../assets/open-wc-logo.svg', import.meta.url).href;
+import '@vaadin/grid/theme/material/vaadin-grid.js';
+import { rmrEuARating, rmrEuASeeding } from './settings.js';
+import { generateEasyProbabilities, getSeedOrder } from '.';
+import './matchup-table.js';
 
 @customElement('cs-buchholz-simulator')
 export class CsBuchholzSimulator extends LitElement {
   @property({ type: String }) header = 'My app';
 
   static override styles = css`
-    :host {
+    /* :host {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -20,7 +22,7 @@ export class CsBuchholzSimulator extends LitElement {
       margin: 0 auto;
       text-align: center;
       background-color: var(--cs-buchholz-simulator-background-color);
-    }
+    } */
 
     main {
       flex-grow: 1;
@@ -29,15 +31,6 @@ export class CsBuchholzSimulator extends LitElement {
     .logo {
       margin-top: 36px;
       animation: app-logo-spin infinite 20s linear;
-    }
-
-    @keyframes app-logo-spin {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
     }
 
     .app-footer {
@@ -50,27 +43,20 @@ export class CsBuchholzSimulator extends LitElement {
     }
   `;
 
+  private seedOrder = getSeedOrder(rmrEuASeeding);
+
+  private matchupProbabilities = generateEasyProbabilities(rmrEuARating);
+
   override render() {
     return html`
       <main>
-        <div class="logo"><img alt="open-wc logo" src=${logo} /></div>
         <h1>${this.header}</h1>
 
-        <p>Edit <code>src/CsBuchholzSimulator.ts</code> and save to reload.</p>
-        <a
-          class="app-link"
-          href="https://open-wc.org/guides/developing-components/code-examples"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Code examples
-        </a>
+        <matchup-table
+          .seedOrder=${this.seedOrder}
+          .matchupProbabilities=${this.matchupProbabilities}
+        ></matchup-table>
       </main>
-
-      <p class="app-footer">
-        🚽 Made with love by
-        <a target="_blank" rel="noopener noreferrer" href="https://github.com/open-wc">open-wc</a>.
-      </p>
     `;
   }
 }
