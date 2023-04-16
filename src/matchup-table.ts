@@ -1,7 +1,9 @@
+/* eslint-disable no-param-reassign */
 import { LitElement, PropertyValueMap, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import '@vaadin/grid/theme/material/vaadin-grid.js';
-import type { GridBodyRenderer } from '@vaadin/grid';
+import '@vaadin/grid/theme/lumo/vaadin-grid.js';
+import type { GridCellPartNameGenerator } from '@vaadin/grid';
+import { columnBodyRenderer, GridColumnBodyLitRenderer } from '@vaadin/grid/lit.js';
 import type { MatchupProbability } from './settings.js';
 
 interface MatchupGridRowCell {
@@ -51,38 +53,55 @@ export class MatchupTable<T extends string> extends LitElement {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  private matchupRowRenderer: GridBodyRenderer<MatchupGridRowCell[]> = (root, column, model) => {
-    // eslint-disable-next-line no-param-reassign
-    root.textContent = `${
-      model.item[parseInt(column.getAttribute('index') || '-1', 10)]?.bo3TeamAWinrate.toFixed(2) ||
-      ''
-    }`;
+  private matchupRowRenderer: GridColumnBodyLitRenderer<MatchupGridRowCell[]> = (
+    item,
+    _model,
+    column
+  ) => {
+    const matchup = item[parseInt(column.getAttribute('index') || '-1', 10)];
+    if (!matchup) return html``;
+
+    return html`<span>${(matchup.bo1TeamAWinrate * 100).toFixed(0)}</span>
+      <br />
+      <span> ${(matchup.bo3TeamAWinrate * 100).toFixed(0)}</span>`;
   };
 
-  private headerColumnRenderer: GridBodyRenderer<string[]> = (root, _column, model) => {
-    // eslint-disable-next-line no-param-reassign
-    root.textContent = `${this.seedOrder[model.index] || 'error'}`;
-    root.part.add('header-cell');
+  private headerColumnRenderer: GridColumnBodyLitRenderer<MatchupGridRowCell[]> = (
+    _items,
+    model
+  ) => {
+    return html`${this.seedOrder[model.index] || 'error'}`;
+  };
+
+  private cellPartNameGenerator: GridCellPartNameGenerator<MatchupGridRowCell[]> = (column) => {
+    if (column.id === 'col-header') return 'header-cell';
+    return '';
   };
 
   override render() {
-    return html` <vaadin-grid .items=${this.gridItems}>
+    return html` <vaadin-grid
+      theme="wrap-cell-content column-borders"
+      .items=${this.gridItems}
+      .cellPartNameGenerator=${this.cellPartNameGenerator}
+    >
       <vaadin-grid-column
-        id="header"
-        width="2em"
+        id="col-header"
+        width="2rem"
         flex-grow="2"
-        .renderer=${this.headerColumnRenderer}
+        header="Team Name"
+        frozen
+        ${columnBodyRenderer(this.headerColumnRenderer)}
       ></vaadin-grid-column>
       ${this.seedOrder.map(
         (teamName, index) =>
           html`<vaadin-grid-column
             id=${`col-${teamName}`}
-            width="2em"
+            width="2rem"
             flex-grow="2"
             header=${teamName as string}
             index=${index}
-            .renderer=${this.matchupRowRenderer}
+            text-align="center"
+            ${columnBodyRenderer(this.matchupRowRenderer)}
           ></vaadin-grid-column>`
       )}
     </vaadin-grid>`;
