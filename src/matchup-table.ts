@@ -1,23 +1,28 @@
-/* eslint-disable no-param-reassign */
-import { LitElement, PropertyValueMap, html } from 'lit';
+/* eslint-disable @typescript-eslint/unbound-method */
+import { LitElement, PropertyValueMap, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import '@vaadin/grid/theme/lumo/vaadin-grid.js';
 import type { GridCellPartNameGenerator } from '@vaadin/grid';
 import { columnBodyRenderer, GridColumnBodyLitRenderer } from '@vaadin/grid/lit.js';
 import type { MatchupProbability } from './settings.js';
+import './matchup-cell.js';
+import type { MatchupCellData } from './matchup-cell.js';
 
-interface MatchupGridRowCell {
-  bo1TeamAWinrate: number;
-  bo3TeamAWinrate: number;
+export interface IndexedMatchupProbability<T extends string> extends MatchupProbability<T> {
+  index: number;
 }
 
 const matchupProbabilitiesToGridItems = <T extends string>(
   matchupProbabilities: MatchupProbability<T>[],
   seedOrder: T[]
-): (MatchupGridRowCell | undefined)[][] => {
+): (IndexedMatchupProbability<T> | undefined)[][] => {
+  // Index matchups so we can quickly update them when cells are updated
+  const indexedMatchupProbabilities: IndexedMatchupProbability<T>[] = matchupProbabilities.map(
+    (prob, index) => ({ ...prob, index })
+  );
   return seedOrder.map((rowTeamName, rowIndex) => {
     // Get all the matchups associated with the team (for performance?)
-    const teamMatchupsProbabilities = matchupProbabilities.filter((prob) =>
+    const teamMatchupsProbabilities = indexedMatchupProbabilities.filter((prob) =>
       [prob.teamA, prob.teamB].includes(rowTeamName)
     );
     const opposingTeams = seedOrder.map((opposingTeam, colIndex) =>
@@ -29,8 +34,11 @@ const matchupProbabilitiesToGridItems = <T extends string>(
         [prob.teamA, prob.teamB].includes(opposingTeamName)
       );
       return {
-        bo1TeamAWinrate: matchup?.bo1TeamAWinrate || 0,
-        bo3TeamAWinrate: matchup?.bo3TeamAWinrate || 0,
+        teamA: matchup?.teamA || ('Team A' as T),
+        teamB: matchup?.teamB || ('Team B' as T),
+        bo1TeamAWinrate: (matchup?.bo1TeamAWinrate || 0) * 100,
+        bo3TeamAWinrate: (matchup?.bo3TeamAWinrate || 0) * 100,
+        index: matchup?.index || -1,
       };
     });
   });
@@ -45,7 +53,16 @@ export class MatchupTable<T extends string> extends LitElement {
   public matchupProbabilities: MatchupProbability<T>[] = [];
 
   @state()
-  private gridItems: (MatchupGridRowCell | undefined)[][] = [];
+  private gridItems: (MatchupCellData | undefined)[][] = [];
+
+  static override styles = css`
+    vaadin-grid-cell-content {
+      padding: var(--lumo-space-xs);
+    }
+    vaadin-grid::part(header-cell) {
+      overflow-wrap: normal;
+    }
+  `;
 
   protected override updated(changedProperties: PropertyValueMap<this>): void {
     if (changedProperties.has('matchupProbabilities') || changedProperties.has('seedOrder')) {
@@ -53,7 +70,7 @@ export class MatchupTable<T extends string> extends LitElement {
     }
   }
 
-  private matchupRowRenderer: GridColumnBodyLitRenderer<MatchupGridRowCell[]> = (
+  private matchupRowRenderer: GridColumnBodyLitRenderer<IndexedMatchupProbability<T>[]> = (
     item,
     _model,
     column
@@ -61,28 +78,55 @@ export class MatchupTable<T extends string> extends LitElement {
     const matchup = item[parseInt(column.getAttribute('index') || '-1', 10)];
     if (!matchup) return html``;
 
-    return html`<span>${(matchup.bo1TeamAWinrate * 100).toFixed(0)}</span>
-      <br />
-      <span> ${(matchup.bo3TeamAWinrate * 100).toFixed(0)}</span>`;
+    return html`<matchup-cell
+      .bo1TeamAWinrate=${matchup.bo1TeamAWinrate}
+      .bo3TeamAWinrate=${matchup.bo3TeamAWinrate}
+      .matchupIndex=${matchup.index}
+      teamA="${matchup.teamA as string}"
+      teamB="${matchup.teamB as string}"
+    ></matchup-cell>`;
   };
 
-  private headerColumnRenderer: GridColumnBodyLitRenderer<MatchupGridRowCell[]> = (
+  private headerColumnRenderer: GridColumnBodyLitRenderer<IndexedMatchupProbability<T>[]> = (
     _items,
     model
   ) => {
     return html`${this.seedOrder[model.index] || 'error'}`;
   };
 
-  private cellPartNameGenerator: GridCellPartNameGenerator<MatchupGridRowCell[]> = (column) => {
+  private cellPartNameGenerator: GridCellPartNameGenerator<IndexedMatchupProbability<T>[]> = (
+    column
+  ) => {
     if (column.id === 'col-header') return 'header-cell';
     return '';
   };
+
+  private onMatchupValueChanged(e: CustomEvent<MatchupCellData>) {
+    const prob = this.matchupProbabilities[e.detail.index];
+    if (prob) {
+      prob.bo1TeamAWinrate = e.detail.bo1TeamAWinrate / 100;
+      prob.bo3TeamAWinrate = e.detail.bo3TeamAWinrate / 100;
+    }
+    this.dispatchProbabilityValueChanged();
+  }
+
+  private dispatchProbabilityValueChanged() {
+    const options: CustomEventInit<MatchupProbability<T>[]> = {
+      detail: this.matchupProbabilities,
+      bubbles: true,
+      composed: true,
+    };
+    this.dispatchEvent(
+      new CustomEvent<MatchupProbability<T>[]>('probabilityValueChanged', options)
+    );
+  }
 
   override render() {
     return html` <vaadin-grid
       theme="wrap-cell-content column-borders"
       .items=${this.gridItems}
       .cellPartNameGenerator=${this.cellPartNameGenerator}
+      @matchupValueChanged=${this.onMatchupValueChanged}
     >
       <vaadin-grid-column
         id="col-header"
