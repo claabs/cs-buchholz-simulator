@@ -4,6 +4,7 @@ import html from '@web/rollup-plugin-html';
 import { importMetaAssets } from '@web/rollup-plugin-import-meta-assets';
 import esbuild from 'rollup-plugin-esbuild';
 import { generateSW } from 'rollup-plugin-workbox';
+import commonjs from '@rollup/plugin-commonjs';
 import path from 'path';
 
 export default {
@@ -27,6 +28,12 @@ export default {
     /** Resolve bare module imports */
     nodeResolve(),
     /** Minify JS, compile JS to a lower language target */
+    commonjs({
+      include: [
+        // the commonjs plugin is slow, list the required packages explicitly:
+        '**/node_modules/color-scales/**/*',
+      ],
+    }),
     esbuild({
       minify: true,
       target: ['chrome64', 'firefox67', 'safari11.1'],

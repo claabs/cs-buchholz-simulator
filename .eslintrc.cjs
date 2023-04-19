@@ -18,5 +18,5 @@ module.exports = {
     'import/extensions': ['error', 'ignorePackages' ],
     'class-methods-use-this': 'off',
   },
-  ignorePatterns: ['dist/**', 'node_modules/**', '*.?js', 'out-tsc/**'],
+  ignorePatterns: ['dist/**', 'node_modules/**', '*.js', '*.cjs', '*.mjs', 'out-tsc/**'],
 };

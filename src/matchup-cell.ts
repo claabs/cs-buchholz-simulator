@@ -9,23 +9,16 @@ import '@vaadin/dialog/theme/lumo/vaadin-dialog.js';
 import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '@vaadin-component-factory/vcf-slider';
 import type { ValueChangedEvent } from '@vaadin-component-factory/vcf-slider/out-tsc/src/vcf-slider';
+import ColorScale from 'color-scales';
 import type { IndexedMatchupProbability } from './matchup-table';
 
 export type MatchupCellData = Omit<IndexedMatchupProbability<string>, 'teamA' | 'teamB'>;
 
+// 'lightcoral', 'white', 'lightskyblue'
+const gradient = new ColorScale(0, 100, ['#F08080', '#FFFFFF', '#87CEFA']);
+
 const percentToColor = (perc: number): string => {
-  let r;
-  let g;
-  const b = 0;
-  if (perc < 50) {
-    r = 255;
-    g = Math.round(5.1 * perc);
-  } else {
-    g = 255;
-    r = Math.round(510 - 5.1 * perc);
-  }
-  const h = r * 0x10000 + g * 0x100 + b * 0x1;
-  return `#${`000000${h.toString(16)}`.slice(-6)}`;
+  return gradient.getColor(perc).toHexString();
 };
 
 /**
@@ -117,8 +110,12 @@ export class MatchupCell extends LitElement {
   }
 
   private saveDialog() {
-    if (this.dialogData.bo1TeamAWinrate) this.bo1TeamAWinrate = this.dialogData.bo1TeamAWinrate;
-    if (this.dialogData.bo3TeamAWinrate) this.bo3TeamAWinrate = this.dialogData.bo3TeamAWinrate;
+    if (this.dialogData.bo1TeamAWinrate !== undefined) {
+      this.bo1TeamAWinrate = this.dialogData.bo1TeamAWinrate;
+    }
+    if (this.dialogData.bo3TeamAWinrate !== undefined) {
+      this.bo3TeamAWinrate = this.dialogData.bo3TeamAWinrate;
+    }
     this.closeDialog();
     this.dispatchMatchupValueChanged();
   }
