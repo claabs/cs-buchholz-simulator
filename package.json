@@ -18,8 +18,10 @@
     "@vaadin-component-factory/vcf-slider": "^23.3.6",
     "@vaadin/button": "^24.0.2",
     "@vaadin/dialog": "^24.0.2",
+    "@vaadin/form-layout": "^24.0.2",
     "@vaadin/grid": "^24.0.2",
     "@vaadin/horizontal-layout": "^24.0.2",
+    "@vaadin/number-field": "^24.0.2",
     "@vaadin/vertical-layout": "^24.0.2",
     "color-scales": "^3.0.2",
     "lit": "^2.0.2"

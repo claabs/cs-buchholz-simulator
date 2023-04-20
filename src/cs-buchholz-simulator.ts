@@ -4,6 +4,7 @@ import '@vaadin/grid/theme/material/vaadin-grid.js';
 import { rmrEuARating, rmrEuASeeding } from './settings.js';
 import { generateEasyProbabilities, getSeedOrder } from '.';
 import './matchup-table.js';
+import './team-ratings.js';
 
 @customElement('cs-buchholz-simulator')
 export class CsBuchholzSimulator extends LitElement {
@@ -52,6 +53,7 @@ export class CsBuchholzSimulator extends LitElement {
       <main>
         <h1>${this.header}</h1>
 
+        <team-ratings .seedOrder=${this.seedOrder} .teamRating=${rmrEuARating}></team-ratings>
         <matchup-table
           .seedOrder=${this.seedOrder}
           .matchupProbabilities=${this.matchupProbabilities}
