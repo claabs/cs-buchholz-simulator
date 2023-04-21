@@ -1,8 +1,10 @@
 // import { hmrPlugin, presets } from '@open-wc/dev-server-hmr';
 import { fromRollup } from '@web/dev-server-rollup';
 import rollupCommonjs from '@rollup/plugin-commonjs';
+import rollupReplace from '@rollup/plugin-replace';
 
 const commonjs = fromRollup(rollupCommonjs);
+const replace = fromRollup(rollupReplace);
 
 
 /** Use Hot Module replacement by adding --hmr to the start command */
@@ -30,6 +32,10 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
         // the commonjs plugin is slow, list the required packages explicitly:
         '**/node_modules/color-scales/**/*',
       ],
+    }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('dev'),
+      preventAssignment: true,
     }),
   ],
 

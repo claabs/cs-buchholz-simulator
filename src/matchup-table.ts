@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { LitElement, PropertyValueMap, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import '@vaadin/grid/theme/lumo/vaadin-grid.js';
@@ -46,10 +45,16 @@ const matchupProbabilitiesToGridItems = <T extends string>(
 
 @customElement('matchup-table')
 export class MatchupTable<T extends string> extends LitElement {
-  @property({ type: Array, reflect: true })
+  @property({
+    type: Array,
+    reflect: true,
+  })
   public seedOrder: T[] = [];
 
-  @property({ type: Array, reflect: true })
+  @property({
+    type: Array,
+    reflect: true,
+  })
   public matchupProbabilities: MatchupProbability<T>[] = [];
 
   @state()

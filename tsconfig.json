@@ -7,7 +7,7 @@
     ],
     "target": "ES2021",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     // override extra strict rules
     // "verbatimModuleSyntax": false,
     "exactOptionalPropertyTypes": false,

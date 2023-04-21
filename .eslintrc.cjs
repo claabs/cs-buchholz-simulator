@@ -17,6 +17,7 @@ module.exports = {
     'import/no-cycle': 'off',
     'import/extensions': ['error', 'ignorePackages' ],
     'class-methods-use-this': 'off',
+    '@typescript-eslint/unbound-method': 'off'
   },
   ignorePatterns: ['dist/**', 'node_modules/**', '*.js', '*.cjs', '*.mjs', 'out-tsc/**'],
 };

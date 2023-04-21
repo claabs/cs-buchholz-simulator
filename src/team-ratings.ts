@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import '@vaadin-component-factory/vcf-slider';
@@ -9,12 +8,16 @@ import './matchup-cell.js';
 import type { NumberFieldValueChangedEvent, NumberField } from '@vaadin/number-field';
 import '@vaadin/form-layout';
 import type { FormLayoutResponsiveStep } from '@vaadin/form-layout';
+import { produce } from 'immer';
 import type { MatchupProbability } from './settings.js';
 
 export interface IndexedMatchupProbability<T extends string> extends MatchupProbability<T> {
   index: number;
 }
 
+/**
+ * @event {CustomEvent<Record<T, number>>} teamRatingValueChanged - Fired when the team rating value changes
+ */
 @customElement('team-ratings')
 export class TeamRatings<T extends string> extends LitElement {
   @property({ type: Array })
@@ -27,7 +30,10 @@ export class TeamRatings<T extends string> extends LitElement {
 
   private onTeamRatingChanged(e: NumberFieldValueChangedEvent) {
     const teamName = (e.target as NumberField).getAttribute('teamName') as T;
-    this.teamRating[teamName] = parseFloat(e.detail.value);
+    this.teamRating = produce<Record<string, number>>(this.teamRating, (teamRating) => {
+      // eslint-disable-next-line no-param-reassign
+      teamRating[teamName] = parseFloat(e.detail.value);
+    });
     this.dispatchTeamRatingValueChanged();
   }
 
@@ -58,6 +64,7 @@ export class TeamRatings<T extends string> extends LitElement {
             step-buttons-visible
             .value=${this.teamRating[teamName]}
             @value-changed=${this.onTeamRatingChanged}
+            .min=${0}
           ></vaadin-number-field>`
         )}
       </vaadin-form-layout>

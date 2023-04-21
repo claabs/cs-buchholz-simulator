@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { LitElement, PropertyValueMap, html, css } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import '@vaadin/vertical-layout/theme/lumo/vaadin-vertical-layout.js';
@@ -8,9 +7,9 @@ import { dialogRenderer, DialogLitRenderer, dialogFooterRenderer } from '@vaadin
 import '@vaadin/dialog/theme/lumo/vaadin-dialog.js';
 import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '@vaadin-component-factory/vcf-slider';
-import type { ValueChangedEvent } from '@vaadin-component-factory/vcf-slider/out-tsc/src/vcf-slider';
+import type { ValueChangedEvent } from '@vaadin-component-factory/vcf-slider/out-tsc/src/vcf-slider.js';
 import ColorScale from 'color-scales';
-import type { IndexedMatchupProbability } from './matchup-table';
+import type { IndexedMatchupProbability } from './matchup-table.js';
 
 export type MatchupCellData = Omit<IndexedMatchupProbability<string>, 'teamA' | 'teamB'>;
 

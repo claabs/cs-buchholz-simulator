@@ -5,6 +5,7 @@ import { importMetaAssets } from '@web/rollup-plugin-import-meta-assets';
 import esbuild from 'rollup-plugin-esbuild';
 import { generateSW } from 'rollup-plugin-workbox';
 import commonjs from '@rollup/plugin-commonjs';
+import replace from '@rollup/plugin-replace';
 import path from 'path';
 
 export default {
@@ -33,6 +34,10 @@ export default {
         // the commonjs plugin is slow, list the required packages explicitly:
         '**/node_modules/color-scales/**/*',
       ],
+    }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+      preventAssignment: true,
     }),
     esbuild({
       minify: true,
