@@ -47,13 +47,11 @@ const matchupProbabilitiesToGridItems = <T extends string>(
 export class MatchupTable<T extends string> extends LitElement {
   @property({
     type: Array,
-    reflect: true,
   })
   public seedOrder: T[] = [];
 
   @property({
     type: Array,
-    reflect: true,
   })
   public matchupProbabilities: MatchupProbability<T>[] = [];
 

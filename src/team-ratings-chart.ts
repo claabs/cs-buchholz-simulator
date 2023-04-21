@@ -1,4 +1,4 @@
-import { LitElement, html, PropertyValueMap } from 'lit';
+import { LitElement, html, PropertyValueMap, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import '@google-web-components/google-chart';
 // import { produce } from 'immer';
@@ -27,6 +27,12 @@ export class TeamRatingsChart<T extends string> extends LitElement {
       this.chartData = teamRatingToChartData(this.teamRating);
     }
   }
+
+  static override styles = css`
+    google-chart {
+      width: 100%;
+    }
+  `;
 
   override render() {
     return html`<google-chart type="column" .data=${this.chartData}></google-chart>`;
