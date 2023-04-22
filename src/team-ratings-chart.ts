@@ -1,7 +1,8 @@
 import { LitElement, html, PropertyValueMap, css } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import '@google-web-components/google-chart';
-// import { produce } from 'immer';
+import type { GoogleChart } from '@google-web-components/google-chart';
+import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
 
 const teamRatingToChartData = <T extends string>(
   teamRating: Record<T, number>
@@ -22,6 +23,18 @@ export class TeamRatingsChart<T extends string> extends LitElement {
   @state()
   private chartData: [[string, string], ...[T, number][]] = [['Team', 'Rating']];
 
+  @query('google-chart')
+  private chart: GoogleChart;
+
+  private chartOptions = {
+    hAxis: {
+      minTextSpacing: 0,
+      showTextEvery: 1,
+    },
+    legend: 'none',
+    chartArea: { width: '100%', height: '80%' },
+  };
+
   protected override updated(changedProperties: PropertyValueMap<this>): void {
     if (changedProperties.has('teamRating') && this.teamRating) {
       this.chartData = teamRatingToChartData(this.teamRating);
@@ -31,11 +44,24 @@ export class TeamRatingsChart<T extends string> extends LitElement {
   static override styles = css`
     google-chart {
       width: 100%;
+      max-width: 1000px;
     }
   `;
 
+  override connectedCallback(): void {
+    // eslint-disable-next-line wc/guard-super-call
+    super.connectedCallback();
+    window.addEventListener('resize', () => this.chart.redraw());
+  }
+
   override render() {
-    return html`<google-chart type="column" .data=${this.chartData}></google-chart>`;
+    return html`<vaadin-horizontal-layout theme="spacing" style="justify-content: center">
+      <google-chart
+        type="column"
+        .data=${this.chartData}
+        .options=${this.chartOptions}
+      ></google-chart>
+    </vaadin-horizontal-layout>`;
   }
 }
 

@@ -50,7 +50,8 @@ export class TeamRatings<T extends string> extends LitElement {
     // Use one column by default
     { minWidth: 0, columns: 2 },
     // Use two columns, if layout's width exceeds 500px
-    { minWidth: '500px', columns: 4 },
+    { minWidth: '625px', columns: 4 },
+    { minWidth: '1400px', columns: 8 },
   ];
 
   override render() {

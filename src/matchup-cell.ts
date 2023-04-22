@@ -79,13 +79,14 @@ export class MatchupCell extends LitElement {
       </vaadin-horizontal-layout>
       <vaadin-vertical-layout style="align-items: stretch; width: 18rem; max-width: 100%;">
         <vcf-slider
-          id="bo3-slider"
+          id="bo1-slider"
           title="Best of 1"
           min="0"
           max="100"
           tooltips-always-visible
           value=${this.bo1TeamAWinrate}
           @value-changed=${(e: ValueChangedEvent) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
             this.dialogData.bo1TeamAWinrate = e.detail.value;
           }}
         ></vcf-slider>
@@ -97,6 +98,7 @@ export class MatchupCell extends LitElement {
           tooltips-always-visible
           value=${this.bo3TeamAWinrate}
           @value-changed=${(e: ValueChangedEvent) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
             this.dialogData.bo3TeamAWinrate = e.detail.value;
           }}
         ></vcf-slider>
