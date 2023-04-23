@@ -136,10 +136,10 @@ export class CsBuchholzSimulato extends LitElement {
       <detail-content style="width: 30%;">
         <vaadin-horizontal-layout theme="padding" style="justify-content: space-evenly">
           <vaadin-button theme="primary" @click=${this.simulateButtonClicked}
-            >Simulate</vaadin-button
+            >Simulate 10k</vaadin-button
           >
           <vaadin-button theme="primary" @click=${this.simulateLongButtonClicked}
-            >Simulate (Long)</vaadin-button
+            >Simulate 100k</vaadin-button
           >
         </vaadin-horizontal-layout>
         ${simulationResultViewerTemplate}
