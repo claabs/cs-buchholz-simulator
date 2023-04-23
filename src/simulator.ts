@@ -1,4 +1,4 @@
-import { MatchupProbability, RmrEuATeam, rmrEuARating, rmrEuASeeding } from './settings.js';
+import type { MatchupProbability } from './settings.js';
 
 interface Matchup<T extends string> {
   teamA: TeamStandingWithDifficulty<T>;
@@ -27,6 +27,26 @@ interface TeamResultsCounts<T extends string> {
   qualified: Map<T, number>;
   allWins: Map<T, number>;
   allLosses: Map<T, number>;
+}
+
+export interface OpponentRate {
+  teamName: string;
+  ratePlayed: string;
+}
+
+export interface TeamResults {
+  teamName: string;
+  rate: number;
+  opponents?: OpponentRate[];
+}
+
+export interface SimulationResults {
+  iterations: number;
+  qualWins: number;
+  elimLosses: number;
+  qualified: TeamResults[];
+  allWins: TeamResults[];
+  allLosses: TeamResults[];
 }
 
 export const generateEasyProbabilities = <T extends string>(
@@ -235,40 +255,44 @@ const simulateEvent = <T extends string>(
   };
 };
 
-const formatResultMap = <T extends string>(
-  resultMap: Map<T, number>,
-  totalRuns: number
-): string[] =>
+const formatResultMap = (resultMap: Map<string, number>, iterations: number): TeamResults[] =>
   Array.from(resultMap.entries())
     .sort(([, a], [, b]) => b - a)
-    .map(([name, count]) => `${name}: ${((count / totalRuns) * 100).toFixed(1)}%`);
+    .map(([teamName, count]) => ({ teamName, rate: count / iterations }));
 
-const formatResultsCounts = <T extends string>(
+export const formatResultsCounts = <T extends string>(
   categorizedResults: TeamResultsCounts<T>,
-  totalRuns: number
-): void => {
-  const qualifiedFormat = formatResultMap(categorizedResults.qualified, totalRuns);
-  const allWinsFormat = formatResultMap(categorizedResults.allWins, totalRuns);
-  const allLossesFormat = formatResultMap(categorizedResults.allLosses, totalRuns);
-  console.log('Qualified:', qualifiedFormat);
-  console.log('All Wins:', allWinsFormat);
-  console.log('All Losses:', allLossesFormat);
+  qualElimMax: number,
+  iterations: number
+): SimulationResults => {
+  const qualified = formatResultMap(categorizedResults.qualified, iterations);
+  const allWins = formatResultMap(categorizedResults.allWins, iterations);
+  const allLosses = formatResultMap(categorizedResults.allLosses, iterations);
+  return {
+    qualified,
+    allWins,
+    allLosses,
+    iterations,
+    qualWins: qualElimMax,
+    elimLosses: qualElimMax,
+  };
 };
 
-function main() {
-  let categorizedResults: TeamResultsCounts<RmrEuATeam> = {
+export const simulateEvents = <T extends string>(
+  seeding: Record<string, T>,
+  probabilities: MatchupProbability<T>[],
+  qualElimMax = 3,
+  iterations = 1000
+): SimulationResults => {
+  let categorizedResults: TeamResultsCounts<T> = {
     allLosses: new Map(),
     allWins: new Map(),
     qualified: new Map(),
   };
-  const RUN_COUNT = 100000;
-  const rmrEuAEasyProbabilities = generateEasyProbabilities(rmrEuARating);
-  for (let i = 0; i < RUN_COUNT; i += 1) {
-    const { qualified, eliminated } = simulateEvent(rmrEuASeeding, rmrEuAEasyProbabilities);
+  for (let i = 0; i < iterations; i += 1) {
+    const { qualified, eliminated } = simulateEvent(seeding, probabilities, qualElimMax);
     const results = [...qualified, ...eliminated];
     categorizedResults = categorizeResults(results, categorizedResults);
   }
-  formatResultsCounts(categorizedResults, RUN_COUNT);
-}
-
-main();
+  return formatResultsCounts(categorizedResults, qualElimMax, iterations);
+};

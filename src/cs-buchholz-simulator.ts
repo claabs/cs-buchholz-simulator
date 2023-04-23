@@ -1,18 +1,32 @@
 import { LitElement, html, css } from 'lit';
-import { property, customElement, state } from 'lit/decorators.js';
-import '@vaadin/grid/theme/material/vaadin-grid.js';
+import { customElement, state, query } from 'lit/decorators.js';
+import type { TabSheetSelectedChangedEvent } from '@vaadin/tabsheet';
 import { MatchupProbability, rmrEuARating, rmrEuASeeding } from './settings.js';
-import { generateEasyProbabilities, getSeedOrder } from './index.js';
+import { generateEasyProbabilities, getSeedOrder } from './simulator.js';
 import './matchup-table.js';
 import './team-ratings.js';
 import './team-ratings-chart.js';
+import './simulation-result-viewer.js';
+import '@vaadin/tabs/theme/lumo/vaadin-tabs';
+import '@vaadin/tabsheet/theme/lumo/vaadin-tabsheet';
+import type { SimulationResultViewer } from './simulation-result-viewer.js';
 
 @customElement('cs-buchholz-simulator')
-export class CsBuchholzSimulator<T extends string> extends LitElement {
-  @property({ type: String }) header = 'My app';
+export class CsBuchholzSimulato extends LitElement {
+  @state()
+  private teamRating: Record<string, number> = rmrEuARating as Record<string, number>;
 
   @state()
-  private teamRating: Record<T, number> = rmrEuARating as Record<T, number>;
+  private matchupProbabilities: MatchupProbability<string>[] = generateEasyProbabilities(
+    this.teamRating
+  );
+
+  private seeding: Record<string, string> = rmrEuASeeding as Record<string, string>;
+
+  private seedOrder = getSeedOrder(this.seeding);
+
+  @query('simulation-result-viewer')
+  private simulationResults: SimulationResultViewer;
 
   static override styles = css`
     /* :host {
@@ -32,49 +46,55 @@ export class CsBuchholzSimulator<T extends string> extends LitElement {
     main {
       flex-grow: 1;
     }
-
-    .logo {
-      margin-top: 36px;
-      animation: app-logo-spin infinite 20s linear;
-    }
-
-    .app-footer {
-      font-size: calc(12px + 0.5vmin);
-      align-items: center;
-    }
-
-    .app-footer a {
-      margin-left: 5px;
-    }
   `;
 
-  private seedOrder = getSeedOrder(rmrEuASeeding);
-
-  @state()
-  private matchupProbabilities: MatchupProbability<T>[] = generateEasyProbabilities(
-    this.teamRating
-  );
-
-  private teamRatingValueChanged(event: CustomEvent<Record<T, number>>) {
+  private teamRatingValueChanged(event: CustomEvent<Record<string, number>>) {
     this.teamRating = event.detail;
     this.matchupProbabilities = generateEasyProbabilities(this.teamRating);
+  }
+
+  private matchupValueChanged(event: CustomEvent<MatchupProbability<string>[]>) {
+    this.matchupProbabilities = event.detail;
+  }
+
+  private selectedTabChanged(event: TabSheetSelectedChangedEvent) {
+    if (event.detail.value === 2) {
+      this.simulationResults.simulate();
+    }
   }
 
   override render() {
     return html`
       <main>
-        <h1>${this.header}</h1>
+        <vaadin-tabsheet @selected-changed=${this.selectedTabChanged}>
+          <vaadin-tabs slot="tabs">
+            <vaadin-tab id="ratings-tab">Ratings</vaadin-tab>
+            <vaadin-tab id="matchups-tab">Matchups</vaadin-tab>
+            <vaadin-tab id="results-tab">Results</vaadin-tab>
+          </vaadin-tabs>
 
-        <team-ratings
-          .seedOrder=${this.seedOrder}
-          .teamRating=${this.teamRating}
-          @teamRatingValueChanged=${this.teamRatingValueChanged}
-        ></team-ratings>
-        <team-ratings-chart .teamRating=${this.teamRating}></team-ratings-chart>
-        <matchup-table
-          .seedOrder=${this.seedOrder}
-          .matchupProbabilities=${this.matchupProbabilities}
-        ></matchup-table>
+          <div tab="ratings-tab">
+            <team-ratings
+              .seedOrder=${this.seedOrder}
+              .teamRating=${this.teamRating}
+              @teamRatingValueChanged=${this.teamRatingValueChanged}
+            ></team-ratings>
+            <team-ratings-chart .teamRating=${this.teamRating}></team-ratings-chart>
+          </div>
+          <div tab="matchups-tab">
+            <matchup-table
+              .seedOrder=${this.seedOrder}
+              .matchupProbabilities=${this.matchupProbabilities}
+              @matchupValueChanged=${this.matchupValueChanged}
+            ></matchup-table>
+          </div>
+          <div tab="results-tab">
+            <simulation-result-viewer
+              .seeding=${this.seeding}
+              .matchupProbabilities=${this.matchupProbabilities}
+            ></simulation-result-viewer>
+          </div>
+        </vaadin-tabsheet>
       </main>
     `;
   }
