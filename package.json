@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@google-web-components/google-chart": "^5.0.3",
-    "@material/web": "^1.0.0-pre.6",
     "@vaadin-component-factory/vcf-slider": "^23.3.6",
     "@vaadin/accordion": "^24.0.3",
     "@vaadin/button": "^24.0.2",
@@ -24,6 +23,7 @@
     "@vaadin/grid": "^24.0.2",
     "@vaadin/horizontal-layout": "^24.0.2",
     "@vaadin/number-field": "^24.0.2",
+    "@vaadin/split-layout": "^24.0.3",
     "@vaadin/tabs": "^24.0.3",
     "@vaadin/tabsheet": "^24.0.3",
     "@vaadin/vertical-layout": "^24.0.2",

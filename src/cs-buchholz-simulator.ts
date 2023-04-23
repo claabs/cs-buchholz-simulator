@@ -9,6 +9,8 @@ import './team-ratings-chart.js';
 import './simulation-result-viewer.js';
 import '@vaadin/tabs/theme/lumo/vaadin-tabs';
 import '@vaadin/tabsheet/theme/lumo/vaadin-tabsheet';
+import '@vaadin/split-layout/theme/lumo/vaadin-split-layout';
+import '@vaadin/button/theme/lumo/vaadin-button.js';
 import type { SimulationResultViewer } from './simulation-result-viewer.js';
 
 @customElement('cs-buchholz-simulator')
@@ -21,12 +23,15 @@ export class CsBuchholzSimulato extends LitElement {
     this.teamRating
   );
 
+  @state()
+  private isMobileView: boolean;
+
   private seeding: Record<string, string> = rmrEuASeeding as Record<string, string>;
 
   private seedOrder = getSeedOrder(this.seeding);
 
   @query('simulation-result-viewer')
-  private simulationResults: SimulationResultViewer;
+  private simulationResultViewer: SimulationResultViewer;
 
   static override styles = css`
     /* :host {
@@ -59,43 +64,72 @@ export class CsBuchholzSimulato extends LitElement {
 
   private selectedTabChanged(event: TabSheetSelectedChangedEvent) {
     if (event.detail.value === 2) {
-      this.simulationResults.simulate();
+      this.simulationResultViewer.simulate();
     }
   }
 
-  override render() {
-    return html`
-      <main>
-        <vaadin-tabsheet @selected-changed=${this.selectedTabChanged}>
-          <vaadin-tabs slot="tabs">
-            <vaadin-tab id="ratings-tab">Ratings</vaadin-tab>
-            <vaadin-tab id="matchups-tab">Matchups</vaadin-tab>
-            <vaadin-tab id="results-tab">Results</vaadin-tab>
-          </vaadin-tabs>
+  private simulateButtonClicked() {
+    this.simulationResultViewer.simulate();
+  }
 
-          <div tab="ratings-tab">
-            <team-ratings
-              .seedOrder=${this.seedOrder}
-              .teamRating=${this.teamRating}
-              @teamRatingValueChanged=${this.teamRatingValueChanged}
-            ></team-ratings>
-            <team-ratings-chart .teamRating=${this.teamRating}></team-ratings-chart>
-          </div>
-          <div tab="matchups-tab">
-            <matchup-table
-              .seedOrder=${this.seedOrder}
-              .matchupProbabilities=${this.matchupProbabilities}
-              @matchupValueChanged=${this.matchupValueChanged}
-            ></matchup-table>
-          </div>
-          <div tab="results-tab">
-            <simulation-result-viewer
-              .seeding=${this.seeding}
-              .matchupProbabilities=${this.matchupProbabilities}
-            ></simulation-result-viewer>
-          </div>
-        </vaadin-tabsheet>
-      </main>
-    `;
+  private updateMobileView() {
+    const mql = window.matchMedia('(max-width: 640px)');
+    this.isMobileView = mql.matches;
+  }
+
+  override connectedCallback(): void {
+    // eslint-disable-next-line wc/guard-super-call
+    super.connectedCallback();
+    window.addEventListener('resize', () => this.updateMobileView());
+    this.updateMobileView();
+  }
+
+  override render() {
+    const teamRatingsTemplate = html`<team-ratings
+        .seedOrder=${this.seedOrder}
+        .teamRating=${this.teamRating}
+        @teamRatingValueChanged=${this.teamRatingValueChanged}
+      ></team-ratings>
+      <team-ratings-chart .teamRating=${this.teamRating}></team-ratings-chart>`;
+
+    const matchupTableTemplate = html` <matchup-table
+      .seedOrder=${this.seedOrder}
+      .matchupProbabilities=${this.matchupProbabilities}
+      @matchupValueChanged=${this.matchupValueChanged}
+    ></matchup-table>`;
+
+    const simulationResultViewerTemplate = html`<simulation-result-viewer
+      .seeding=${this.seeding}
+      .matchupProbabilities=${this.matchupProbabilities}
+    ></simulation-result-viewer>`;
+
+    const mobileLayoutTemplate = html`<vaadin-tabsheet @selected-changed=${this.selectedTabChanged}>
+      <vaadin-tabs slot="tabs">
+        <vaadin-tab id="ratings-tab">Ratings</vaadin-tab>
+        <vaadin-tab id="matchups-tab">Matchups</vaadin-tab>
+        <vaadin-tab id="results-tab">Results</vaadin-tab>
+      </vaadin-tabs>
+
+      <div tab="ratings-tab">${teamRatingsTemplate}</div>
+      <div tab="matchups-tab">${matchupTableTemplate}</div>
+      <div tab="results-tab">${simulationResultViewerTemplate}</div>
+    </vaadin-tabsheet>`;
+
+    const desktopLayoutTemplate = html` <vaadin-split-layout>
+      <master-content style="width: 70%;">
+        ${teamRatingsTemplate} ${matchupTableTemplate}
+      </master-content>
+      <detail-content style="width: 30%;">
+        <vaadin-button
+          theme="primary"
+          @click=${this.simulateButtonClicked}
+          style="margin-right: auto;"
+          >Simulate</vaadin-button
+        >
+        ${simulationResultViewerTemplate}
+      </detail-content>
+    </vaadin-split-layout>`;
+
+    return html` <main>${this.isMobileView ? mobileLayoutTemplate : desktopLayoutTemplate}</main> `;
   }
 }
