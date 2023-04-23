@@ -18,7 +18,10 @@ export class SimulationResultViewer extends LitElement {
   private simulationResults: SimulationResults;
 
   public simulate(): void {
-    this.simulationResults = simulateEvents(this.seeding, this.matchupProbabilities);
+    this.simulationResults = simulateEvents(this.seeding, this.matchupProbabilities, {
+      qualWins: 3,
+      elimLosses: 3,
+    });
   }
 
   private responsiveSteps: FormLayoutResponsiveStep[] = [
@@ -35,7 +38,10 @@ export class SimulationResultViewer extends LitElement {
       >
         ${teamResults.opponents &&
         html`<vaadin-vertical-layout>
-          ${teamResults.opponents.map((opponent) => html` <span>${opponent.teamName}</span> `)}
+          ${teamResults.opponents.map(
+            (opponent) =>
+              html`<span>${(opponent.ratePlayed * 100).toFixed(1)}% - ${opponent.teamName}</span>`
+          )}
         </vaadin-vertical-layout>`}
       </vaadin-accordion-panel>
     `;

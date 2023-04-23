@@ -58,7 +58,7 @@ export class CsBuchholzSimulato extends LitElement {
     this.matchupProbabilities = generateEasyProbabilities(this.teamRating);
   }
 
-  private matchupValueChanged(event: CustomEvent<MatchupProbability<string>[]>) {
+  private probabilityValueChanged(event: CustomEvent<MatchupProbability<string>[]>) {
     this.matchupProbabilities = event.detail;
   }
 
@@ -95,7 +95,7 @@ export class CsBuchholzSimulato extends LitElement {
     const matchupTableTemplate = html` <matchup-table
       .seedOrder=${this.seedOrder}
       .matchupProbabilities=${this.matchupProbabilities}
-      @matchupValueChanged=${this.matchupValueChanged}
+      @probabilityValueChanged=${this.probabilityValueChanged}
     ></matchup-table>`;
 
     const simulationResultViewerTemplate = html`<simulation-result-viewer

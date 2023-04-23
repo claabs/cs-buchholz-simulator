@@ -23,15 +23,16 @@ interface QualElimOutput<T extends string> {
   competitors: TeamStanding<T>[];
 }
 
-interface TeamResultsCounts<T extends string> {
-  qualified: Map<T, number>;
-  allWins: Map<T, number>;
-  allLosses: Map<T, number>;
+interface TeamResultCounts {
+  qualified: number;
+  allWins: number;
+  allLosses: number;
+  opponents: Map<string, number>;
 }
 
 export interface OpponentRate {
   teamName: string;
-  ratePlayed: string;
+  ratePlayed: number;
 }
 
 export interface TeamResults {
@@ -47,6 +48,11 @@ export interface SimulationResults {
   qualified: TeamResults[];
   allWins: TeamResults[];
   allLosses: TeamResults[];
+}
+
+export interface SimulationSettings {
+  qualWins: number;
+  elimLosses: number;
 }
 
 export const generateEasyProbabilities = <T extends string>(
@@ -108,28 +114,33 @@ const sortRecordGroup = <T extends string>(
 
 const categorizeResults = <T extends string>(
   results: TeamStanding<T>[],
-  resultCounts?: TeamResultsCounts<T>,
-  qualElimMax = 3
-): TeamResultsCounts<T> => {
-  const teamResultsCounts: TeamResultsCounts<T> = resultCounts || {
-    allLosses: new Map(),
-    allWins: new Map(),
-    qualified: new Map(),
-  };
+  qualWins: number,
+  elimLosses: number,
+  allTeamResults: Map<string, TeamResultCounts>
+): Map<string, TeamResultCounts> => {
   results.forEach((teamStanding) => {
-    if (teamStanding.wins === qualElimMax) {
-      const qualCount = teamResultsCounts.qualified.get(teamStanding.name) || 0;
-      teamResultsCounts.qualified.set(teamStanding.name, qualCount + 1);
+    const teamResult: TeamResultCounts = allTeamResults.get(teamStanding.name) || {
+      qualified: 0,
+      allWins: 0,
+      allLosses: 0,
+      opponents: new Map(),
+    };
+    if (teamStanding.wins === qualWins) {
+      teamResult.qualified += 1;
       if (teamStanding.losses === 0) {
-        const allWinsCount = teamResultsCounts.allWins.get(teamStanding.name) || 0;
-        teamResultsCounts.allWins.set(teamStanding.name, allWinsCount + 1);
+        teamResult.allWins += 1;
       }
-    } else if (teamStanding.losses === qualElimMax && teamStanding.wins === 0) {
-      const allLossesCount = teamResultsCounts.allLosses.get(teamStanding.name) || 0;
-      teamResultsCounts.allLosses.set(teamStanding.name, allLossesCount + 1);
+    } else if (teamStanding.losses === elimLosses && teamStanding.wins === 0) {
+      teamResult.allLosses += 1;
     }
+    teamStanding.pastOpponents.forEach((opponent) => {
+      const opponentCount = teamResult.opponents.get(opponent) || 0;
+      teamResult.opponents.set(opponent, opponentCount + 1);
+    });
+
+    allTeamResults.set(teamStanding.name, teamResult);
   });
-  return teamResultsCounts;
+  return allTeamResults;
 };
 
 export const getSeedOrder = <T extends string>(seeding: Record<string, T>) =>
@@ -175,7 +186,7 @@ const calculateMatchups = <T extends string>(teamsStandings: TeamStanding<T>[]):
 const simulateMatchup = <T extends string>(
   matchup: Matchup<T>,
   matchupProbabilities: MatchupProbability<T>[],
-  qualElimMax = 3
+  simSettings: SimulationSettings
 ): TeamStanding<T>[] => {
   const probabilityListing = matchupProbabilities.find(
     (probListing) =>
@@ -183,7 +194,8 @@ const simulateMatchup = <T extends string>(
       (probListing.teamA === matchup.teamB.name && probListing.teamB === matchup.teamA.name)
   );
   const isQualElim =
-    matchup.teamA.wins === qualElimMax - 1 || matchup.teamA.losses === qualElimMax - 1;
+    matchup.teamA.wins === simSettings.qualWins - 1 ||
+    matchup.teamA.losses === simSettings.elimLosses - 1;
   const teamAWinrate =
     (isQualElim ? probabilityListing?.bo3TeamAWinrate : probabilityListing?.bo1TeamAWinrate) || 0.5;
   const swapTeams = probabilityListing ? probabilityListing.teamA !== matchup.teamA.name : false;
@@ -204,18 +216,19 @@ const simulateMatchup = <T extends string>(
 
 const simulateMatchups = <T extends string>(
   matchups: Matchup<T>[],
-  matchupProbabilities: MatchupProbability<T>[]
+  matchupProbabilities: MatchupProbability<T>[],
+  simSettings: SimulationSettings
 ): TeamStanding<T>[] =>
-  matchups.flatMap((matchup) => simulateMatchup(matchup, matchupProbabilities));
+  matchups.flatMap((matchup) => simulateMatchup(matchup, matchupProbabilities, simSettings));
 
 const extractQualElims = <T extends string>(
   teamsStandings: TeamStanding<T>[],
-  qualElimMax: number
+  simSettings: SimulationSettings
 ): QualElimOutput<T> =>
   teamsStandings.reduce(
     (acc, team) => {
-      if (team.wins >= qualElimMax) acc.qualified.push(team);
-      else if (team.losses >= qualElimMax) acc.eliminated.push(team);
+      if (team.wins >= simSettings.qualWins) acc.qualified.push(team);
+      else if (team.losses >= simSettings.elimLosses) acc.eliminated.push(team);
       else acc.competitors.push(team);
       return acc;
     },
@@ -226,24 +239,24 @@ const extractQualElims = <T extends string>(
     }
   );
 
-const simulateEvent = <T extends string>(
-  seeding: Record<string, T>,
-  probabilities: MatchupProbability<T>[],
-  qualElimMax = 3
-): QualElimOutput<T> => {
-  let competitors: TeamStanding<T>[] = Object.entries(seeding).map(([seed, name]) => ({
+const simulateEvent = (
+  seeding: Record<string, string>,
+  probabilities: MatchupProbability<string>[],
+  simSettings: SimulationSettings
+): QualElimOutput<string> => {
+  let competitors: TeamStanding<string>[] = Object.entries(seeding).map(([seed, name]) => ({
     name,
     seed: parseInt(seed, 10),
     wins: 0,
     losses: 0,
     pastOpponents: [],
   }));
-  const qualified: TeamStanding<T>[] = [];
-  const eliminated: TeamStanding<T>[] = [];
+  const qualified: TeamStanding<string>[] = [];
+  const eliminated: TeamStanding<string>[] = [];
   while (competitors.length) {
     const matchups = calculateMatchups(competitors);
-    const standings = simulateMatchups(matchups, probabilities);
-    const qualElimResult = extractQualElims(standings, qualElimMax);
+    const standings = simulateMatchups(matchups, probabilities, simSettings);
+    const qualElimResult = extractQualElims(standings, simSettings);
     competitors = qualElimResult.competitors;
     qualified.push(...qualElimResult.qualified);
     eliminated.push(...qualElimResult.eliminated);
@@ -255,44 +268,69 @@ const simulateEvent = <T extends string>(
   };
 };
 
-const formatResultMap = (resultMap: Map<string, number>, iterations: number): TeamResults[] =>
-  Array.from(resultMap.entries())
-    .sort(([, a], [, b]) => b - a)
-    .map(([teamName, count]) => ({ teamName, rate: count / iterations }));
-
-export const formatResultsCounts = <T extends string>(
-  categorizedResults: TeamResultsCounts<T>,
-  qualElimMax: number,
+export const formatResultsCounts = (
+  categorizedResults: Map<string, TeamResultCounts>,
+  simSettings: SimulationSettings,
   iterations: number
 ): SimulationResults => {
-  const qualified = formatResultMap(categorizedResults.qualified, iterations);
-  const allWins = formatResultMap(categorizedResults.allWins, iterations);
-  const allLosses = formatResultMap(categorizedResults.allLosses, iterations);
+  const { qualified, allWins, allLosses } = Array.from(categorizedResults.entries()).reduce(
+    (acc, [teamName, resultCounts]) => {
+      const formattedOpponents: OpponentRate[] = Array.from(
+        resultCounts.opponents.entries(),
+        ([oppTeam, timesPlayed]) => ({ teamName: oppTeam, ratePlayed: timesPlayed / iterations })
+      ).sort((a, b) => b.ratePlayed - a.ratePlayed);
+      if (resultCounts.qualified) {
+        acc.qualified.push({
+          teamName,
+          rate: resultCounts.qualified / iterations,
+          opponents: formattedOpponents,
+        });
+      }
+      if (resultCounts.allWins) {
+        acc.allWins.push({
+          teamName,
+          rate: resultCounts.allWins / iterations,
+          opponents: formattedOpponents,
+        });
+      }
+      if (resultCounts.allLosses) {
+        acc.allLosses.push({
+          teamName,
+          rate: resultCounts.allLosses / iterations,
+          opponents: formattedOpponents,
+        });
+      }
+
+      return acc;
+    },
+    { qualified: [] as TeamResults[], allWins: [] as TeamResults[], allLosses: [] as TeamResults[] }
+  );
+
   return {
-    qualified,
-    allWins,
-    allLosses,
+    qualified: qualified.sort((a, b) => b.rate - a.rate),
+    allWins: allWins.sort((a, b) => b.rate - a.rate),
+    allLosses: allLosses.sort((a, b) => b.rate - a.rate),
     iterations,
-    qualWins: qualElimMax,
-    elimLosses: qualElimMax,
+    ...simSettings,
   };
 };
 
-export const simulateEvents = <T extends string>(
-  seeding: Record<string, T>,
-  probabilities: MatchupProbability<T>[],
-  qualElimMax = 3,
-  iterations = 1000
+export const simulateEvents = (
+  seeding: Record<string, string>,
+  probabilities: MatchupProbability<string>[],
+  simSettings: SimulationSettings,
+  iterations = 10000
 ): SimulationResults => {
-  let categorizedResults: TeamResultsCounts<T> = {
-    allLosses: new Map(),
-    allWins: new Map(),
-    qualified: new Map(),
-  };
+  let allTeamResults = new Map<string, TeamResultCounts>();
   for (let i = 0; i < iterations; i += 1) {
-    const { qualified, eliminated } = simulateEvent(seeding, probabilities, qualElimMax);
+    const { qualified, eliminated } = simulateEvent(seeding, probabilities, simSettings);
     const results = [...qualified, ...eliminated];
-    categorizedResults = categorizeResults(results, categorizedResults);
+    allTeamResults = categorizeResults(
+      results,
+      simSettings.qualWins,
+      simSettings.elimLosses,
+      allTeamResults
+    );
   }
-  return formatResultsCounts(categorizedResults, qualElimMax, iterations);
+  return formatResultsCounts(allTeamResults, simSettings, iterations);
 };
