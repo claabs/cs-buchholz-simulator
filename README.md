@@ -1,6 +1,6 @@
 # Counter Strike Swiss Buchholz Simulator
 
-Make accurate Pick'Em predictions by providing head-to-head matchup odds and simulating thousands of events.
+Make accurate Pick'Em predictions by providing head-to-head matchup odds and simulating thousands of group stages.
 
 ## TODO
 
@@ -12,3 +12,4 @@ Make accurate Pick'Em predictions by providing head-to-head matchup odds and sim
 - [ ] Add step by step instruction
 - [ ] Add team logos/colors
 - [ ] New panel to customize teams/seeding
+- [ ] Add sim progress bar
