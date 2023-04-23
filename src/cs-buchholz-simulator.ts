@@ -1,8 +1,8 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, state, query } from 'lit/decorators.js';
+import { customElement, state, query, property } from 'lit/decorators.js';
 import type { TabSheetSelectedChangedEvent } from '@vaadin/tabsheet';
-import { MatchupProbability, rmrEuARating, rmrEuASeeding } from './settings.js';
-import { generateEasyProbabilities, getSeedOrder } from './simulator.js';
+import { MatchupProbability, masterRating, masterSeedOrder } from './settings.js';
+import { generateEasyProbabilities } from './simulator.js';
 import './matchup-table.js';
 import './team-ratings.js';
 import './team-ratings-chart.js';
@@ -17,8 +17,11 @@ import type { TeamRatingsChart } from './team-ratings-chart.js';
 
 @customElement('cs-buchholz-simulator')
 export class CsBuchholzSimulato extends LitElement {
+  @property({ type: Array })
+  private seedOrder: string[] = masterSeedOrder;
+
   @state()
-  private teamRating: Record<string, number> = rmrEuARating as Record<string, number>;
+  private teamRating: Record<string, number> = masterRating as Record<string, number>;
 
   @state()
   private matchupProbabilities: MatchupProbability<string>[] = generateEasyProbabilities(
@@ -27,10 +30,6 @@ export class CsBuchholzSimulato extends LitElement {
 
   @state()
   private isMobileView: boolean;
-
-  private seeding: Record<string, string> = rmrEuASeeding as Record<string, string>;
-
-  private seedOrder = getSeedOrder(this.seeding);
 
   @query('simulation-result-viewer')
   private simulationResultViewer: SimulationResultViewer;
@@ -112,7 +111,7 @@ export class CsBuchholzSimulato extends LitElement {
     ></matchup-table>`;
 
     const simulationResultViewerTemplate = html`<simulation-result-viewer
-      .seeding=${this.seeding}
+      .seedOrder=${this.seedOrder}
       .matchupProbabilities=${this.matchupProbabilities}
     ></simulation-result-viewer>`;
 

@@ -386,13 +386,13 @@ const extractQualElims = <T extends string>(
   );
 
 const simulateEvent = (
-  seeding: Record<string, string>,
+  seedOrder: string[],
   probabilities: MatchupProbability<string>[],
   simSettings: SimulationSettings
 ): QualElimOutput<string> => {
-  let competitors: TeamStanding<string>[] = Object.entries(seeding).map(([seed, name]) => ({
-    name,
-    seed: parseInt(seed, 10),
+  let competitors: TeamStanding<string>[] = seedOrder.map((teamName, index) => ({
+    name: teamName,
+    seed: index + 1,
     wins: 0,
     losses: 0,
     pastOpponents: [],
@@ -467,14 +467,14 @@ export const formatResultsCounts = (
 };
 
 export const simulateEvents = (
-  seeding: Record<string, string>,
+  seedOrder: string[],
   probabilities: MatchupProbability<string>[],
   simSettings: SimulationSettings,
   iterations = 10000
 ): SimulationResults => {
   let allTeamResults = new Map<string, TeamResultCounts>();
   for (let i = 0; i < iterations; i += 1) {
-    const { qualified, eliminated } = simulateEvent(seeding, probabilities, simSettings);
+    const { qualified, eliminated } = simulateEvent(seedOrder, probabilities, simSettings);
     const results = [...qualified, ...eliminated];
     allTeamResults = categorizeResults(
       results,

@@ -9,8 +9,8 @@ import { rateToPctString } from './util.js';
 
 @customElement('simulation-result-viewer')
 export class SimulationResultViewer extends LitElement {
-  @property({ type: Object, noAccessor: true })
-  public seeding: Record<string, string>;
+  @property({ type: Array, noAccessor: true })
+  public seedOrder: string[];
 
   @property({ type: Array, noAccessor: true })
   public matchupProbabilities: MatchupProbability<string>[];
@@ -20,7 +20,7 @@ export class SimulationResultViewer extends LitElement {
 
   public simulate(iterations: number): void {
     this.simulationResults = simulateEvents(
-      this.seeding,
+      this.seedOrder,
       this.matchupProbabilities,
       {
         qualWins: 3,
@@ -62,7 +62,7 @@ export class SimulationResultViewer extends LitElement {
   override render() {
     return html`
       ${this.simulationResults
-        ? html`<h3>Simulated ${this.simulationResults.iterations} events</h3>
+        ? html`<h3>Simulated ${this.simulationResults.iterations.toLocaleString()} events</h3>
             <vaadin-form-layout .responsiveSteps=${this.responsiveSteps}>
               <vaadin-accordion>
                 <h2>${this.simulationResults.qualWins}-0 Teams</h2>
