@@ -14,10 +14,10 @@ import type { IndexedMatchupProbability } from './matchup-table.js';
 export type MatchupCellData = Omit<IndexedMatchupProbability<string>, 'teamA' | 'teamB'>;
 
 // 'lightcoral', 'white', 'lightskyblue'
-const gradient = new ColorScale(0, 100, ['#F08080', '#FFFFFF', '#87CEFA']);
+const gradient = new ColorScale(0, 1, ['#F08080', '#FFFFFF', '#87CEFA']);
 
-const percentToColor = (perc: number): string => {
-  return gradient.getColor(perc).toHexString();
+const rateToColor = (rate: number): string => {
+  return gradient.getColor(rate).toHexString();
 };
 
 /**
@@ -62,9 +62,9 @@ export class MatchupCell extends LitElement {
 
   override updated(changedProperties: PropertyValueMap<this>): void {
     if (changedProperties.has('bo1TeamAWinrate') && this.bo1)
-      this.bo1.style.backgroundColor = percentToColor(this.bo1TeamAWinrate);
+      this.bo1.style.backgroundColor = rateToColor(this.bo1TeamAWinrate);
     if (changedProperties.has('bo3TeamAWinrate') && this.bo3)
-      this.bo3.style.backgroundColor = percentToColor(this.bo3TeamAWinrate);
+      this.bo3.style.backgroundColor = rateToColor(this.bo3TeamAWinrate);
   }
 
   private renderDialog: DialogLitRenderer = () => {
@@ -84,7 +84,7 @@ export class MatchupCell extends LitElement {
           min="0"
           max="100"
           tooltips-always-visible
-          value=${this.bo1TeamAWinrate}
+          value=${this.bo1TeamAWinrate * 100}
           @value-changed=${(e: ValueChangedEvent) => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
             this.dialogData.bo1TeamAWinrate = e.detail.value;
@@ -96,7 +96,7 @@ export class MatchupCell extends LitElement {
           min="0"
           max="100"
           tooltips-always-visible
-          value=${this.bo3TeamAWinrate}
+          value=${this.bo3TeamAWinrate * 100}
           @value-changed=${(e: ValueChangedEvent) => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
             this.dialogData.bo3TeamAWinrate = e.detail.value;
@@ -112,10 +112,10 @@ export class MatchupCell extends LitElement {
 
   private saveDialog() {
     if (this.dialogData.bo1TeamAWinrate !== undefined) {
-      this.bo1TeamAWinrate = this.dialogData.bo1TeamAWinrate;
+      this.bo1TeamAWinrate = this.dialogData.bo1TeamAWinrate / 100;
     }
     if (this.dialogData.bo3TeamAWinrate !== undefined) {
-      this.bo3TeamAWinrate = this.dialogData.bo3TeamAWinrate;
+      this.bo3TeamAWinrate = this.dialogData.bo3TeamAWinrate / 100;
     }
     this.closeDialog();
     this.dispatchMatchupValueChanged();
@@ -166,8 +166,8 @@ export class MatchupCell extends LitElement {
         style="align-items: stretch"
         @click=${this.openDialog}
       >
-        <div class="winrate" id="bo1">${this.bo1TeamAWinrate.toFixed(0)}</div>
-        <div class="winrate" id="bo3">${this.bo3TeamAWinrate.toFixed(0)}</div>
+        <div class="winrate" id="bo1">${(this.bo1TeamAWinrate * 100).toFixed(0)}</div>
+        <div class="winrate" id="bo3">${(this.bo3TeamAWinrate * 100).toFixed(0)}</div>
       </vaadin-vertical-layout>`;
   }
 }

@@ -24,7 +24,7 @@ export class TeamRatingsChart<T extends string> extends LitElement {
   private chartData: [[string, string], ...[T, number][]] = [['Team', 'Rating']];
 
   @query('google-chart')
-  private chart: GoogleChart;
+  public chart: GoogleChart;
 
   private chartOptions = {
     hAxis: {

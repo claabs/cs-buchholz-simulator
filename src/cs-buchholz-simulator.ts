@@ -11,7 +11,9 @@ import '@vaadin/tabs/theme/lumo/vaadin-tabs';
 import '@vaadin/tabsheet/theme/lumo/vaadin-tabsheet';
 import '@vaadin/split-layout/theme/lumo/vaadin-split-layout';
 import '@vaadin/button/theme/lumo/vaadin-button.js';
+import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
 import type { SimulationResultViewer } from './simulation-result-viewer.js';
+import type { TeamRatingsChart } from './team-ratings-chart.js';
 
 @customElement('cs-buchholz-simulator')
 export class CsBuchholzSimulato extends LitElement {
@@ -32,6 +34,9 @@ export class CsBuchholzSimulato extends LitElement {
 
   @query('simulation-result-viewer')
   private simulationResultViewer: SimulationResultViewer;
+
+  @query('team-ratings-chart')
+  private teamRatingsChart: TeamRatingsChart<string>;
 
   static override styles = css`
     /* :host {
@@ -64,17 +69,25 @@ export class CsBuchholzSimulato extends LitElement {
 
   private selectedTabChanged(event: TabSheetSelectedChangedEvent) {
     if (event.detail.value === 2) {
-      this.simulationResultViewer.simulate();
+      this.simulationResultViewer.simulate(10000);
     }
   }
 
   private simulateButtonClicked() {
-    this.simulationResultViewer.simulate();
+    this.simulationResultViewer.simulate(10000);
+  }
+
+  private simulateLongButtonClicked() {
+    this.simulationResultViewer.simulate(100000);
   }
 
   private updateMobileView() {
     const mql = window.matchMedia('(max-width: 640px)');
     this.isMobileView = mql.matches;
+  }
+
+  private splitterDragEnd() {
+    this.teamRatingsChart.chart.redraw();
   }
 
   override connectedCallback(): void {
@@ -115,17 +128,21 @@ export class CsBuchholzSimulato extends LitElement {
       <div tab="results-tab">${simulationResultViewerTemplate}</div>
     </vaadin-tabsheet>`;
 
-    const desktopLayoutTemplate = html` <vaadin-split-layout>
+    const desktopLayoutTemplate = html`<vaadin-split-layout
+      @splitter-dragend=${this.splitterDragEnd}
+    >
       <master-content style="width: 70%;">
         ${teamRatingsTemplate} ${matchupTableTemplate}
       </master-content>
       <detail-content style="width: 30%;">
-        <vaadin-button
-          theme="primary"
-          @click=${this.simulateButtonClicked}
-          style="margin-right: auto;"
-          >Simulate</vaadin-button
-        >
+        <vaadin-horizontal-layout theme="padding" style="justify-content: space-evenly">
+          <vaadin-button theme="primary" @click=${this.simulateButtonClicked}
+            >Simulate</vaadin-button
+          >
+          <vaadin-button theme="primary" @click=${this.simulateLongButtonClicked}
+            >Simulate (Long)</vaadin-button
+          >
+        </vaadin-horizontal-layout>
         ${simulationResultViewerTemplate}
       </detail-content>
     </vaadin-split-layout>`;

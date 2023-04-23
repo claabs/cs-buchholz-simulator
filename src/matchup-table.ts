@@ -35,8 +35,8 @@ const matchupProbabilitiesToGridItems = <T extends string>(
       return {
         teamA: matchup?.teamA || ('Team A' as T),
         teamB: matchup?.teamB || ('Team B' as T),
-        bo1TeamAWinrate: (matchup?.bo1TeamAWinrate || 0) * 100,
-        bo3TeamAWinrate: (matchup?.bo3TeamAWinrate || 0) * 100,
+        bo1TeamAWinrate: matchup?.bo1TeamAWinrate || 0,
+        bo3TeamAWinrate: matchup?.bo3TeamAWinrate || 0,
         index: matchup?.index || -1,
       };
     });

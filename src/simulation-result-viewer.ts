@@ -5,6 +5,7 @@ import type { FormLayoutResponsiveStep } from '@vaadin/form-layout';
 import '@vaadin/form-layout';
 import { simulateEvents, SimulationResults, TeamResults } from './simulator.js';
 import type { MatchupProbability } from './settings.js';
+import { rateToPctString } from './util.js';
 
 @customElement('simulation-result-viewer')
 export class SimulationResultViewer extends LitElement {
@@ -17,11 +18,16 @@ export class SimulationResultViewer extends LitElement {
   @state()
   private simulationResults: SimulationResults;
 
-  public simulate(): void {
-    this.simulationResults = simulateEvents(this.seeding, this.matchupProbabilities, {
-      qualWins: 3,
-      elimLosses: 3,
-    });
+  public simulate(iterations: number): void {
+    this.simulationResults = simulateEvents(
+      this.seeding,
+      this.matchupProbabilities,
+      {
+        qualWins: 3,
+        elimLosses: 3,
+      },
+      iterations
+    );
   }
 
   private responsiveSteps: FormLayoutResponsiveStep[] = [
@@ -33,7 +39,7 @@ export class SimulationResultViewer extends LitElement {
   private renderTeamResults(teamResults: TeamResults) {
     return html`
       <vaadin-accordion-panel
-        summary="${`${(teamResults.rate * 100).toFixed(1)}% - ${teamResults.teamName}`}"
+        summary="${rateToPctString(teamResults.rate, 1)} - ${teamResults.teamName}"
         theme="filled small"
       >
         ${teamResults.opponents &&
@@ -41,9 +47,9 @@ export class SimulationResultViewer extends LitElement {
           ${teamResults.opponents.map(
             (opponent) =>
               html`<span
-                >${(opponent.totalRate * 100).toFixed(1)}% vs ${opponent.teamName} (BO1:
-                ${(opponent.bo1Rate * 100).toFixed(0)}%; BO3:
-                ${(opponent.bo3Rate * 100).toFixed(0)}%)</span
+                >${rateToPctString(opponent.totalRate, 1)} vs ${opponent.teamName} (BO1:
+                ${rateToPctString(opponent.bo1Rate)}; BO3:
+                ${rateToPctString(opponent.bo3Rate)})</span
               >`
           )}
         </vaadin-vertical-layout>`}
@@ -55,26 +61,29 @@ export class SimulationResultViewer extends LitElement {
 
   override render() {
     return html`
-      <vaadin-form-layout .responsiveSteps=${this.responsiveSteps}>
-        <vaadin-accordion>
-          <h2>${this.simulationResults.qualWins}-0 Teams</h2>
-          ${this.simulationResults.allWins.map((teamResults) =>
-            this.renderTeamResults(teamResults)
-          )}
-        </vaadin-accordion>
-        <vaadin-accordion>
-          <h2>Qualified Teams</h2>
-          ${this.simulationResults.qualified.map((teamResults) =>
-            this.renderTeamResults(teamResults)
-          )}
-        </vaadin-accordion>
-        <vaadin-accordion>
-          <h2>0-${this.simulationResults.elimLosses} Teams</h2>
-          ${this.simulationResults.allLosses.map((teamResults) =>
-            this.renderTeamResults(teamResults)
-          )}
-        </vaadin-accordion>
-      </vaadin-form-layout>
+      ${this.simulationResults
+        ? html`<h3>Simulated ${this.simulationResults.iterations} events</h3>
+            <vaadin-form-layout .responsiveSteps=${this.responsiveSteps}>
+              <vaadin-accordion>
+                <h2>${this.simulationResults.qualWins}-0 Teams</h2>
+                ${this.simulationResults.allWins.map((teamResults) =>
+                  this.renderTeamResults(teamResults)
+                )}
+              </vaadin-accordion>
+              <vaadin-accordion>
+                <h2>Qualified Teams</h2>
+                ${this.simulationResults.qualified.map((teamResults) =>
+                  this.renderTeamResults(teamResults)
+                )}
+              </vaadin-accordion>
+              <vaadin-accordion>
+                <h2>0-${this.simulationResults.elimLosses} Teams</h2>
+                ${this.simulationResults.allLosses.map((teamResults) =>
+                  this.renderTeamResults(teamResults)
+                )}
+              </vaadin-accordion>
+            </vaadin-form-layout>`
+        : html`<h3>Run simulation to view results</h3>`}
     `;
   }
 }
