@@ -40,7 +40,11 @@ export class SimulationResultViewer extends LitElement {
         html`<vaadin-vertical-layout>
           ${teamResults.opponents.map(
             (opponent) =>
-              html`<span>${(opponent.ratePlayed * 100).toFixed(1)}% - ${opponent.teamName}</span>`
+              html`<span
+                >${(opponent.totalRate * 100).toFixed(1)}% vs ${opponent.teamName} (BO1:
+                ${(opponent.bo1Rate * 100).toFixed(0)}%; BO3:
+                ${(opponent.bo3Rate * 100).toFixed(0)}%)</span
+              >`
           )}
         </vaadin-vertical-layout>`}
       </vaadin-accordion-panel>

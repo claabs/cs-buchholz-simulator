@@ -1,8 +1,19 @@
 import type { MatchupProbability } from './settings.js';
 
+enum BestOfNumber {
+  BO1 = 1,
+  BO3 = 3,
+}
+
 interface Matchup<T extends string> {
   teamA: TeamStandingWithDifficulty<T>;
   teamB: TeamStandingWithDifficulty<T>;
+}
+
+interface PastOpponentDetail {
+  teamName: string;
+  bestOf: BestOfNumber;
+  won: boolean;
 }
 
 interface TeamStanding<T extends string> {
@@ -10,7 +21,7 @@ interface TeamStanding<T extends string> {
   seed: number;
   wins: number;
   losses: number;
-  pastOpponents: T[];
+  pastOpponents: PastOpponentDetail[];
 }
 
 interface TeamStandingWithDifficulty<T extends string> extends TeamStanding<T> {
@@ -23,16 +34,24 @@ interface QualElimOutput<T extends string> {
   competitors: TeamStanding<T>[];
 }
 
+interface OpponentCounts {
+  bo1: number;
+  bo3: number;
+  total: number;
+}
+
 interface TeamResultCounts {
   qualified: number;
   allWins: number;
   allLosses: number;
-  opponents: Map<string, number>;
+  opponents: Map<string, OpponentCounts>;
 }
 
 export interface OpponentRate {
   teamName: string;
-  ratePlayed: number;
+  totalRate: number;
+  bo1Rate: number;
+  bo3Rate: number;
 }
 
 export interface TeamResults {
@@ -91,8 +110,10 @@ const calculateDifficulties = <T extends string>(
   teamsStandings: TeamStanding<T>[]
 ): TeamStandingWithDifficulty<T>[] =>
   teamsStandings.map((team) => {
-    const difficulty = team.pastOpponents.reduce((differentialSum, opponentName) => {
-      const opponentStanding = teamsStandings.find((standing) => standing.name === opponentName);
+    const difficulty = team.pastOpponents.reduce((differentialSum, opponentDetail) => {
+      const opponentStanding = teamsStandings.find(
+        (standing) => standing.name === opponentDetail.teamName
+      );
       if (!opponentStanding) return differentialSum;
       const winDifferential = opponentStanding.wins - opponentStanding.losses;
       return differentialSum + winDifferential;
@@ -134,8 +155,18 @@ const categorizeResults = <T extends string>(
       teamResult.allLosses += 1;
     }
     teamStanding.pastOpponents.forEach((opponent) => {
-      const opponentCount = teamResult.opponents.get(opponent) || 0;
-      teamResult.opponents.set(opponent, opponentCount + 1);
+      const opponentCounts: OpponentCounts = teamResult.opponents.get(opponent.teamName) || {
+        bo1: 0,
+        bo3: 0,
+        total: 0,
+      };
+      opponentCounts.total += 1;
+      if (opponent.bestOf === BestOfNumber.BO1) {
+        opponentCounts.bo1 += 1;
+      } else {
+        opponentCounts.bo3 += 1;
+      }
+      teamResult.opponents.set(opponent.teamName, opponentCounts);
     });
 
     allTeamResults.set(teamStanding.name, teamResult);
@@ -148,19 +179,133 @@ export const getSeedOrder = <T extends string>(seeding: Record<string, T>) =>
     .sort(([seedA], [seedB]) => parseInt(seedA, 10) - parseInt(seedB, 10))
     .map(([, teamName]) => teamName);
 
+const sixTeamMatchupPriority: [[number, number], [number, number], [number, number]][] = [
+  [
+    [1, 6],
+    [2, 5],
+    [3, 4],
+  ],
+  [
+    [1, 6],
+    [2, 4],
+    [3, 5],
+  ],
+  [
+    [1, 5],
+    [2, 6],
+    [3, 4],
+  ],
+  [
+    [1, 5],
+    [2, 4],
+    [3, 6],
+  ],
+  [
+    [1, 4],
+    [2, 6],
+    [3, 5],
+  ],
+  [
+    [1, 4],
+    [2, 5],
+    [3, 6],
+  ],
+  [
+    [1, 6],
+    [2, 3],
+    [4, 5],
+  ],
+  [
+    [1, 5],
+    [2, 3],
+    [4, 6],
+  ],
+  [
+    [1, 3],
+    [2, 6],
+    [4, 5],
+  ],
+  [
+    [1, 3],
+    [2, 5],
+    [4, 6],
+  ],
+  [
+    [1, 4],
+    [2, 3],
+    [5, 6],
+  ],
+  [
+    [1, 3],
+    [2, 4],
+    [5, 6],
+  ],
+  [
+    [1, 2],
+    [3, 6],
+    [4, 5],
+  ],
+  [
+    [1, 2],
+    [3, 5],
+    [4, 6],
+  ],
+  [
+    [1, 2],
+    [3, 4],
+    [5, 6],
+  ],
+];
+
 const matchRecordGroup = <T extends string>(
   recordGroup: TeamStandingWithDifficulty<T>[]
 ): Matchup<T>[] => {
   const sortedGroup = sortRecordGroup(recordGroup);
   const matchups: Matchup<T>[] = [];
-  while (sortedGroup.length) {
-    const teamA = sortedGroup.shift();
-    const teamB = sortedGroup.pop();
-    if (teamA && teamB) {
-      matchups.push({
-        teamA,
-        teamB,
+  if (sortedGroup.length === 6) {
+    // In other rounds, refer to the following table and select the top-most row that does not result in a rematch:
+    let validMatchups: Matchup<T>[] = [];
+    sixTeamMatchupPriority.some((seedMatchups) => {
+      validMatchups = [];
+      return seedMatchups.every((seedMatchup) => {
+        const highTeam = sortedGroup[seedMatchup[0] - 1];
+        const lowTeam = sortedGroup[seedMatchup[1] - 1];
+        if (!(highTeam && lowTeam)) throw new Error('No team matching seed matchup');
+        if (!highTeam.pastOpponents.find((opp) => opp.teamName === lowTeam.name)) {
+          validMatchups.push({ teamA: highTeam, teamB: lowTeam });
+          return true;
+        }
+        return false;
       });
+    });
+    matchups.push(...validMatchups);
+  } else {
+    // Matchups shall be determined by seed. In round 3, the highest seeded team faces the lowest seeded team available that does not result in a rematch within the stage.
+    while (sortedGroup.length) {
+      const highTeam = sortedGroup.shift();
+      if (!highTeam) throw new Error('Missing high seed team');
+      const skippedTeams = [];
+      let validLowTeam = false;
+      let lowTeam: TeamStandingWithDifficulty<T> | undefined;
+
+      while (!validLowTeam) {
+        lowTeam = sortedGroup.pop();
+        if (!lowTeam) throw new Error('Missing low seed team');
+        const lowTeamName = lowTeam.name;
+        if (!highTeam.pastOpponents.some((opp) => opp.teamName === lowTeamName)) {
+          validLowTeam = true;
+        } else {
+          skippedTeams.unshift(lowTeam);
+        }
+      }
+      sortedGroup.push(...skippedTeams); // Re-add skipped low seed teams to end of the array
+
+      if (highTeam && lowTeam) {
+        matchups.push({
+          teamA: highTeam,
+          teamB: lowTeam,
+        });
+      }
     }
   }
   return matchups;
@@ -202,8 +347,9 @@ const simulateMatchup = <T extends string>(
 
   const teamAWins = Math.random() <= teamAWinrate;
   const { teamA, teamB } = matchup;
-  teamA.pastOpponents.push(teamB.name);
-  teamB.pastOpponents.push(teamA.name);
+  const bestOf = isQualElim ? BestOfNumber.BO3 : BestOfNumber.BO1;
+  teamA.pastOpponents.push({ teamName: teamB.name, bestOf, won: teamAWins });
+  teamB.pastOpponents.push({ teamName: teamA.name, bestOf, won: !teamAWins });
   if (teamAWins && !swapTeams) {
     teamA.wins += 1;
     teamB.losses += 1;
@@ -277,8 +423,13 @@ export const formatResultsCounts = (
     (acc, [teamName, resultCounts]) => {
       const formattedOpponents: OpponentRate[] = Array.from(
         resultCounts.opponents.entries(),
-        ([oppTeam, timesPlayed]) => ({ teamName: oppTeam, ratePlayed: timesPlayed / iterations })
-      ).sort((a, b) => b.ratePlayed - a.ratePlayed);
+        ([oppTeam, oppCounts]) => ({
+          teamName: oppTeam,
+          totalRate: oppCounts.total / iterations,
+          bo1Rate: oppCounts.bo1 / iterations,
+          bo3Rate: oppCounts.bo3 / iterations,
+        })
+      ).sort((a, b) => b.totalRate - a.totalRate);
       if (resultCounts.qualified) {
         acc.qualified.push({
           teamName,
