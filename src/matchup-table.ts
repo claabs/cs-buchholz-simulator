@@ -107,8 +107,8 @@ export class MatchupTable<T extends string> extends LitElement {
   private onMatchupValueChanged(e: CustomEvent<MatchupCellData>) {
     const prob = this.matchupProbabilities[e.detail.index];
     if (prob) {
-      prob.bo1TeamAWinrate = e.detail.bo1TeamAWinrate / 100;
-      prob.bo3TeamAWinrate = e.detail.bo3TeamAWinrate / 100;
+      prob.bo1TeamAWinrate = e.detail.bo1TeamAWinrate;
+      prob.bo3TeamAWinrate = e.detail.bo3TeamAWinrate;
     }
     this.dispatchProbabilityValueChanged();
   }

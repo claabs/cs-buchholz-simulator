@@ -75,22 +75,28 @@ export interface SimulationSettings {
 }
 
 export const generateEasyProbabilities = <T extends string>(
+  seedOrder: string[],
   ratings: Record<T, number>
-): MatchupProbability<T>[] =>
-  Object.entries<number>(ratings).reduce((acc, [team, rating], index, ratingEntries) => {
-    const opposingTeams = ratingEntries.slice(index + 1);
-    const teamMatchupProbs: MatchupProbability<T>[] = opposingTeams.map(([oppTeam, oppRating]) => {
-      const differenceFactor = rating / oppRating;
+): MatchupProbability<T>[] => {
+  const orderedRatings = seedOrder.map((teamName) => ({
+    teamName,
+    rating: ratings[teamName as T],
+  }));
+  return orderedRatings.reduce((acc, team, index) => {
+    const opposingTeams = orderedRatings.slice(index + 1);
+    const teamMatchupProbs: MatchupProbability<T>[] = opposingTeams.map((opp) => {
+      const differenceFactor = team.rating / opp.rating;
       const winRate = differenceFactor / (differenceFactor + 1);
       return {
-        teamA: team as T,
-        teamB: oppTeam as T,
+        teamA: team.teamName as T,
+        teamB: opp.teamName as T,
         bo1TeamAWinrate: winRate,
         bo3TeamAWinrate: winRate,
       };
     });
     return acc.concat(teamMatchupProbs);
   }, [] as MatchupProbability<T>[]);
+};
 
 const splitStandingsToRecordGroups = <T extends string>(
   teamsStandings: TeamStandingWithDifficulty<T>[]

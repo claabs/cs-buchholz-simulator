@@ -25,6 +25,7 @@ export class CsBuchholzSimulato extends LitElement {
 
   @state()
   private matchupProbabilities: MatchupProbability<string>[] = generateEasyProbabilities(
+    this.seedOrder,
     this.teamRating
   );
 
@@ -59,7 +60,7 @@ export class CsBuchholzSimulato extends LitElement {
 
   private teamRatingValueChanged(event: CustomEvent<Record<string, number>>) {
     this.teamRating = event.detail;
-    this.matchupProbabilities = generateEasyProbabilities(this.teamRating);
+    this.matchupProbabilities = generateEasyProbabilities(this.seedOrder, this.teamRating);
   }
 
   private probabilityValueChanged(event: CustomEvent<MatchupProbability<string>[]>) {
