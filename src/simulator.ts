@@ -136,7 +136,7 @@ const sortRecordGroup = <T extends string>(
   recordGroup: TeamStandingWithDifficulty<T>[]
 ): TeamStandingWithDifficulty<T>[] =>
   recordGroup.sort((teamA, teamB) => {
-    const difficultyDiff = teamA.difficulty - teamB.difficulty;
+    const difficultyDiff = teamB.difficulty - teamA.difficulty;
     if (difficultyDiff !== 0) return difficultyDiff;
     return teamA.seed - teamB.seed;
   });
