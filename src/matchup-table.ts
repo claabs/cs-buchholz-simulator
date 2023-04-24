@@ -126,6 +126,7 @@ export class MatchupTable<T extends string> extends LitElement {
 
   override render() {
     return html` <vaadin-grid
+      all-rows-visible
       theme="wrap-cell-content column-borders"
       .items=${this.gridItems}
       .cellPartNameGenerator=${this.cellPartNameGenerator}
@@ -135,7 +136,7 @@ export class MatchupTable<T extends string> extends LitElement {
         id="col-header"
         width="2rem"
         flex-grow="2"
-        header="Team Name"
+        header="BO1 / BO3"
         frozen
         ${columnBodyRenderer(this.headerColumnRenderer)}
       ></vaadin-grid-column>
