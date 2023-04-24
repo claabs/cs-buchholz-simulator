@@ -4,7 +4,6 @@ Make accurate Pick'Em predictions by providing head-to-head matchup odds and sim
 
 ## TODO
 
-- [ ] Easy BO1 offset adjustment for rating
 - [ ] Link to repo
 - [ ] Obvious CSS fixes
 - [ ] Save progress to local storage

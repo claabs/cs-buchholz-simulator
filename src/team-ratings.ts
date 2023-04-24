@@ -9,10 +9,16 @@ import type { NumberFieldValueChangedEvent, NumberField } from '@vaadin/number-f
 import '@vaadin/form-layout';
 import type { FormLayoutResponsiveStep } from '@vaadin/form-layout';
 import { produce } from 'immer';
+import type { ValueChangedEvent } from '@vaadin-component-factory/vcf-slider/out-tsc/src/vcf-slider.js';
 import type { MatchupProbability } from './settings.js';
 
 export interface IndexedMatchupProbability<T extends string> extends MatchupProbability<T> {
   index: number;
+}
+
+export interface TeamRatingDetails {
+  teamRating: Record<string, number>;
+  bo1Skew: number;
 }
 
 /**
@@ -26,6 +32,9 @@ export class TeamRatings<T extends string> extends LitElement {
   @property({ type: Object })
   public teamRating: Record<T, number>;
 
+  @property({ type: Number })
+  public bo1Skew = 0.5;
+
   static override styles = css``;
 
   private onTeamRatingChanged(e: NumberFieldValueChangedEvent) {
@@ -37,13 +46,19 @@ export class TeamRatings<T extends string> extends LitElement {
     this.dispatchTeamRatingValueChanged();
   }
 
+  private onBo1SkewValueChanged(e: ValueChangedEvent) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    this.bo1Skew = e.detail.value;
+    this.dispatchTeamRatingValueChanged();
+  }
+
   private dispatchTeamRatingValueChanged() {
-    const options: CustomEventInit<Record<T, number>> = {
-      detail: this.teamRating,
+    const options: CustomEventInit<TeamRatingDetails> = {
+      detail: { teamRating: this.teamRating, bo1Skew: this.bo1Skew },
       bubbles: true,
       composed: true,
     };
-    this.dispatchEvent(new CustomEvent<Record<T, number>>('teamRatingValueChanged', options));
+    this.dispatchEvent(new CustomEvent<TeamRatingDetails>('teamRatingValueChanged', options));
   }
 
   private responsiveSteps: FormLayoutResponsiveStep[] = [
@@ -59,7 +74,7 @@ export class TeamRatings<T extends string> extends LitElement {
       <vaadin-form-layout .responsiveSteps=${this.responsiveSteps}>
         ${this.seedOrder.map(
           (teamName, index) => html` <vaadin-number-field
-            id="rating-slider-${index}"
+            id="rating-input-${index}"
             teamName="${teamName as string}"
             label="${index + 1}: ${teamName as string}"
             step-buttons-visible
@@ -69,6 +84,16 @@ export class TeamRatings<T extends string> extends LitElement {
           ></vaadin-number-field>`
         )}
       </vaadin-form-layout>
+      <h3>Best of 1 skew toward 50/50</h3>
+      <vcf-slider
+        id="bo1-skew"
+        min="0"
+        max="1"
+        step="0.05"
+        tooltips-always-visible
+        value="${this.bo1Skew}"
+        @value-changed=${this.onBo1SkewValueChanged}
+      ></vcf-slider>
     `;
   }
 }

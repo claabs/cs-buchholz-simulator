@@ -14,6 +14,7 @@ import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
 import type { SimulationResultViewer } from './simulation-result-viewer.js';
 import type { TeamRatingsChart } from './team-ratings-chart.js';
+import type { TeamRatingDetails } from './team-ratings.js';
 
 @customElement('cs-buchholz-simulator')
 export class CsBuchholzSimulato extends LitElement {
@@ -26,7 +27,8 @@ export class CsBuchholzSimulato extends LitElement {
   @state()
   private matchupProbabilities: MatchupProbability<string>[] = generateEasyProbabilities(
     this.seedOrder,
-    this.teamRating
+    this.teamRating,
+    0.5
   );
 
   @state()
@@ -58,9 +60,10 @@ export class CsBuchholzSimulato extends LitElement {
     }
   `;
 
-  private teamRatingValueChanged(event: CustomEvent<Record<string, number>>) {
-    this.teamRating = event.detail;
-    this.matchupProbabilities = generateEasyProbabilities(this.seedOrder, this.teamRating);
+  private teamRatingValueChanged(event: CustomEvent<TeamRatingDetails>) {
+    this.teamRating = event.detail.teamRating;
+    const { bo1Skew } = event.detail;
+    this.matchupProbabilities = generateEasyProbabilities(this.seedOrder, this.teamRating, bo1Skew);
   }
 
   private probabilityValueChanged(event: CustomEvent<MatchupProbability<string>[]>) {
@@ -101,6 +104,7 @@ export class CsBuchholzSimulato extends LitElement {
     const teamRatingsTemplate = html`<team-ratings
         .seedOrder=${this.seedOrder}
         .teamRating=${this.teamRating}
+        .bo1Skew=${0.5}
         @teamRatingValueChanged=${this.teamRatingValueChanged}
       ></team-ratings>
       <team-ratings-chart .teamRating=${this.teamRating}></team-ratings-chart>`;
