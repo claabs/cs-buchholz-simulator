@@ -12,6 +12,7 @@ import '@vaadin/tabsheet/theme/lumo/vaadin-tabsheet';
 import '@vaadin/split-layout/theme/lumo/vaadin-split-layout';
 import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
+import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
 import type { SimulationResultViewer } from './simulation-result-viewer.js';
 import type { TeamRatingsChart } from './team-ratings-chart.js';
 import type { TeamRatingDetails } from './team-ratings.js';
@@ -140,12 +141,20 @@ export class CsBuchholzSimulato extends LitElement {
       </master-content>
       <detail-content style="width: 30%;">
         <vaadin-horizontal-layout theme="padding" style="justify-content: space-evenly">
-          <vaadin-button theme="primary" @click=${this.simulateButtonClicked}
+          <vaadin-button id="simulate" theme="primary" @click=${this.simulateButtonClicked}
             >Simulate 10k</vaadin-button
           >
-          <vaadin-button theme="primary" @click=${this.simulateLongButtonClicked}
+          <vaadin-tooltip
+            for="simulate"
+            text="Runs enough simulations to be consistent about ±2%. Good for seeing quick results."
+          ></vaadin-tooltip>
+          <vaadin-button id="simulate-long" theme="primary" @click=${this.simulateLongButtonClicked}
             >Simulate 100k</vaadin-button
           >
+          <vaadin-tooltip
+            for="simulate-long"
+            text="Runs more simulations for a more precise result. This can take around 10 seconds."
+          ></vaadin-tooltip>
         </vaadin-horizontal-layout>
         ${simulationResultViewerTemplate}
       </detail-content>

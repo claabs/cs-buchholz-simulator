@@ -1,11 +1,15 @@
 import { LitElement, PropertyValueMap, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import '@vaadin/grid/theme/lumo/vaadin-grid.js';
-import type { GridCellPartNameGenerator } from '@vaadin/grid';
 import { columnBodyRenderer, GridColumnBodyLitRenderer } from '@vaadin/grid/lit.js';
+import type { GridCellPartNameGenerator } from '@vaadin/grid';
+import '@vaadin/grid/theme/lumo/vaadin-grid.js';
+import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
+import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
+import '@vaadin/icon';
+import '@vaadin/icons';
 import type { MatchupProbability } from './settings.js';
-import './matchup-cell.js';
 import type { MatchupCellData } from './matchup-cell.js';
+import './matchup-cell.js';
 
 export interface IndexedMatchupProbability<T extends string> extends MatchupProbability<T> {
   index: number;
@@ -57,6 +61,9 @@ export class MatchupTable<T extends string> extends LitElement {
 
   @state()
   private gridItems: (MatchupCellData | undefined)[][] = [];
+
+  @state()
+  private tableHelpTooltipOpened = false;
 
   static override styles = css`
     vaadin-grid-cell-content {
@@ -125,34 +132,50 @@ export class MatchupTable<T extends string> extends LitElement {
   }
 
   override render() {
-    return html` <vaadin-grid
-      all-rows-visible
-      theme="wrap-cell-content column-borders"
-      .items=${this.gridItems}
-      .cellPartNameGenerator=${this.cellPartNameGenerator}
-      @matchupValueChanged=${this.onMatchupValueChanged}
-    >
-      <vaadin-grid-column
-        id="col-header"
-        width="2rem"
-        flex-grow="2"
-        header="BO1 / BO3"
-        frozen
-        ${columnBodyRenderer(this.headerColumnRenderer)}
-      ></vaadin-grid-column>
-      ${this.seedOrder.map(
-        (teamName, index) =>
-          html`<vaadin-grid-column
-            id=${`col-${teamName}`}
-            width="2rem"
-            flex-grow="2"
-            header=${teamName as string}
-            index=${index}
-            text-align="center"
-            ${columnBodyRenderer(this.matchupRowRenderer)}
-          ></vaadin-grid-column>`
-      )}
-    </vaadin-grid>`;
+    return html`<vaadin-horizontal-layout style="align-items: baseline" theme="spacing">
+        <h3>Adjust matchup odds</h3>
+        <vaadin-tooltip
+          for="table-help-icon"
+          text="The table cells can be edited to fine tune any matchup odds. The values are the win percentage for the team in the row; with the top being best-of-1 and bottom being best-of-3. After editing any cells, careful adjusting the rating scores as your custom cell data can be overwritten."
+          manual
+          .opened="${this.tableHelpTooltipOpened}"
+        ></vaadin-tooltip>
+        <vaadin-icon
+          id="table-help-icon"
+          icon="vaadin:question-circle"
+          @click="${() => {
+            this.tableHelpTooltipOpened = !this.tableHelpTooltipOpened;
+          }}"
+        ></vaadin-icon>
+      </vaadin-horizontal-layout>
+      <vaadin-grid
+        all-rows-visible
+        theme="wrap-cell-content column-borders"
+        .items=${this.gridItems}
+        .cellPartNameGenerator=${this.cellPartNameGenerator}
+        @matchupValueChanged=${this.onMatchupValueChanged}
+      >
+        <vaadin-grid-column
+          id="col-header"
+          width="2rem"
+          flex-grow="2"
+          header="BO1 / BO3"
+          frozen
+          ${columnBodyRenderer(this.headerColumnRenderer)}
+        ></vaadin-grid-column>
+        ${this.seedOrder.map(
+          (teamName, index) =>
+            html`<vaadin-grid-column
+              id=${`col-${teamName}`}
+              width="2rem"
+              flex-grow="2"
+              header=${teamName as string}
+              index=${index}
+              text-align="center"
+              ${columnBodyRenderer(this.matchupRowRenderer)}
+            ></vaadin-grid-column>`
+        )}
+      </vaadin-grid>`;
   }
 }
 

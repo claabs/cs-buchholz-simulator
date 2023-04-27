@@ -8,7 +8,7 @@ Make accurate Pick'Em predictions by providing head-to-head matchup odds and sim
 - [ ] Obvious CSS fixes
 - [ ] Save progress to local storage
 - [ ] Warn of progress loss on when re-adjusting ratings
-- [ ] Add step by step instruction
 - [ ] Add team logos/colors
 - [ ] New panel to customize teams/seeding
 - [ ] Add sim progress bar
+- [ ] Run sim in workers

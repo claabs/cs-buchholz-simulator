@@ -1,11 +1,15 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import '@vaadin/accordion/theme/lumo/vaadin-accordion';
 import type { FormLayoutResponsiveStep } from '@vaadin/form-layout';
+import '@vaadin/accordion/theme/lumo/vaadin-accordion';
 import '@vaadin/form-layout';
+import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
+import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
+import '@vaadin/icon';
+import '@vaadin/icons';
 import { simulateEvents, SimulationResults, TeamResults } from './simulator.js';
-import type { MatchupProbability } from './settings.js';
 import { rateToPctString } from './util.js';
+import type { MatchupProbability } from './settings.js';
 
 @customElement('simulation-result-viewer')
 export class SimulationResultViewer extends LitElement {
@@ -17,6 +21,9 @@ export class SimulationResultViewer extends LitElement {
 
   @state()
   private simulationResults: SimulationResults;
+
+  @state()
+  private simHelpTooltipOpened = false;
 
   public simulate(iterations: number): void {
     this.simulationResults = simulateEvents(
@@ -62,7 +69,22 @@ export class SimulationResultViewer extends LitElement {
   override render() {
     return html`
       ${this.simulationResults
-        ? html`<h3>Simulated ${this.simulationResults.iterations.toLocaleString()} events</h3>
+        ? html` <vaadin-horizontal-layout style="align-items: baseline" theme="spacing">
+              <h3>Simulated ${this.simulationResults.iterations.toLocaleString()} events</h3>
+              <vaadin-tooltip
+                for="sim-help-icon"
+                text="The percentage next to the team name in the dropdown title is how often out of all the simulations that the team achieved that result. You can open the dropdown for each team to see how often they play each opponent in an event, and within that, how often they play as a best-of-1 or best-of-3."
+                manual
+                .opened="${this.simHelpTooltipOpened}"
+              ></vaadin-tooltip>
+              <vaadin-icon
+                id="sim-help-icon"
+                icon="vaadin:question-circle"
+                @click="${() => {
+                  this.simHelpTooltipOpened = !this.simHelpTooltipOpened;
+                }}"
+              ></vaadin-icon>
+            </vaadin-horizontal-layout>
             <vaadin-form-layout .responsiveSteps=${this.responsiveSteps}>
               <vaadin-accordion>
                 <h2>${this.simulationResults.qualWins}-0 Teams</h2>

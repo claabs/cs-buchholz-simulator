@@ -1,15 +1,17 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
+import { produce } from 'immer';
+import type { NumberFieldValueChangedEvent, NumberField } from '@vaadin/number-field';
+import type { FormLayoutResponsiveStep } from '@vaadin/form-layout';
+import type { ValueChangedEvent } from '@vaadin-component-factory/vcf-slider/out-tsc/src/vcf-slider.js';
 import '@vaadin-component-factory/vcf-slider';
-import '@vaadin/vertical-layout/theme/lumo/vaadin-vertical-layout.js';
 import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
 import '@vaadin/number-field/theme/lumo/vaadin-number-field';
+import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
+import '@vaadin/icon';
+import '@vaadin/icons';
 import './matchup-cell.js';
-import type { NumberFieldValueChangedEvent, NumberField } from '@vaadin/number-field';
 import '@vaadin/form-layout';
-import type { FormLayoutResponsiveStep } from '@vaadin/form-layout';
-import { produce } from 'immer';
-import type { ValueChangedEvent } from '@vaadin-component-factory/vcf-slider/out-tsc/src/vcf-slider.js';
 import type { MatchupProbability } from './settings.js';
 
 export interface IndexedMatchupProbability<T extends string> extends MatchupProbability<T> {
@@ -34,6 +36,12 @@ export class TeamRatings<T extends string> extends LitElement {
 
   @property({ type: Number })
   public bo1Skew = 0.5;
+
+  @state()
+  private ratingHelpTooltipOpened = false;
+
+  @state()
+  private skewHelpTooltipOpened = false;
 
   static override styles = css``;
 
@@ -71,6 +79,22 @@ export class TeamRatings<T extends string> extends LitElement {
 
   override render() {
     return html`
+      <vaadin-horizontal-layout style="align-items: baseline" theme="spacing">
+        <h3>Set rating scores for each team</h3>
+        <vaadin-tooltip
+          for="rating-help-icon"
+          text="This section helps quickly populate the matchup table by calculating odds using points. The points are pre-populated with HLTV ranking points."
+          manual
+          .opened="${this.ratingHelpTooltipOpened}"
+        ></vaadin-tooltip>
+        <vaadin-icon
+          id="rating-help-icon"
+          icon="vaadin:question-circle"
+          @click="${() => {
+            this.ratingHelpTooltipOpened = !this.ratingHelpTooltipOpened;
+          }}"
+        ></vaadin-icon>
+      </vaadin-horizontal-layout>
       <vaadin-form-layout .responsiveSteps=${this.responsiveSteps}>
         ${this.seedOrder.map(
           (teamName, index) => html` <vaadin-number-field
@@ -84,7 +108,22 @@ export class TeamRatings<T extends string> extends LitElement {
           ></vaadin-number-field>`
         )}
       </vaadin-form-layout>
-      <h3>Best of 1 skew toward 50/50</h3>
+      <vaadin-horizontal-layout style="align-items: baseline" theme="spacing">
+        <h3>Best of 1 skew</h3>
+        <vaadin-tooltip
+          for="skew-help-icon"
+          text="Use this slider to adjust how much best-of-1 matches skew toward 50/50 compared to the best-of-3 odds, since BO1's tend to upset more. 0.0 means the BO1 are the same as the BO3 odds. 1.0 means the BO1 odds are 50/50."
+          manual
+          .opened="${this.skewHelpTooltipOpened}"
+        ></vaadin-tooltip>
+        <vaadin-icon
+          id="skew-help-icon"
+          icon="vaadin:question-circle"
+          @click="${() => {
+            this.skewHelpTooltipOpened = !this.skewHelpTooltipOpened;
+          }}"
+        ></vaadin-icon>
+      </vaadin-horizontal-layout>
       <vcf-slider
         id="bo1-skew"
         min="0"
