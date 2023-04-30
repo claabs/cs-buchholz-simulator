@@ -68,9 +68,19 @@ export class MatchupTable<T extends string> extends LitElement {
   static override styles = css`
     vaadin-grid-cell-content {
       padding: var(--lumo-space-xs);
+      text-overflow: clip;
     }
-    vaadin-grid::part(header-cell) {
-      overflow-wrap: normal;
+
+    @media (max-width: 640px) {
+      vaadin-grid::part(header-cell) {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+      }
+    }
+
+    vaadin-grid::part(first-column-cell) {
+      writing-mode: horizontal-tb;
+      text-orientation: mixed;
     }
   `;
 
