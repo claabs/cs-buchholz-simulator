@@ -12,6 +12,7 @@ import '@vaadin/tabsheet/theme/lumo/vaadin-tabsheet';
 import '@vaadin/split-layout/theme/lumo/vaadin-split-layout';
 import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
+import '@vaadin/vertical-layout/theme/lumo/vaadin-vertical-layout.js';
 import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
 import type { SimulationResultViewer } from './simulation-result-viewer.js';
 import type { TeamRatingsChart } from './team-ratings-chart.js';
@@ -34,6 +35,9 @@ export class CsBuchholzSimulato extends LitElement {
 
   @state()
   private isMobileView: boolean;
+
+  @state()
+  private selectedTab = 0;
 
   @query('simulation-result-viewer')
   private simulationResultViewer: SimulationResultViewer;
@@ -72,6 +76,7 @@ export class CsBuchholzSimulato extends LitElement {
   }
 
   private selectedTabChanged(event: TabSheetSelectedChangedEvent) {
+    this.selectedTab = event.detail.value;
     if (event.detail.value === 2) {
       this.simulationResultViewer.simulate(10000);
     }
@@ -121,42 +126,75 @@ export class CsBuchholzSimulato extends LitElement {
       .matchupProbabilities=${this.matchupProbabilities}
     ></simulation-result-viewer>`;
 
-    const mobileLayoutTemplate = html`<vaadin-tabsheet @selected-changed=${this.selectedTabChanged}>
+    const mobileLayoutTemplate = html`<vaadin-tabsheet
+      @selected-changed=${this.selectedTabChanged}
+      .selected=${this.selectedTab}
+    >
       <vaadin-tabs slot="tabs">
         <vaadin-tab id="ratings-tab">Ratings</vaadin-tab>
         <vaadin-tab id="matchups-tab">Matchups</vaadin-tab>
         <vaadin-tab id="results-tab">Results</vaadin-tab>
       </vaadin-tabs>
 
-      <div tab="ratings-tab">${teamRatingsTemplate}</div>
-      <div tab="matchups-tab">${matchupTableTemplate}</div>
+      <vaadin-vertical-layout tab="ratings-tab" theme="spacing-s" style="align-items: stretch">
+        ${teamRatingsTemplate}
+        <vaadin-button
+          id="to-matchups"
+          theme="primary"
+          @click=${() => {
+            this.selectedTab = 1;
+          }}
+          >To Matchups...</vaadin-button
+        >
+      </vaadin-vertical-layout>
+
+      <vaadin-vertical-layout tab="matchups-tab" theme="spacing-s" style="align-items: stretch">
+        ${matchupTableTemplate}
+        <vaadin-button
+          id="to-results"
+          theme="primary"
+          @click=${() => {
+            this.selectedTab = 2;
+          }}
+          >To Results...</vaadin-button
+        >
+      </vaadin-vertical-layout>
+
       <div tab="results-tab">${simulationResultViewerTemplate}</div>
     </vaadin-tabsheet>`;
 
     const desktopLayoutTemplate = html`<vaadin-split-layout
       @splitter-dragend=${this.splitterDragEnd}
+      style="height: 100vh;"
     >
       <master-content style="width: 70%;">
-        ${teamRatingsTemplate} ${matchupTableTemplate}
+        <vaadin-vertical-layout theme="padding" style="align-items: stretch">
+          ${teamRatingsTemplate} ${matchupTableTemplate}
+        </vaadin-vertical-layout>
       </master-content>
       <detail-content style="width: 30%;">
-        <vaadin-horizontal-layout theme="padding" style="justify-content: space-evenly">
-          <vaadin-button id="simulate" theme="primary" @click=${this.simulateButtonClicked}
-            >Simulate 10k</vaadin-button
-          >
-          <vaadin-tooltip
-            for="simulate"
-            text="Runs enough simulations to be consistent about ±2%. Good for seeing quick results."
-          ></vaadin-tooltip>
-          <vaadin-button id="simulate-long" theme="primary" @click=${this.simulateLongButtonClicked}
-            >Simulate 100k</vaadin-button
-          >
-          <vaadin-tooltip
-            for="simulate-long"
-            text="Runs more simulations for a more precise result. This can take around 10 seconds."
-          ></vaadin-tooltip>
-        </vaadin-horizontal-layout>
-        ${simulationResultViewerTemplate}
+        <vaadin-vertical-layout theme="padding" style="align-items: stretch">
+          <vaadin-horizontal-layout theme="padding" style="justify-content: space-evenly">
+            <vaadin-button id="simulate" theme="primary" @click=${this.simulateButtonClicked}
+              >Simulate 10k</vaadin-button
+            >
+            <vaadin-tooltip
+              for="simulate"
+              text="Runs enough simulations to be consistent about ±2%. Good for seeing quick results."
+            ></vaadin-tooltip>
+            <vaadin-button
+              id="simulate-long"
+              theme="primary"
+              @click=${this.simulateLongButtonClicked}
+              >Simulate 100k</vaadin-button
+            >
+            <vaadin-tooltip
+              for="simulate-long"
+              text="Runs more simulations for a more precise result. This can take around 10 seconds."
+            ></vaadin-tooltip>
+          </vaadin-horizontal-layout>
+          ${simulationResultViewerTemplate}
+        </vaadin-vertical-layout>
       </detail-content>
     </vaadin-split-layout>`;
 

@@ -43,7 +43,17 @@ export class TeamRatings<T extends string> extends LitElement {
   @state()
   private skewHelpTooltipOpened = false;
 
-  static override styles = css``;
+  static override styles = css`
+    vcf-slider {
+      /* align-self: center; */
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .slider-label {
+      margin-block-end: 0;
+    }
+  `;
 
   private onTeamRatingChanged(e: NumberFieldValueChangedEvent) {
     const teamName = (e.target as NumberField).getAttribute('teamName') as T;
@@ -79,7 +89,7 @@ export class TeamRatings<T extends string> extends LitElement {
 
   override render() {
     return html`
-      <vaadin-horizontal-layout style="align-items: baseline" theme="spacing">
+      <vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
         <h3>Set rating scores for each team</h3>
         <vaadin-tooltip
           for="rating-help-icon"
@@ -108,8 +118,8 @@ export class TeamRatings<T extends string> extends LitElement {
           ></vaadin-number-field>`
         )}
       </vaadin-form-layout>
-      <vaadin-horizontal-layout style="align-items: baseline" theme="spacing">
-        <h3>Best of 1 skew</h3>
+      <vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
+        <h3 class="slider-label">Best of 1 skew</h3>
         <vaadin-tooltip
           for="skew-help-icon"
           text="Use this slider to adjust how much best-of-1 matches skew toward 50/50 compared to the best-of-3 odds, since BO1's tend to upset more. 0.0 means the BO1 are the same as the BO3 odds. 1.0 means the BO1 odds are 50/50."

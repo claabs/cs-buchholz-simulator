@@ -73,12 +73,12 @@ export class MatchupCell extends LitElement {
         theme="spacing"
         style="justify-content: space-between; align-items: baseline;"
       >
-        <h2>${this.teamA}</h2>
+        <h2 style="margin-block-end: 0;">${this.teamA}</h2>
         defeats
-        <h2>${this.teamB}</h2>
+        <h2 style="margin-block-end: 0;">${this.teamB}</h2>
       </vaadin-horizontal-layout>
       <vaadin-vertical-layout style="align-items: stretch; width: 18rem; max-width: 100%;">
-        <h3>Best of 1</h3>
+        <h3 style="margin-block-end: 0;">Best of 1</h3>
         <vcf-slider
           id="bo1-slider"
           min="0"
@@ -90,7 +90,7 @@ export class MatchupCell extends LitElement {
             this.dialogData.bo1TeamAWinrate = e.detail.value;
           }}
         ></vcf-slider>
-        <h3>Best of 3</h3>
+        <h3 style="margin-block-end: 0;">Best of 3</h3>
         <vcf-slider
           id="bo3-slider"
           min="0"

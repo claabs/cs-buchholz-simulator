@@ -132,7 +132,7 @@ export class MatchupTable<T extends string> extends LitElement {
   }
 
   override render() {
-    return html`<vaadin-horizontal-layout style="align-items: baseline" theme="spacing">
+    return html`<vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
         <h3>Adjust matchup odds</h3>
         <vaadin-tooltip
           for="table-help-icon"

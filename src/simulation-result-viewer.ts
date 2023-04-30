@@ -64,13 +64,24 @@ export class SimulationResultViewer extends LitElement {
     `;
   }
 
-  static override styles = css``;
+  static override styles = css`
+    .sim-header {
+      margin-block-end: 0;
+    }
+
+    vaadin-accordion-heading {
+      color: black;
+      font-weight: bold;
+    }
+  `;
 
   override render() {
     return html`
       ${this.simulationResults
-        ? html` <vaadin-horizontal-layout style="align-items: baseline" theme="spacing">
-              <h3>Simulated ${this.simulationResults.iterations.toLocaleString()} events</h3>
+        ? html` <vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
+              <h3 class="sim-header">
+                Simulated ${this.simulationResults.iterations.toLocaleString()} events
+              </h3>
               <vaadin-tooltip
                 for="sim-help-icon"
                 text="The percentage next to the team name in the dropdown title is how often out of all the simulations that the team achieved that result. You can open the dropdown for each team to see how often they play each opponent in an event, and within that, how often they play as a best-of-1 or best-of-3."
@@ -87,19 +98,19 @@ export class SimulationResultViewer extends LitElement {
             </vaadin-horizontal-layout>
             <vaadin-form-layout .responsiveSteps=${this.responsiveSteps}>
               <vaadin-accordion>
-                <h2>${this.simulationResults.qualWins}-0 Teams</h2>
+                <h3 class="sim-header">${this.simulationResults.qualWins}-0 Teams</h3>
                 ${this.simulationResults.allWins.map((teamResults) =>
                   this.renderTeamResults(teamResults)
                 )}
               </vaadin-accordion>
               <vaadin-accordion>
-                <h2>Qualified Teams</h2>
+                <h3 class="sim-header">Qualified Teams</h3>
                 ${this.simulationResults.qualified.map((teamResults) =>
                   this.renderTeamResults(teamResults)
                 )}
               </vaadin-accordion>
               <vaadin-accordion>
-                <h2>0-${this.simulationResults.elimLosses} Teams</h2>
+                <h3 class="sim-header">0-${this.simulationResults.elimLosses} Teams</h3>
                 ${this.simulationResults.allLosses.map((teamResults) =>
                   this.renderTeamResults(teamResults)
                 )}
