@@ -6,6 +6,7 @@ import esbuild from 'rollup-plugin-esbuild';
 import { generateSW } from 'rollup-plugin-workbox';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
+import { copy } from '@web/rollup-plugin-copy';
 import path from 'path';
 
 export default {
@@ -25,6 +26,7 @@ export default {
       minify: true,
       injectServiceWorker: true,
       serviceWorkerPath: 'dist/sw.js',
+      absoluteBaseUrl: 'https://claabs.github.io/cs-buchholz-simulator/',
     }),
     /** Resolve bare module imports */
     nodeResolve(),
@@ -78,5 +80,6 @@ export default {
       clientsClaim: true,
       runtimeCaching: [{ urlPattern: 'polyfills/*.js', handler: 'CacheFirst' }],
     }),
+    copy({ patterns: 'assets/*' }),
   ],
 };
