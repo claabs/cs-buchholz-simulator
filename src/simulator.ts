@@ -38,12 +38,15 @@ interface OpponentCounts {
   bo1: number;
   bo3: number;
   total: number;
+  won: number;
 }
 
 interface TeamResultCounts {
   qualified: number;
   allWins: number;
   allLosses: number;
+  wins: number;
+  losses: number;
   opponents: Map<string, OpponentCounts>;
 }
 
@@ -52,11 +55,13 @@ export interface OpponentRate {
   totalRate: number;
   bo1Rate: number;
   bo3Rate: number;
+  winRate: number;
 }
 
 export interface TeamResults {
   teamName: string;
   rate: number;
+  winRate: number;
   opponents?: OpponentRate[];
 }
 
@@ -152,8 +157,12 @@ const categorizeResults = <T extends string>(
       qualified: 0,
       allWins: 0,
       allLosses: 0,
+      wins: 0,
+      losses: 0,
       opponents: new Map(),
     };
+    teamResult.wins += teamStanding.wins;
+    teamResult.losses += teamStanding.losses;
     if (teamStanding.wins === qualWins) {
       teamResult.qualified += 1;
       if (teamStanding.losses === 0) {
@@ -167,6 +176,7 @@ const categorizeResults = <T extends string>(
         bo1: 0,
         bo3: 0,
         total: 0,
+        won: 0,
       };
       opponentCounts.total += 1;
       if (opponent.bestOf === BestOfNumber.BO1) {
@@ -174,6 +184,7 @@ const categorizeResults = <T extends string>(
       } else {
         opponentCounts.bo3 += 1;
       }
+      if (opponent.won) opponentCounts.won += 1;
       teamResult.opponents.set(opponent.teamName, opponentCounts);
     });
 
@@ -273,7 +284,7 @@ const matchRecordGroup = <T extends string>(
   if (sortedGroup.length === 6) {
     // In other rounds, refer to the following table and select the top-most row that does not result in a rematch:
     let validMatchups: Matchup<T>[] = [];
-    sixTeamMatchupPriority.some((seedMatchups) => {
+    const foundValid = sixTeamMatchupPriority.some((seedMatchups) => {
       validMatchups = [];
       return seedMatchups.every((seedMatchup) => {
         const highTeam = sortedGroup[seedMatchup[0] - 1];
@@ -286,6 +297,7 @@ const matchRecordGroup = <T extends string>(
         return false;
       });
     });
+    if (!foundValid) throw new Error('No valid matchups without rematches!');
     matchups.push(...validMatchups);
   } else {
     // Matchups shall be determined by seed. In round 3, the highest seeded team faces the lowest seeded team available that does not result in a rematch within the stage.
@@ -349,16 +361,19 @@ const simulateMatchup = <T extends string>(
   const isQualElim =
     matchup.teamA.wins === simSettings.qualWins - 1 ||
     matchup.teamA.losses === simSettings.elimLosses - 1;
-  const teamAWinrate =
+  const swapProbability = probabilityListing
+    ? probabilityListing.teamA !== matchup.teamA.name
+    : false;
+  const probTeamAWinrate =
     (isQualElim ? probabilityListing?.bo3TeamAWinrate : probabilityListing?.bo1TeamAWinrate) || 0.5;
-  const swapTeams = probabilityListing ? probabilityListing.teamA !== matchup.teamA.name : false;
+  const teamAWinrate = swapProbability ? 1 - probTeamAWinrate : probTeamAWinrate;
 
   const teamAWins = Math.random() <= teamAWinrate;
   const { teamA, teamB } = matchup;
   const bestOf = isQualElim ? BestOfNumber.BO3 : BestOfNumber.BO1;
   teamA.pastOpponents.push({ teamName: teamB.name, bestOf, won: teamAWins });
   teamB.pastOpponents.push({ teamName: teamA.name, bestOf, won: !teamAWins });
-  if (teamAWins && !swapTeams) {
+  if (teamAWins) {
     teamA.wins += 1;
     teamB.losses += 1;
   } else {
@@ -436,13 +451,16 @@ export const formatResultsCounts = (
           totalRate: oppCounts.total / iterations,
           bo1Rate: oppCounts.bo1 / iterations,
           bo3Rate: oppCounts.bo3 / iterations,
+          winRate: oppCounts.won / oppCounts.total,
         })
       ).sort((a, b) => b.totalRate - a.totalRate);
+      const winRate = resultCounts.wins / (resultCounts.wins + resultCounts.losses);
       if (resultCounts.qualified) {
         acc.qualified.push({
           teamName,
           rate: resultCounts.qualified / iterations,
           opponents: formattedOpponents,
+          winRate,
         });
       }
       if (resultCounts.allWins) {
@@ -450,6 +468,7 @@ export const formatResultsCounts = (
           teamName,
           rate: resultCounts.allWins / iterations,
           opponents: formattedOpponents,
+          winRate,
         });
       }
       if (resultCounts.allLosses) {
@@ -457,6 +476,7 @@ export const formatResultsCounts = (
           teamName,
           rate: resultCounts.allLosses / iterations,
           opponents: formattedOpponents,
+          winRate,
         });
       }
 
