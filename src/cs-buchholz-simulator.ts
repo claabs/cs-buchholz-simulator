@@ -1,6 +1,8 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state, query, property } from 'lit/decorators.js';
+import { NotificationLitRenderer, notificationRenderer } from '@vaadin/notification/lit.js';
 import type { TabSheetSelectedChangedEvent } from '@vaadin/tabsheet';
+import type { NotificationOpenedChangedEvent } from '@vaadin/notification';
 import { MatchupProbability, masterRating, masterSeedOrder } from './settings.js';
 import { generateEasyProbabilities } from './simulator.js';
 import './matchup-table.js';
@@ -20,6 +22,60 @@ import type { TeamRatingDetails } from './team-ratings.js';
 
 @customElement('cs-buchholz-simulator')
 export class CsBuchholzSimulato extends LitElement {
+  constructor() {
+    super();
+    if ('serviceWorker' in navigator) {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      window.addEventListener('load', async () => {
+        // register the service worker from the file specified
+        const registration = await navigator.serviceWorker.register('./sw.js');
+
+        // ensure the case when the updatefound event was missed is also handled
+        // by re-invoking the prompt when there's a waiting Service Worker
+        if (registration.waiting) {
+          console.log('waiting');
+
+          this.registration = registration;
+          this.notificationOpened = true;
+        }
+
+        // detect Service Worker update available and wait for it to become installed
+        registration.addEventListener('updatefound', () => {
+          if (registration.installing) {
+            console.log('installing');
+
+            // wait until the new Service worker is actually installed (ready to take over)
+            registration.installing.addEventListener('statechange', () => {
+              if (registration.waiting) {
+                console.log('waiting');
+
+                // if there's an existing controller (previous Service Worker), show the prompt
+                if (navigator.serviceWorker.controller) {
+                  this.registration = registration;
+                  this.notificationOpened = true;
+                } else {
+                  // otherwise it's the first install, nothing to do
+                  console.log('Service Worker initialized for the first time');
+                }
+              }
+            });
+          }
+        });
+
+        let refreshing = false;
+
+        // detect controller change and refresh the page
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          console.log('controllerchange');
+          if (!refreshing) {
+            window.location.reload();
+            refreshing = true;
+          }
+        });
+      });
+    }
+  }
+
   @property({ type: Array })
   private seedOrder: string[] = masterSeedOrder;
 
@@ -39,11 +95,16 @@ export class CsBuchholzSimulato extends LitElement {
   @state()
   private selectedTab = 0;
 
+  @state()
+  private notificationOpened = false;
+
   @query('simulation-result-viewer')
   private simulationResultViewer: SimulationResultViewer;
 
   @query('team-ratings-chart')
   private teamRatingsChart: TeamRatingsChart<string>;
+
+  private registration?: ServiceWorkerRegistration;
 
   static override styles = css`
     /* :host {
@@ -98,6 +159,29 @@ export class CsBuchholzSimulato extends LitElement {
   private splitterDragEnd() {
     this.teamRatingsChart.chart.redraw();
   }
+
+  private updatePage() {
+    if (this.registration?.waiting) {
+      // let waiting Service Worker know it should became active
+      this.registration.waiting.postMessage('SKIP_WAITING');
+    }
+  }
+
+  private notificationRenderer: NotificationLitRenderer = (notif) => html`
+    <vaadin-horizontal-layout theme="spacing" style="align-items: center;">
+      <div>New version available! OK to reload?</div>
+      <vaadin-button
+        theme="tertiary-inline"
+        style="margin-left: var(--lumo-space-xl);"
+        @click="${this.updatePage}"
+      >
+        RELOAD
+      </vaadin-button>
+      <vaadin-button theme="tertiary-inline" aria-label="Close" @click="${notif.close}">
+        <vaadin-icon icon="lumo:cross"></vaadin-icon>
+      </vaadin-button>
+    </vaadin-horizontal-layout>
+  `;
 
   override connectedCallback(): void {
     // eslint-disable-next-line wc/guard-super-call
@@ -198,6 +282,20 @@ export class CsBuchholzSimulato extends LitElement {
       </detail-content>
     </vaadin-split-layout>`;
 
-    return html` <main>${this.isMobileView ? mobileLayoutTemplate : desktopLayoutTemplate}</main> `;
+    return html`
+      <main>
+        <vaadin-notification
+          theme=""
+          duration="10000"
+          position="bottom-center"
+          .opened="${this.notificationOpened}"
+          @opened-changed="${(e: NotificationOpenedChangedEvent) => {
+            this.notificationOpened = e.detail.value;
+          }}"
+          ${notificationRenderer(this.notificationRenderer, [])}
+        ></vaadin-notification>
+        >${this.isMobileView ? mobileLayoutTemplate : desktopLayoutTemplate}
+      </main>
+    `;
   }
 }

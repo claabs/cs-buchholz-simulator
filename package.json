@@ -24,6 +24,7 @@
     "@vaadin/horizontal-layout": "^24.0.2",
     "@vaadin/icon": "^24.0.3",
     "@vaadin/icons": "^24.0.3",
+    "@vaadin/notification": "^24.0.4",
     "@vaadin/number-field": "^24.0.2",
     "@vaadin/split-layout": "^24.0.3",
     "@vaadin/tabs": "^24.0.3",
