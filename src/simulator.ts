@@ -365,7 +365,7 @@ const simulateMatchup = <T extends string>(
     ? probabilityListing.teamA !== matchup.teamA.name
     : false;
   const probTeamAWinrate =
-    (isQualElim ? probabilityListing?.bo3TeamAWinrate : probabilityListing?.bo1TeamAWinrate) || 0.5;
+    (isQualElim ? probabilityListing?.bo3TeamAWinrate : probabilityListing?.bo1TeamAWinrate) ?? 0.5;
   const teamAWinrate = swapProbability ? 1 - probTeamAWinrate : probTeamAWinrate;
 
   const teamAWins = Math.random() <= teamAWinrate;
