@@ -6,57 +6,57 @@ export interface MatchupProbability<T extends string> {
 }
 
 export type MasterTeamName =
-  | 'Monte'
-  | 'paiN'
+  | 'NAVI'
+  | 'fnatic'
+  | 'Into the Breach'
+  | 'BNE'
+  | 'Heroic'
+  | '9INE'
+  | 'Vitality'
+  | 'FURIA'
   | 'G2'
-  | 'GamerLegion'
-  | 'forZe'
+  | 'ENCE'
+  | 'FaZe'
   | 'Apeks'
   | 'NIP'
-  | 'OG'
-  | 'ENCE'
-  | 'MOUZ'
-  | 'Liquid'
-  | 'Grayhound'
-  | 'CoL'
-  | 'MongolZ'
-  | 'Fluxo'
-  | 'FaZe';
+  | 'GamerLegion'
+  | 'Monte'
+  | 'Liquid';
 
 export const masterSeedOrder: string[] = [
-  'Monte',
-  'paiN',
-  'G2',
-  'GamerLegion',
-  'forZe',
-  'Apeks',
-  'NIP',
-  'OG',
+  'NAVI',
+  '9INE',
+  'FURIA',
+  'fnatic',
+  'Heroic',
+  'Into the Breach',
+  'Vitality',
+  'BNE',
   'ENCE',
-  'MOUZ',
-  'Liquid',
-  'Grayhound',
-  'CoL',
-  'MongolZ',
-  'Fluxo',
+  'G2',
+  'Apeks',
   'FaZe',
+  'NIP',
+  'Monte',
+  'Liquid',
+  'GamerLegion',
 ];
 
 export const masterRating: Record<MasterTeamName, number> = {
-  G2: 697,
-  FaZe: 680,
-  Liquid: 418,
-  ENCE: 290,
-  MOUZ: 239,
-  OG: 239,
-  NIP: 216,
-  forZe: 195,
-  paiN: 178,
-  CoL: 161,
+  Heroic: 926,
+  Vitality: 893,
+  NAVI: 806,
+  G2: 725,
+  FaZe: 700,
+  Liquid: 421,
+  FURIA: 639,
+  ENCE: 318,
+  NIP: 221,
+  fnatic: 215,
+  '9INE': 189,
+  BNE: 157,
   Monte: 113,
-  MongolZ: 111,
-  Grayhound: 101,
-  GamerLegion: 78,
-  Apeks: 75,
-  Fluxo: 45,
+  Apeks: 120,
+  'Into the Breach': 92,
+  GamerLegion: 75, // ?
 };
