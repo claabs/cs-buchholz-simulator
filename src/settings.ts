@@ -42,6 +42,47 @@ export const masterSeedOrder: string[] = [
   'GamerLegion',
 ];
 
+export const presetTeamLists: Record<string, string[]> = {
+  '2023 Paris Major Legends': [
+    'NAVI',
+    '9INE',
+    'FURIA',
+    'fnatic',
+    'Heroic',
+    'Into the Breach',
+    'Vitality',
+    'BNE',
+    'ENCE',
+    'G2',
+    'Apeks',
+    'FaZe',
+    'NIP',
+    'Monte',
+    'Liquid',
+    'GamerLegion',
+  ],
+
+  '2023 Paris Major Challengers': [
+    'Monte',
+    'paiN',
+    'G2',
+    'GamerLegion',
+    'forZe',
+    'Apeks',
+    'NIP',
+    'OG',
+    'ENCE',
+    'MOUZ',
+    'Liquid',
+    'Grayhound',
+    'CoL',
+    'MongolZ',
+    'Fluxo',
+    'FaZe',
+  ],
+  Custom: [],
+};
+
 export const masterRating: Record<MasterTeamName, number> = {
   Heroic: 926,
   Vitality: 893,

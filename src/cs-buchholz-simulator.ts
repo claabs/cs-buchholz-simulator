@@ -3,6 +3,7 @@ import { customElement, state, query, property } from 'lit/decorators.js';
 import type { TabSheetSelectedChangedEvent } from '@vaadin/tabsheet';
 import { MatchupProbability, masterRating, masterSeedOrder } from './settings.js';
 import { generateEasyProbabilities } from './simulator.js';
+import './team-list.js';
 import './matchup-table.js';
 import './team-ratings.js';
 import './team-ratings-chart.js';
@@ -107,6 +108,8 @@ export class CsBuchholzSimulato extends LitElement {
   }
 
   override render() {
+    const teamListTemplate = html`<team-list .teamList=${this.seedOrder}></team-list>`;
+
     const teamRatingsTemplate = html`<team-ratings
         .seedOrder=${this.seedOrder}
         .teamRating=${this.teamRating}
@@ -131,10 +134,23 @@ export class CsBuchholzSimulato extends LitElement {
       .selected=${this.selectedTab}
     >
       <vaadin-tabs slot="tabs">
+        <vaadin-tab id="team-list-tab">Ratings</vaadin-tab>
         <vaadin-tab id="ratings-tab">Ratings</vaadin-tab>
         <vaadin-tab id="matchups-tab">Matchups</vaadin-tab>
         <vaadin-tab id="results-tab">Results</vaadin-tab>
       </vaadin-tabs>
+
+      <vaadin-vertical-layout tab="team-list-tab" theme="spacing-s" style="align-items: stretch">
+        ${teamListTemplate}
+        <vaadin-button
+          id="to-ratings"
+          theme="primary"
+          @click=${() => {
+            this.selectedTab = 1;
+          }}
+          >To Ratings...</vaadin-button
+        >
+      </vaadin-vertical-layout>
 
       <vaadin-vertical-layout tab="ratings-tab" theme="spacing-s" style="align-items: stretch">
         ${teamRatingsTemplate}
@@ -142,7 +158,7 @@ export class CsBuchholzSimulato extends LitElement {
           id="to-matchups"
           theme="primary"
           @click=${() => {
-            this.selectedTab = 1;
+            this.selectedTab = 2;
           }}
           >To Matchups...</vaadin-button
         >
@@ -154,7 +170,7 @@ export class CsBuchholzSimulato extends LitElement {
           id="to-results"
           theme="primary"
           @click=${() => {
-            this.selectedTab = 2;
+            this.selectedTab = 3;
           }}
           >To Results...</vaadin-button
         >
@@ -169,7 +185,7 @@ export class CsBuchholzSimulato extends LitElement {
     >
       <master-content style="width: 70%;">
         <vaadin-vertical-layout theme="padding" style="align-items: stretch">
-          ${teamRatingsTemplate} ${matchupTableTemplate}
+          ${teamListTemplate} ${teamRatingsTemplate} ${matchupTableTemplate}
         </vaadin-vertical-layout>
       </master-content>
       <detail-content style="width: 30%;">
