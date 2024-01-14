@@ -80,8 +80,7 @@
   },
   "lint-staged": {
     "*.ts": [
-      "eslint --fix",
-      "prettier --write"
+      "eslint"
     ]
   },
   "customElements": "custom-elements.json"
