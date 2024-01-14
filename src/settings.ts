@@ -1,57 +1,20 @@
-export interface MatchupProbability<T extends string> {
-  teamA: T;
-  teamB: T;
+export interface MatchupProbability {
+  teamA: string;
+  teamB: string;
   bo1TeamAWinrate: number;
   bo3TeamAWinrate: number;
 }
 
-export type MasterTeamName =
-  | 'NAVI'
-  | 'fnatic'
-  | 'Into the Breach'
-  | 'BNE'
-  | 'Heroic'
-  | '9INE'
-  | 'Vitality'
-  | 'FURIA'
-  | 'G2'
-  | 'ENCE'
-  | 'FaZe'
-  | 'Apeks'
-  | 'NIP'
-  | 'GamerLegion'
-  | 'Monte'
-  | 'Liquid';
-
-export const masterSeedOrder: string[] = [
-  'NAVI',
-  '9INE',
-  'FURIA',
-  'fnatic',
-  'Heroic',
-  'Into the Breach',
-  'Vitality',
-  'BNE',
-  'ENCE',
-  'G2',
-  'Apeks',
-  'FaZe',
-  'NIP',
-  'Monte',
-  'Liquid',
-  'GamerLegion',
-];
-
 export const presetTeamLists: Record<string, string[]> = {
   '2023 Paris Major Legends': [
-    'NAVI',
+    'Natus Vincere',
     '9INE',
     'FURIA',
     'fnatic',
     'Heroic',
     'Into the Breach',
     'Vitality',
-    'BNE',
+    'Bad News Eagles',
     'ENCE',
     'G2',
     'Apeks',
@@ -61,43 +24,23 @@ export const presetTeamLists: Record<string, string[]> = {
     'Liquid',
     'GamerLegion',
   ],
-
   '2023 Paris Major Challengers': [
     'Monte',
     'paiN',
     'G2',
     'GamerLegion',
-    'forZe',
+    'FORZE',
     'Apeks',
-    'NIP',
+    'Ninjas in Pyjamas',
     'OG',
     'ENCE',
     'MOUZ',
     'Liquid',
     'Grayhound',
-    'CoL',
-    'MongolZ',
+    'Complexity',
+    'TheMongolz',
     'Fluxo',
     'FaZe',
   ],
   Custom: [],
-};
-
-export const masterRating: Record<MasterTeamName, number> = {
-  Heroic: 926,
-  Vitality: 893,
-  NAVI: 806,
-  G2: 725,
-  FaZe: 700,
-  Liquid: 421,
-  FURIA: 639,
-  ENCE: 318,
-  NIP: 221,
-  fnatic: 215,
-  '9INE': 189,
-  BNE: 157,
-  Monte: 113,
-  Apeks: 120,
-  'Into the Breach': 92,
-  GamerLegion: 75, // ?
 };

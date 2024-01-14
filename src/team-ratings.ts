@@ -14,7 +14,7 @@ import './matchup-cell.js';
 import '@vaadin/form-layout';
 import type { MatchupProbability } from './settings.js';
 
-export interface IndexedMatchupProbability<T extends string> extends MatchupProbability<T> {
+export interface IndexedMatchupProbability extends MatchupProbability {
   index: number;
 }
 
@@ -27,12 +27,12 @@ export interface TeamRatingDetails {
  * @event {CustomEvent<Record<T, number>>} teamRatingValueChanged - Fired when the team rating value changes
  */
 @customElement('team-ratings')
-export class TeamRatings<T extends string> extends LitElement {
+export class TeamRatings extends LitElement {
   @property({ type: Array })
-  public seedOrder: T[] = [];
+  public seedOrder: string[] = [];
 
   @property({ type: Object })
-  public teamRating: Record<T, number>;
+  public teamRating: Record<string, number>;
 
   @property({ type: Number })
   public bo1Skew = 0.5;
@@ -56,7 +56,7 @@ export class TeamRatings<T extends string> extends LitElement {
   `;
 
   private onTeamRatingChanged(e: NumberFieldValueChangedEvent) {
-    const teamName = (e.target as NumberField).getAttribute('teamName') as T;
+    const teamName = (e.target as NumberField).getAttribute('teamName') as string;
     this.teamRating = produce<Record<string, number>>(this.teamRating, (teamRating) => {
       // eslint-disable-next-line no-param-reassign
       teamRating[teamName] = parseFloat(e.detail.value);
@@ -109,10 +109,10 @@ export class TeamRatings<T extends string> extends LitElement {
         ${this.seedOrder.map(
           (teamName, index) => html` <vaadin-number-field
             id="rating-input-${index}"
-            teamName="${teamName as string}"
-            label="${index + 1}: ${teamName as string}"
+            teamName="${teamName}"
+            label="${index + 1}: ${teamName}"
             step-buttons-visible
-            .value=${this.teamRating[teamName]}
+            .value=${this.teamRating[teamName] ?? 0}
             @value-changed=${this.onTeamRatingChanged}
             .min=${0}
           ></vaadin-number-field>`
@@ -149,6 +149,6 @@ export class TeamRatings<T extends string> extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'team-ratings': TeamRatings<string>;
+    'team-ratings': TeamRatings;
   }
 }

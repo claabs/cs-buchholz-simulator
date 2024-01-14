@@ -1,7 +1,8 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state, query, property } from 'lit/decorators.js';
 import type { TabSheetSelectedChangedEvent } from '@vaadin/tabsheet';
-import { MatchupProbability, masterRating, masterSeedOrder } from './settings.js';
+import { MatchupProbability, presetTeamLists } from './settings.js';
+import masterRating from './hltv-team-points.js';
 import { generateEasyProbabilities } from './simulator.js';
 import './team-list.js';
 import './matchup-table.js';
@@ -19,16 +20,25 @@ import type { SimulationResultViewer } from './simulation-result-viewer.js';
 import type { TeamRatingsChart } from './team-ratings-chart.js';
 import type { TeamRatingDetails } from './team-ratings.js';
 
+const filterTeamRating = (seedOrder: string[]): Record<string, number> => {
+  const teamRating: Record<string, number> = {};
+  seedOrder.forEach((teamName) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    teamRating[teamName] = masterRating[teamName] ?? 0;
+  });
+  return teamRating;
+};
+
 @customElement('cs-buchholz-simulator')
 export class CsBuchholzSimulato extends LitElement {
   @property({ type: Array })
-  private seedOrder: string[] = masterSeedOrder;
+  private seedOrder: string[] = Object.values(presetTeamLists)[0] || [];
 
   @state()
-  private teamRating: Record<string, number> = masterRating as Record<string, number>;
+  private teamRating: Record<string, number> = filterTeamRating(this.seedOrder);
 
   @state()
-  private matchupProbabilities: MatchupProbability<string>[] = generateEasyProbabilities(
+  private matchupProbabilities: MatchupProbability[] = generateEasyProbabilities(
     this.seedOrder,
     this.teamRating,
     0.5
@@ -44,7 +54,7 @@ export class CsBuchholzSimulato extends LitElement {
   private simulationResultViewer: SimulationResultViewer;
 
   @query('team-ratings-chart')
-  private teamRatingsChart: TeamRatingsChart<string>;
+  private teamRatingsChart: TeamRatingsChart;
 
   static override styles = css`
     /* :host {
@@ -66,13 +76,18 @@ export class CsBuchholzSimulato extends LitElement {
     }
   `;
 
+  private teamListChanged(event: CustomEvent<string[]>) {
+    this.seedOrder = event.detail;
+    this.teamRating = filterTeamRating(this.seedOrder);
+  }
+
   private teamRatingValueChanged(event: CustomEvent<TeamRatingDetails>) {
     this.teamRating = event.detail.teamRating;
     const { bo1Skew } = event.detail;
     this.matchupProbabilities = generateEasyProbabilities(this.seedOrder, this.teamRating, bo1Skew);
   }
 
-  private probabilityValueChanged(event: CustomEvent<MatchupProbability<string>[]>) {
+  private probabilityValueChanged(event: CustomEvent<MatchupProbability[]>) {
     this.matchupProbabilities = event.detail;
   }
 
@@ -108,7 +123,10 @@ export class CsBuchholzSimulato extends LitElement {
   }
 
   override render() {
-    const teamListTemplate = html`<team-list .teamList=${this.seedOrder}></team-list>`;
+    const teamListTemplate = html`<team-list
+      .teamList=${this.seedOrder}
+      @teamListChanged=${this.teamListChanged}
+    ></team-list>`;
 
     const teamRatingsTemplate = html`<team-ratings
         .seedOrder=${this.seedOrder}

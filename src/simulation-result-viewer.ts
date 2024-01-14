@@ -17,7 +17,7 @@ export class SimulationResultViewer extends LitElement {
   public seedOrder: string[];
 
   @property({ type: Array, noAccessor: true })
-  public matchupProbabilities: MatchupProbability<string>[];
+  public matchupProbabilities: MatchupProbability[];
 
   @state()
   private simulationResults: SimulationResults;

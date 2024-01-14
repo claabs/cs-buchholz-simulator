@@ -6,18 +6,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
+    "lint": "tsc --noEmit && eslint .",
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
     "build": "rimraf dist && tsc && rollup -c rollup.config.js && npm run analyze -- --exclude dist",
     "start:build": "web-dev-server --root-dir dist --app-index index.html --open",
     "analyze": "cem analyze --litelement",
-    "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\""
+    "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
+    "update-points": "vite-node update-rankings.ts"
   },
   "dependencies": {
     "@google-web-components/google-chart": "^5.0.3",
     "@vaadin-component-factory/vcf-slider": "^23.3.6",
     "@vaadin/accordion": "^24.0.3",
     "@vaadin/button": "^24.0.2",
+    "@vaadin/combo-box": "24.0",
     "@vaadin/dialog": "^24.0.2",
     "@vaadin/form-layout": "^24.0.2",
     "@vaadin/grid": "^24.0.2",
@@ -29,7 +31,6 @@
     "@vaadin/split-layout": "^24.0.3",
     "@vaadin/tabs": "^24.0.3",
     "@vaadin/tabsheet": "^24.0.3",
-    "@vaadin/text-field": "24.0",
     "@vaadin/tooltip": "^24.0.3",
     "@vaadin/vertical-layout": "^24.0.2",
     "color-scales": "^3.0.2",
@@ -60,6 +61,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
+    "hltv": "^3.5.0",
     "husky": "^4.3.8",
     "lint-staged": "^10.5.4",
     "prettier": "^2.8.7",
@@ -68,7 +70,8 @@
     "rollup-plugin-esbuild": "^5.0.0",
     "rollup-plugin-workbox": "^6.2.0",
     "tslib": "^2.3.1",
-    "typescript": "4.7"
+    "typescript": "4.7",
+    "vite-node": "^1.2.0"
   },
   "husky": {
     "hooks": {

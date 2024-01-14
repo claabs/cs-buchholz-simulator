@@ -11,16 +11,16 @@ import type { MatchupProbability } from './settings.js';
 import type { MatchupCellData } from './matchup-cell.js';
 import './matchup-cell.js';
 
-export interface IndexedMatchupProbability<T extends string> extends MatchupProbability<T> {
+export interface IndexedMatchupProbability extends MatchupProbability {
   index: number;
 }
 
-const matchupProbabilitiesToGridItems = <T extends string>(
-  matchupProbabilities: MatchupProbability<T>[],
-  seedOrder: T[]
-): (IndexedMatchupProbability<T> | undefined)[][] => {
+const matchupProbabilitiesToGridItems = (
+  matchupProbabilities: MatchupProbability[],
+  seedOrder: string[]
+): (IndexedMatchupProbability | undefined)[][] => {
   // Index matchups so we can quickly update them when cells are updated
-  const indexedMatchupProbabilities: IndexedMatchupProbability<T>[] = matchupProbabilities.map(
+  const indexedMatchupProbabilities: IndexedMatchupProbability[] = matchupProbabilities.map(
     (prob, index) => ({ ...prob, index })
   );
   return seedOrder.map((rowTeamName, rowIndex) => {
@@ -37,8 +37,8 @@ const matchupProbabilitiesToGridItems = <T extends string>(
         [prob.teamA, prob.teamB].includes(opposingTeamName)
       );
       return {
-        teamA: matchup?.teamA || ('Team A' as T),
-        teamB: matchup?.teamB || ('Team B' as T),
+        teamA: matchup?.teamA || 'Team A',
+        teamB: matchup?.teamB || 'Team B',
         bo1TeamAWinrate: matchup?.bo1TeamAWinrate || 0,
         bo3TeamAWinrate: matchup?.bo3TeamAWinrate || 0,
         index: matchup?.index || -1,
@@ -48,16 +48,16 @@ const matchupProbabilitiesToGridItems = <T extends string>(
 };
 
 @customElement('matchup-table')
-export class MatchupTable<T extends string> extends LitElement {
+export class MatchupTable extends LitElement {
   @property({
     type: Array,
   })
-  public seedOrder: T[] = [];
+  public seedOrder: string[] = [];
 
   @property({
     type: Array,
   })
-  public matchupProbabilities: MatchupProbability<T>[] = [];
+  public matchupProbabilities: MatchupProbability[] = [];
 
   @state()
   private gridItems: (MatchupCellData | undefined)[][] = [];
@@ -90,7 +90,7 @@ export class MatchupTable<T extends string> extends LitElement {
     }
   }
 
-  private matchupRowRenderer: GridColumnBodyLitRenderer<IndexedMatchupProbability<T>[]> = (
+  private matchupRowRenderer: GridColumnBodyLitRenderer<IndexedMatchupProbability[]> = (
     item,
     _model,
     column
@@ -102,19 +102,19 @@ export class MatchupTable<T extends string> extends LitElement {
       .bo1TeamAWinrate=${matchup.bo1TeamAWinrate}
       .bo3TeamAWinrate=${matchup.bo3TeamAWinrate}
       .matchupIndex=${matchup.index}
-      teamA="${matchup.teamA as string}"
-      teamB="${matchup.teamB as string}"
+      teamA="${matchup.teamA}"
+      teamB="${matchup.teamB}"
     ></matchup-cell>`;
   };
 
-  private headerColumnRenderer: GridColumnBodyLitRenderer<IndexedMatchupProbability<T>[]> = (
+  private headerColumnRenderer: GridColumnBodyLitRenderer<IndexedMatchupProbability[]> = (
     _items,
     model
   ) => {
     return html`${this.seedOrder[model.index] || 'error'}`;
   };
 
-  private cellPartNameGenerator: GridCellPartNameGenerator<IndexedMatchupProbability<T>[]> = (
+  private cellPartNameGenerator: GridCellPartNameGenerator<IndexedMatchupProbability[]> = (
     column
   ) => {
     if (column.id === 'col-header') return 'header-cell';
@@ -131,14 +131,12 @@ export class MatchupTable<T extends string> extends LitElement {
   }
 
   private dispatchProbabilityValueChanged() {
-    const options: CustomEventInit<MatchupProbability<T>[]> = {
+    const options: CustomEventInit<MatchupProbability[]> = {
       detail: this.matchupProbabilities,
       bubbles: true,
       composed: true,
     };
-    this.dispatchEvent(
-      new CustomEvent<MatchupProbability<T>[]>('probabilityValueChanged', options)
-    );
+    this.dispatchEvent(new CustomEvent<MatchupProbability[]>('probabilityValueChanged', options));
   }
 
   override render() {
@@ -179,7 +177,7 @@ export class MatchupTable<T extends string> extends LitElement {
               id=${`col-${teamName}`}
               width="2rem"
               flex-grow="2"
-              header=${teamName as string}
+              header=${teamName}
               index=${index}
               text-align="center"
               ${columnBodyRenderer(this.matchupRowRenderer)}
@@ -191,6 +189,6 @@ export class MatchupTable<T extends string> extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'matchup-table': MatchupTable<string>;
+    'matchup-table': MatchupTable;
   }
 }

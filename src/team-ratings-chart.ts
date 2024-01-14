@@ -4,24 +4,24 @@ import '@google-web-components/google-chart';
 import type { GoogleChart } from '@google-web-components/google-chart';
 import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
 
-const teamRatingToChartData = <T extends string>(
-  teamRating: Record<T, number>
-): [[string, string], ...[T, number][]] => {
-  const sortedRatings = (Object.entries<number>(teamRating) as [T, number][]).sort(
+const teamRatingToChartData = (
+  teamRating: Record<string, number>
+): [[string, string], ...[string, number][]] => {
+  const sortedRatings = Object.entries<number>(teamRating).sort(
     ([, ratingA], [, ratingB]) => ratingB - ratingA
   );
   return [['Team', 'Rating'], ...sortedRatings];
 };
 
 @customElement('team-ratings-chart')
-export class TeamRatingsChart<T extends string> extends LitElement {
+export class TeamRatingsChart extends LitElement {
   @property({
     type: Object,
   })
-  public teamRating: Record<T, number>;
+  public teamRating: Record<string, number>;
 
   @state()
-  private chartData: [[string, string], ...[T, number][]] = [['Team', 'Rating']];
+  private chartData: [[string, string], ...[string, number][]] = [['Team', 'Rating']];
 
   @query('google-chart')
   public chart: GoogleChart;
@@ -67,6 +67,6 @@ export class TeamRatingsChart<T extends string> extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'team-ratings-chart': TeamRatingsChart<string>;
+    'team-ratings-chart': TeamRatingsChart;
   }
 }

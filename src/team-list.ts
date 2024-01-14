@@ -3,12 +3,19 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { produce } from 'immer';
 import { columnBodyRenderer, GridColumnBodyLitRenderer } from '@vaadin/grid/lit.js';
 import type { GridDragStartEvent, GridDropEvent } from '@vaadin/grid';
-import type { TextFieldChangeEvent } from '@vaadin/text-field';
+import type { ComboBoxChangeEvent } from '@vaadin/combo-box';
 import type { SelectItem, SelectValueChangedEvent } from '@vaadin/select';
 import '@vaadin/grid/theme/lumo/vaadin-grid.js';
 import '@vaadin/select/theme/lumo/vaadin-select.js';
-import '@vaadin/text-field/theme/lumo/vaadin-text-field.js';
+import '@vaadin/combo-box/theme/lumo/vaadin-combo-box.js';
 import { presetTeamLists } from './settings.js';
+import masterRating from './hltv-team-points.js';
+
+const allTeamNames = Object.entries(masterRating)
+  .sort((a, b) => {
+    return b[1] - a[1];
+  })
+  .map(([team]) => team);
 
 /**
  * @event {CustomEvent<string[]>} teamListChanged - Fired when the team list changes
@@ -62,6 +69,7 @@ export class TeamList extends LitElement {
         teamList.splice(dropIndex, 0, draggedItem);
       })(this.teamList, this.draggedItem);
       this.presetListValue = 'Custom';
+      this.dispatchTeamListChanged();
     }
   }
 
@@ -79,7 +87,7 @@ export class TeamList extends LitElement {
     this.dispatchTeamListChanged();
   }
 
-  private onTeamNameChange(e: TextFieldChangeEvent) {
+  private onTeamNameChange(e: ComboBoxChangeEvent<string>) {
     const indexString = e.target.getAttribute('index');
     if (!indexString) return;
     const index = parseInt(indexString, 10);
@@ -95,13 +103,15 @@ export class TeamList extends LitElement {
   };
 
   private teamNameColumnRenderer: GridColumnBodyLitRenderer<string> = (item, model) => {
-    return html`<vaadin-text-field
+    return html`<vaadin-combo-box
       aria-label="Team Name ${model.index + 1}"
+      allow-custom-value
       value="${item}"
       index="${model.index}"
       @change=${this.onTeamNameChange}
+      .items="${allTeamNames}"
     >
-    </vaadin-text-field>`;
+    </vaadin-combo-box>`;
   };
 
   override render() {

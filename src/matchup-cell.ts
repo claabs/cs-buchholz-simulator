@@ -11,7 +11,7 @@ import type { ValueChangedEvent } from '@vaadin-component-factory/vcf-slider/out
 import ColorScale from 'color-scales';
 import type { IndexedMatchupProbability } from './matchup-table.js';
 
-export type MatchupCellData = Omit<IndexedMatchupProbability<string>, 'teamA' | 'teamB'>;
+export type MatchupCellData = Omit<IndexedMatchupProbability, 'teamA' | 'teamB'>;
 
 // 'lightcoral', 'white', 'lightskyblue'
 const gradient = new ColorScale(0, 1, ['#F08080', '#FFFFFF', '#87CEFA']);
