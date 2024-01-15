@@ -5,8 +5,10 @@ import '@vaadin/accordion/theme/lumo/vaadin-accordion';
 import '@vaadin/form-layout';
 import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
 import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
+import '@vaadin/progress-bar/theme/lumo/vaadin-progress-bar';
 import '@vaadin/icon';
 import '@vaadin/icons';
+import '@vaadin/progress-bar';
 import { simulateEvents, SimulationResults, TeamResults } from './simulator.js';
 import { rateToPctString } from './util.js';
 import type { MatchupProbability } from './settings.js';
@@ -25,7 +27,15 @@ export class SimulationResultViewer extends LitElement {
   @state()
   private simHelpTooltipOpened = false;
 
+  @state()
+  private percentCompleted = 0;
+
+  private updateProgress(pct: number) {
+    this.percentCompleted = pct;
+  }
+
   public async simulate(iterations: number): Promise<void> {
+    this.percentCompleted = 0;
     this.simulationResults = await simulateEvents(
       this.seedOrder,
       this.matchupProbabilities,
@@ -33,8 +43,10 @@ export class SimulationResultViewer extends LitElement {
         qualWins: 3,
         elimLosses: 3,
       },
+      this.updateProgress.bind(this),
       iterations
     );
+    this.percentCompleted = 1;
   }
 
   private responsiveSteps: FormLayoutResponsiveStep[] = [
@@ -77,6 +89,7 @@ export class SimulationResultViewer extends LitElement {
 
   override render() {
     return html`
+      <vaadin-progress-bar value="${this.percentCompleted}"></vaadin-progress-bar>
       ${this.simulationResults
         ? html` <vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
               <h3 class="sim-header">

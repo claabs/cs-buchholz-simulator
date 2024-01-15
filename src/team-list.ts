@@ -46,7 +46,7 @@ export class TeamList extends LitElement {
 
   static override styles = css`
     .list-presets {
-      width: 30em;
+      width: 350px;
     }
     .team-list {
       max-width: 448px;
@@ -135,7 +135,7 @@ export class TeamList extends LitElement {
         <h3>Adjust team list or seeding</h3>
         <vaadin-tooltip
           for="rating-help-icon"
-          text="Select a preset team list for an event, or customize the names and drag-and-drop to adjust seeding."
+          text="Select a preset team list for an event, or customize the names and drag-and-drop to adjust seeding. WARNING: Changing any value here will undo any work done later on the rating scores or matchup table."
           manual
           .opened="${this.teamListHelpTooltipOpened}"
         ></vaadin-tooltip>

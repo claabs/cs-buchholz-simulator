@@ -81,6 +81,18 @@ export interface SimulationEventMessage {
   iterations: number;
 }
 
+export interface MessageFromWorkerFinish {
+  data: Map<string, TeamResultCounts>;
+  type: 'finish';
+}
+
+export interface MessageFromWorkerProgress {
+  data: number;
+  type: 'progress';
+}
+
+export type MessageFromWorker = MessageFromWorkerFinish | MessageFromWorkerProgress;
+
 export const generateEasyProbabilities = (
   seedOrder: string[],
   ratings: Record<string, number>,
@@ -168,18 +180,26 @@ export const simulateEvents = async (
   seedOrder: string[],
   probabilities: MatchupProbability[],
   simSettings: SimulationSettings,
+  progress: (pct: number) => void,
   iterations = 10000
 ): Promise<SimulationResults> => {
   const workerCount = window.navigator.hardwareConcurrency;
   const iterationsPerWorker = Math.floor(iterations / workerCount);
   const runningWorkers: Promise<Map<string, TeamResultCounts>>[] = [];
+  let progressTotal = 0;
   for (let i = 0; i < workerCount; i += 1) {
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
     const promise = new Promise<Map<string, TeamResultCounts>>((resolve, reject) => {
       const worker = new Worker(new URL('./worker/simulation-worker.js', import.meta.url), {
         type: 'module',
       });
-      worker.addEventListener('message', (evt: MessageEvent<Map<string, TeamResultCounts>>) => {
-        resolve(evt.data);
+      worker.addEventListener('message', (evt: MessageEvent<MessageFromWorker>) => {
+        if (evt.data.type === 'finish') {
+          resolve(evt.data.data);
+        } else {
+          progressTotal += evt.data.data;
+          progress(progressTotal / iterations);
+        }
       });
       worker.addEventListener('error', (evt: ErrorEvent) => {
         reject(evt.error);

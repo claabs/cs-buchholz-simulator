@@ -1,9 +1,12 @@
 {
   "name": "cs-buchholz-simulator",
-  "description": "Webcomponent cs-buchholz-simulator following open-wc recommendations",
+  "description": "Make accurate Counter-Strike RMR and Major Pick'Em predictions by providing head-to-head matchup odds and simulating thousands of group stages.",
   "license": "MIT",
-  "author": "cs-buchholz-simulator",
-  "version": "0.0.0",
+  "author": {
+    "name": "Charlie Laabs",
+    "url": "https://github.com/claabs"
+  },
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "lint": "tsc --noEmit && eslint .",
@@ -26,6 +29,7 @@
     "@vaadin/icon": "^24.0.3",
     "@vaadin/icons": "^24.0.3",
     "@vaadin/number-field": "^24.0.2",
+    "@vaadin/progress-bar": "24.0",
     "@vaadin/select": "~24.0",
     "@vaadin/split-layout": "^24.0.3",
     "@vaadin/tabs": "^24.0.3",

@@ -1,6 +1,8 @@
 import type { MatchupProbability } from '../settings.js';
 import type {
   Matchup,
+  MessageFromWorkerFinish,
+  MessageFromWorkerProgress,
   OpponentCounts,
   QualElimOutput,
   SimulationEventMessage,
@@ -340,7 +342,7 @@ export const simulateEvent = (
 
 const onMessage = (evt: MessageEvent<SimulationEventMessage>) => {
   const { iterations, seedOrder, probabilities, simSettings } = evt.data;
-
+  const progressInterval = Math.floor(iterations / 5);
   let allTeamResults = new Map<string, TeamResultCounts>();
   for (let i = 0; i < iterations; i += 1) {
     const { qualified, eliminated } = simulateEvent(seedOrder, probabilities, simSettings);
@@ -351,9 +353,20 @@ const onMessage = (evt: MessageEvent<SimulationEventMessage>) => {
       simSettings.elimLosses,
       allTeamResults
     );
+    if (i % progressInterval === 0) {
+      const progressMessage: MessageFromWorkerProgress = {
+        data: i,
+        type: 'progress',
+      };
+      self.postMessage(progressMessage);
+    }
   }
 
-  self.postMessage(allTeamResults);
+  const finishMessage: MessageFromWorkerFinish = {
+    data: allTeamResults,
+    type: 'finish',
+  };
+  self.postMessage(finishMessage);
   self.close();
 };
 
