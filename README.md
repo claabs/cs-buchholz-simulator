@@ -11,3 +11,4 @@ Make accurate CS:GO Major Pick'Em predictions by providing head-to-head matchup 
 - [ ] Add sim progress bar
 - [ ] Scheduled job to update HLTV points
 - [ ] Convert tooltips to info panels
+- [ ] Fix drag and drop on mobile
