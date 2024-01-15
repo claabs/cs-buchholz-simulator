@@ -38,10 +38,13 @@ export class CsBuchholzSimulato extends LitElement {
   private teamRating: Record<string, number> = filterTeamRating(this.seedOrder);
 
   @state()
+  private bo1Skew = 0.5;
+
+  @state()
   private matchupProbabilities: MatchupProbability[] = generateEasyProbabilities(
     this.seedOrder,
     this.teamRating,
-    0.5
+    this.bo1Skew
   );
 
   @state()
@@ -79,12 +82,21 @@ export class CsBuchholzSimulato extends LitElement {
   private teamListChanged(event: CustomEvent<string[]>) {
     this.seedOrder = event.detail;
     this.teamRating = filterTeamRating(this.seedOrder);
+    this.matchupProbabilities = generateEasyProbabilities(
+      this.seedOrder,
+      this.teamRating,
+      this.bo1Skew
+    );
   }
 
   private teamRatingValueChanged(event: CustomEvent<TeamRatingDetails>) {
     this.teamRating = event.detail.teamRating;
-    const { bo1Skew } = event.detail;
-    this.matchupProbabilities = generateEasyProbabilities(this.seedOrder, this.teamRating, bo1Skew);
+    this.bo1Skew = event.detail.bo1Skew;
+    this.matchupProbabilities = generateEasyProbabilities(
+      this.seedOrder,
+      this.teamRating,
+      this.bo1Skew
+    );
   }
 
   private probabilityValueChanged(event: CustomEvent<MatchupProbability[]>) {
