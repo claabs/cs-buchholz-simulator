@@ -25,8 +25,8 @@ export class SimulationResultViewer extends LitElement {
   @state()
   private simHelpTooltipOpened = false;
 
-  public simulate(iterations: number): void {
-    this.simulationResults = simulateEvents(
+  public async simulate(iterations: number): Promise<void> {
+    this.simulationResults = await simulateEvents(
       this.seedOrder,
       this.matchupProbabilities,
       {

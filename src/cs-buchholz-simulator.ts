@@ -24,7 +24,7 @@ const filterTeamRating = (seedOrder: string[]): Record<string, number> => {
   const teamRating: Record<string, number> = {};
   seedOrder.forEach((teamName) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    teamRating[teamName] = masterRating[teamName] ?? 0;
+    teamRating[teamName] = masterRating[teamName] ?? 1;
   });
   return teamRating;
 };
@@ -91,19 +91,19 @@ export class CsBuchholzSimulato extends LitElement {
     this.matchupProbabilities = event.detail;
   }
 
-  private selectedTabChanged(event: TabSheetSelectedChangedEvent) {
+  private async selectedTabChanged(event: TabSheetSelectedChangedEvent) {
     this.selectedTab = event.detail.value;
     if (event.detail.value === 2) {
-      this.simulationResultViewer.simulate(10000);
+      await this.simulationResultViewer.simulate(10000);
     }
   }
 
-  private simulateButtonClicked() {
-    this.simulationResultViewer.simulate(10000);
+  private async simulateButtonClicked() {
+    await this.simulationResultViewer.simulate(10000);
   }
 
-  private simulateLongButtonClicked() {
-    this.simulationResultViewer.simulate(100000);
+  private async simulateLongButtonClicked() {
+    await this.simulationResultViewer.simulate(100000);
   }
 
   private updateMobileView() {

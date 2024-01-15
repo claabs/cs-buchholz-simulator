@@ -41,7 +41,7 @@ interface OpponentCounts {
   won: number;
 }
 
-interface TeamResultCounts {
+export interface TeamResultCounts {
   qualified: number;
   allWins: number;
   allLosses: number;
@@ -86,7 +86,7 @@ export const generateEasyProbabilities = (
 ): MatchupProbability[] => {
   const orderedRatings = seedOrder.map((teamName) => ({
     teamName,
-    rating: ratings[teamName] ?? 0,
+    rating: ratings[teamName] ?? 1,
   }));
   return orderedRatings.reduce((acc, team, index) => {
     const opposingTeams = orderedRatings.slice(index + 1);
@@ -142,7 +142,7 @@ const sortRecordGroup = (recordGroup: TeamStandingWithDifficulty[]): TeamStandin
     return teamA.seed - teamB.seed;
   });
 
-const categorizeResults = (
+export const categorizeResults = (
   results: TeamStanding[],
   qualWins: number,
   elimLosses: number,
@@ -402,7 +402,7 @@ const extractQualElims = (
     }
   );
 
-const simulateEvent = (
+export const simulateEvent = (
   seedOrder: string[],
   probabilities: MatchupProbability[],
   simSettings: SimulationSettings
@@ -488,22 +488,78 @@ export const formatResultsCounts = (
   };
 };
 
-export const simulateEvents = (
+export interface SimulationEventMessage {
+  seedOrder: string[];
+  probabilities: MatchupProbability[];
+  simSettings: SimulationSettings;
+  iterations: number;
+}
+
+export const simulateEvents = async (
   seedOrder: string[],
   probabilities: MatchupProbability[],
   simSettings: SimulationSettings,
   iterations = 10000
-): SimulationResults => {
-  let allTeamResults = new Map<string, TeamResultCounts>();
-  for (let i = 0; i < iterations; i += 1) {
-    const { qualified, eliminated } = simulateEvent(seedOrder, probabilities, simSettings);
-    const results = [...qualified, ...eliminated];
-    allTeamResults = categorizeResults(
-      results,
-      simSettings.qualWins,
-      simSettings.elimLosses,
-      allTeamResults
-    );
+): Promise<SimulationResults> => {
+  const workerCount = window.navigator.hardwareConcurrency;
+  const iterationsPerWorker = Math.floor(iterations / workerCount);
+  const runningWorkers: Promise<Map<string, TeamResultCounts>>[] = [];
+  for (let i = 0; i < workerCount; i += 1) {
+    const promise = new Promise<Map<string, TeamResultCounts>>((resolve, reject) => {
+      const worker = new Worker(new URL('./worker/simulation-worker.js', import.meta.url), {
+        type: 'module',
+      });
+      worker.addEventListener('message', (evt: MessageEvent<Map<string, TeamResultCounts>>) => {
+        resolve(evt.data);
+      });
+      worker.addEventListener('error', (evt: ErrorEvent) => {
+        reject(evt.error);
+      });
+      const message: SimulationEventMessage = {
+        seedOrder,
+        probabilities,
+        simSettings,
+        iterations: iterationsPerWorker,
+      };
+      worker.postMessage(message);
+    });
+    runningWorkers.push(promise);
   }
+  const allTeamResults = new Map<string, TeamResultCounts>();
+  const workerResults = await Promise.all(runningWorkers);
+  workerResults.forEach((teamResults) => {
+    teamResults.forEach((teamCounts, teamName) => {
+      const prevTotal = allTeamResults.get(teamName);
+      if (!prevTotal) {
+        allTeamResults.set(teamName, teamCounts);
+      } else {
+        const newOpponents = new Map<string, OpponentCounts>();
+        teamCounts.opponents.forEach((opponentCounts, opponentName) => {
+          const prevOpponent = newOpponents.get(opponentName);
+          if (!prevOpponent) {
+            newOpponents.set(opponentName, opponentCounts);
+          } else {
+            const newOpponentCounts: OpponentCounts = {
+              total: prevOpponent.total + opponentCounts.total,
+              won: prevOpponent.won + opponentCounts.won,
+              bo1: prevOpponent.bo1 + opponentCounts.bo1,
+              bo3: prevOpponent.bo3 + opponentCounts.bo3,
+            };
+            newOpponents.set(opponentName, newOpponentCounts);
+          }
+        });
+        const newTotal: TeamResultCounts = {
+          qualified: prevTotal.qualified + teamCounts.qualified,
+          allWins: prevTotal.allWins + teamCounts.allWins,
+          allLosses: prevTotal.allLosses + teamCounts.allLosses,
+          wins: prevTotal.wins + teamCounts.wins,
+          losses: prevTotal.losses + teamCounts.losses,
+          opponents: newOpponents,
+        };
+        allTeamResults.set(teamName, newTotal);
+      }
+    });
+  });
+
   return formatResultsCounts(allTeamResults, simSettings, iterations);
 };

@@ -10,4 +10,3 @@ Make accurate CS:GO Major Pick'Em predictions by providing head-to-head matchup 
 - [ ] Add team logos/colors
 - [ ] New panel to customize teams/seeding
 - [ ] Add sim progress bar
-- [ ] Run sim in workers

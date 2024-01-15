@@ -112,9 +112,9 @@ export class TeamRatings extends LitElement {
             teamName="${teamName}"
             label="${index + 1}: ${teamName}"
             step-buttons-visible
-            .value=${this.teamRating[teamName] ?? 0}
+            .value=${this.teamRating[teamName] ?? 1}
             @value-changed=${this.onTeamRatingChanged}
-            .min=${0}
+            .min=${1}
           ></vaadin-number-field>`
         )}
       </vaadin-form-layout>
