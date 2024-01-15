@@ -7,6 +7,7 @@ import { generateSW } from 'rollup-plugin-workbox';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import { copy } from '@web/rollup-plugin-copy';
+import OMT from "@surma/rollup-plugin-off-main-thread";
 import path from 'path';
 
 export default {
@@ -48,6 +49,7 @@ export default {
     /** Bundle assets references via import.meta.url */
     importMetaAssets(),
     /** Minify html and css tagged template literals */
+    OMT(),
     babel({
       plugins: [
         [

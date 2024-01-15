@@ -1,8 +1,10 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state, query, property } from 'lit/decorators.js';
 import type { TabSheetSelectedChangedEvent } from '@vaadin/tabsheet';
-import { MatchupProbability, masterRating, masterSeedOrder } from './settings.js';
+import { MatchupProbability, presetTeamLists } from './settings.js';
+import masterRating from './hltv-team-points.js';
 import { generateEasyProbabilities } from './simulator.js';
+import './team-list.js';
 import './matchup-table.js';
 import './team-ratings.js';
 import './team-ratings-chart.js';
@@ -18,19 +20,31 @@ import type { SimulationResultViewer } from './simulation-result-viewer.js';
 import type { TeamRatingsChart } from './team-ratings-chart.js';
 import type { TeamRatingDetails } from './team-ratings.js';
 
+const filterTeamRating = (seedOrder: string[]): Record<string, number> => {
+  const teamRating: Record<string, number> = {};
+  seedOrder.forEach((teamName) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    teamRating[teamName] = masterRating[teamName] ?? 1;
+  });
+  return teamRating;
+};
+
 @customElement('cs-buchholz-simulator')
 export class CsBuchholzSimulato extends LitElement {
   @property({ type: Array })
-  private seedOrder: string[] = masterSeedOrder;
+  private seedOrder: string[] = Object.values(presetTeamLists)[0] || [];
 
   @state()
-  private teamRating: Record<string, number> = masterRating as Record<string, number>;
+  private teamRating: Record<string, number> = filterTeamRating(this.seedOrder);
 
   @state()
-  private matchupProbabilities: MatchupProbability<string>[] = generateEasyProbabilities(
+  private bo1Skew = 0.5;
+
+  @state()
+  private matchupProbabilities: MatchupProbability[] = generateEasyProbabilities(
     this.seedOrder,
     this.teamRating,
-    0.5
+    this.bo1Skew
   );
 
   @state()
@@ -43,7 +57,7 @@ export class CsBuchholzSimulato extends LitElement {
   private simulationResultViewer: SimulationResultViewer;
 
   @query('team-ratings-chart')
-  private teamRatingsChart: TeamRatingsChart<string>;
+  private teamRatingsChart: TeamRatingsChart;
 
   static override styles = css`
     /* :host {
@@ -65,29 +79,43 @@ export class CsBuchholzSimulato extends LitElement {
     }
   `;
 
-  private teamRatingValueChanged(event: CustomEvent<TeamRatingDetails>) {
-    this.teamRating = event.detail.teamRating;
-    const { bo1Skew } = event.detail;
-    this.matchupProbabilities = generateEasyProbabilities(this.seedOrder, this.teamRating, bo1Skew);
+  private teamListChanged(event: CustomEvent<string[]>) {
+    this.seedOrder = event.detail;
+    this.teamRating = filterTeamRating(this.seedOrder);
+    this.matchupProbabilities = generateEasyProbabilities(
+      this.seedOrder,
+      this.teamRating,
+      this.bo1Skew
+    );
   }
 
-  private probabilityValueChanged(event: CustomEvent<MatchupProbability<string>[]>) {
+  private teamRatingValueChanged(event: CustomEvent<TeamRatingDetails>) {
+    this.teamRating = event.detail.teamRating;
+    this.bo1Skew = event.detail.bo1Skew;
+    this.matchupProbabilities = generateEasyProbabilities(
+      this.seedOrder,
+      this.teamRating,
+      this.bo1Skew
+    );
+  }
+
+  private probabilityValueChanged(event: CustomEvent<MatchupProbability[]>) {
     this.matchupProbabilities = event.detail;
   }
 
-  private selectedTabChanged(event: TabSheetSelectedChangedEvent) {
+  private async selectedTabChanged(event: TabSheetSelectedChangedEvent) {
     this.selectedTab = event.detail.value;
     if (event.detail.value === 2) {
-      this.simulationResultViewer.simulate(10000);
+      await this.simulationResultViewer.simulate(10000);
     }
   }
 
-  private simulateButtonClicked() {
-    this.simulationResultViewer.simulate(10000);
+  private async simulateButtonClicked() {
+    await this.simulationResultViewer.simulate(10000);
   }
 
-  private simulateLongButtonClicked() {
-    this.simulationResultViewer.simulate(100000);
+  private async simulateLongButtonClicked() {
+    await this.simulationResultViewer.simulate(100000);
   }
 
   private updateMobileView() {
@@ -107,6 +135,11 @@ export class CsBuchholzSimulato extends LitElement {
   }
 
   override render() {
+    const teamListTemplate = html`<team-list
+      .teamList=${this.seedOrder}
+      @teamListChanged=${this.teamListChanged}
+    ></team-list>`;
+
     const teamRatingsTemplate = html`<team-ratings
         .seedOrder=${this.seedOrder}
         .teamRating=${this.teamRating}
@@ -131,10 +164,23 @@ export class CsBuchholzSimulato extends LitElement {
       .selected=${this.selectedTab}
     >
       <vaadin-tabs slot="tabs">
+        <vaadin-tab id="team-list-tab">Ratings</vaadin-tab>
         <vaadin-tab id="ratings-tab">Ratings</vaadin-tab>
         <vaadin-tab id="matchups-tab">Matchups</vaadin-tab>
         <vaadin-tab id="results-tab">Results</vaadin-tab>
       </vaadin-tabs>
+
+      <vaadin-vertical-layout tab="team-list-tab" theme="spacing-s" style="align-items: stretch">
+        ${teamListTemplate}
+        <vaadin-button
+          id="to-ratings"
+          theme="primary"
+          @click=${() => {
+            this.selectedTab = 1;
+          }}
+          >To Ratings...</vaadin-button
+        >
+      </vaadin-vertical-layout>
 
       <vaadin-vertical-layout tab="ratings-tab" theme="spacing-s" style="align-items: stretch">
         ${teamRatingsTemplate}
@@ -142,7 +188,7 @@ export class CsBuchholzSimulato extends LitElement {
           id="to-matchups"
           theme="primary"
           @click=${() => {
-            this.selectedTab = 1;
+            this.selectedTab = 2;
           }}
           >To Matchups...</vaadin-button
         >
@@ -154,7 +200,7 @@ export class CsBuchholzSimulato extends LitElement {
           id="to-results"
           theme="primary"
           @click=${() => {
-            this.selectedTab = 2;
+            this.selectedTab = 3;
           }}
           >To Results...</vaadin-button
         >
@@ -169,7 +215,7 @@ export class CsBuchholzSimulato extends LitElement {
     >
       <master-content style="width: 70%;">
         <vaadin-vertical-layout theme="padding" style="align-items: stretch">
-          ${teamRatingsTemplate} ${matchupTableTemplate}
+          ${teamListTemplate} ${teamRatingsTemplate} ${matchupTableTemplate}
         </vaadin-vertical-layout>
       </master-content>
       <detail-content style="width: 30%;">

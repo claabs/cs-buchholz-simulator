@@ -19,5 +19,5 @@ module.exports = {
     'class-methods-use-this': 'off',
     '@typescript-eslint/unbound-method': 'off'
   },
-  ignorePatterns: ['dist/**', 'node_modules/**', '*.js', '*.cjs', '*.mjs', 'out-tsc/**'],
+  ignorePatterns: ['dist/**', 'node_modules/**', '*.js', '*.cjs', '*.mjs', 'out-tsc/**', 'src/hltv-team-points.ts'],
 };

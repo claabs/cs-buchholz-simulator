@@ -5,9 +5,9 @@ enum BestOfNumber {
   BO3 = 3,
 }
 
-interface Matchup<T extends string> {
-  teamA: TeamStandingWithDifficulty<T>;
-  teamB: TeamStandingWithDifficulty<T>;
+interface Matchup {
+  teamA: TeamStandingWithDifficulty;
+  teamB: TeamStandingWithDifficulty;
 }
 
 interface PastOpponentDetail {
@@ -16,22 +16,22 @@ interface PastOpponentDetail {
   won: boolean;
 }
 
-interface TeamStanding<T extends string> {
-  name: T;
+interface TeamStanding {
+  name: string;
   seed: number;
   wins: number;
   losses: number;
   pastOpponents: PastOpponentDetail[];
 }
 
-interface TeamStandingWithDifficulty<T extends string> extends TeamStanding<T> {
+interface TeamStandingWithDifficulty extends TeamStanding {
   difficulty: number;
 }
 
-interface QualElimOutput<T extends string> {
-  qualified: TeamStanding<T>[];
-  eliminated: TeamStanding<T>[];
-  competitors: TeamStanding<T>[];
+interface QualElimOutput {
+  qualified: TeamStanding[];
+  eliminated: TeamStanding[];
+  competitors: TeamStanding[];
 }
 
 interface OpponentCounts {
@@ -41,7 +41,7 @@ interface OpponentCounts {
   won: number;
 }
 
-interface TeamResultCounts {
+export interface TeamResultCounts {
   qualified: number;
   allWins: number;
   allLosses: number;
@@ -79,35 +79,35 @@ export interface SimulationSettings {
   elimLosses: number;
 }
 
-export const generateEasyProbabilities = <T extends string>(
+export const generateEasyProbabilities = (
   seedOrder: string[],
-  ratings: Record<T, number>,
+  ratings: Record<string, number>,
   bo1Skew: number
-): MatchupProbability<T>[] => {
+): MatchupProbability[] => {
   const orderedRatings = seedOrder.map((teamName) => ({
     teamName,
-    rating: ratings[teamName as T],
+    rating: ratings[teamName] ?? 1,
   }));
   return orderedRatings.reduce((acc, team, index) => {
     const opposingTeams = orderedRatings.slice(index + 1);
-    const teamMatchupProbs: MatchupProbability<T>[] = opposingTeams.map((opp) => {
+    const teamMatchupProbs: MatchupProbability[] = opposingTeams.map((opp) => {
       const differenceFactor = team.rating / opp.rating;
       const bo3Winrate = differenceFactor / (differenceFactor + 1);
       const bo1Winrate = (0.5 - bo3Winrate) * bo1Skew + bo3Winrate;
       return {
-        teamA: team.teamName as T,
-        teamB: opp.teamName as T,
+        teamA: team.teamName,
+        teamB: opp.teamName,
         bo1TeamAWinrate: bo1Winrate,
         bo3TeamAWinrate: bo3Winrate,
       };
     });
     return acc.concat(teamMatchupProbs);
-  }, [] as MatchupProbability<T>[]);
+  }, [] as MatchupProbability[]);
 };
 
-const splitStandingsToRecordGroups = <T extends string>(
-  teamsStandings: TeamStandingWithDifficulty<T>[]
-): Map<number, TeamStandingWithDifficulty<T>[]> =>
+const splitStandingsToRecordGroups = (
+  teamsStandings: TeamStandingWithDifficulty[]
+): Map<number, TeamStandingWithDifficulty[]> =>
   teamsStandings.reduce((groups, teamStanding) => {
     const winDifferential = teamStanding.wins - teamStanding.losses;
     const recordGroup = groups.get(winDifferential);
@@ -117,11 +117,9 @@ const splitStandingsToRecordGroups = <T extends string>(
       groups.set(winDifferential, [teamStanding]);
     }
     return groups;
-  }, new Map<number, TeamStandingWithDifficulty<T>[]>());
+  }, new Map<number, TeamStandingWithDifficulty[]>());
 
-const calculateDifficulties = <T extends string>(
-  teamsStandings: TeamStanding<T>[]
-): TeamStandingWithDifficulty<T>[] =>
+const calculateDifficulties = (teamsStandings: TeamStanding[]): TeamStandingWithDifficulty[] =>
   teamsStandings.map((team) => {
     const difficulty = team.pastOpponents.reduce((differentialSum, opponentDetail) => {
       const opponentStanding = teamsStandings.find(
@@ -137,17 +135,15 @@ const calculateDifficulties = <T extends string>(
     };
   });
 
-const sortRecordGroup = <T extends string>(
-  recordGroup: TeamStandingWithDifficulty<T>[]
-): TeamStandingWithDifficulty<T>[] =>
+const sortRecordGroup = (recordGroup: TeamStandingWithDifficulty[]): TeamStandingWithDifficulty[] =>
   recordGroup.sort((teamA, teamB) => {
     const difficultyDiff = teamB.difficulty - teamA.difficulty;
     if (difficultyDiff !== 0) return difficultyDiff;
     return teamA.seed - teamB.seed;
   });
 
-const categorizeResults = <T extends string>(
-  results: TeamStanding<T>[],
+export const categorizeResults = (
+  results: TeamStanding[],
   qualWins: number,
   elimLosses: number,
   allTeamResults: Map<string, TeamResultCounts>
@@ -193,7 +189,7 @@ const categorizeResults = <T extends string>(
   return allTeamResults;
 };
 
-export const getSeedOrder = <T extends string>(seeding: Record<string, T>) =>
+export const getSeedOrder = (seeding: Record<string, string>) =>
   Object.entries(seeding)
     .sort(([seedA], [seedB]) => parseInt(seedA, 10) - parseInt(seedB, 10))
     .map(([, teamName]) => teamName);
@@ -276,14 +272,12 @@ const sixTeamMatchupPriority: [[number, number], [number, number], [number, numb
   ],
 ];
 
-const matchRecordGroup = <T extends string>(
-  recordGroup: TeamStandingWithDifficulty<T>[]
-): Matchup<T>[] => {
+const matchRecordGroup = (recordGroup: TeamStandingWithDifficulty[]): Matchup[] => {
   const sortedGroup = sortRecordGroup(recordGroup);
-  const matchups: Matchup<T>[] = [];
+  const matchups: Matchup[] = [];
   if (sortedGroup.length === 6) {
     // In other rounds, refer to the following table and select the top-most row that does not result in a rematch:
-    let validMatchups: Matchup<T>[] = [];
+    let validMatchups: Matchup[] = [];
     const foundValid = sixTeamMatchupPriority.some((seedMatchups) => {
       validMatchups = [];
       return seedMatchups.every((seedMatchup) => {
@@ -306,7 +300,7 @@ const matchRecordGroup = <T extends string>(
       if (!highTeam) throw new Error('Missing high seed team');
       const skippedTeams = [];
       let validLowTeam = false;
-      let lowTeam: TeamStandingWithDifficulty<T> | undefined;
+      let lowTeam: TeamStandingWithDifficulty | undefined;
 
       while (!validLowTeam) {
         lowTeam = sortedGroup.pop();
@@ -335,24 +329,24 @@ const matchRecordGroup = <T extends string>(
  * https://github.com/ValveSoftware/csgo/blob/main/major-supplemental-rulebook.md#mid-stage-seed-calculation
  * @param teamsStandings
  */
-const calculateMatchups = <T extends string>(teamsStandings: TeamStanding<T>[]): Matchup<T>[] => {
+const calculateMatchups = (teamsStandings: TeamStanding[]): Matchup[] => {
   // 1. Current W-L record in the stage
   // 2. Difficulty Score in the current stage
   // 3. Initial seeding of the current stage
   const teamsStandingsWithDifficulty = calculateDifficulties(teamsStandings);
   const recordGroups = splitStandingsToRecordGroups(teamsStandingsWithDifficulty);
-  const matchups: Matchup<T>[] = Array.from(recordGroups.values()).reduce(
-    (acc: Matchup<T>[], recordGroup) => acc.concat(matchRecordGroup(recordGroup)),
+  const matchups: Matchup[] = Array.from(recordGroups.values()).reduce(
+    (acc: Matchup[], recordGroup) => acc.concat(matchRecordGroup(recordGroup)),
     []
   );
   return matchups;
 };
 
-const simulateMatchup = <T extends string>(
-  matchup: Matchup<T>,
-  matchupProbabilities: MatchupProbability<T>[],
+const simulateMatchup = (
+  matchup: Matchup,
+  matchupProbabilities: MatchupProbability[],
   simSettings: SimulationSettings
-): TeamStanding<T>[] => {
+): TeamStanding[] => {
   const probabilityListing = matchupProbabilities.find(
     (probListing) =>
       (probListing.teamA === matchup.teamA.name && probListing.teamB === matchup.teamB.name) ||
@@ -383,17 +377,17 @@ const simulateMatchup = <T extends string>(
   return [teamA, teamB];
 };
 
-const simulateMatchups = <T extends string>(
-  matchups: Matchup<T>[],
-  matchupProbabilities: MatchupProbability<T>[],
+const simulateMatchups = (
+  matchups: Matchup[],
+  matchupProbabilities: MatchupProbability[],
   simSettings: SimulationSettings
-): TeamStanding<T>[] =>
+): TeamStanding[] =>
   matchups.flatMap((matchup) => simulateMatchup(matchup, matchupProbabilities, simSettings));
 
-const extractQualElims = <T extends string>(
-  teamsStandings: TeamStanding<T>[],
+const extractQualElims = (
+  teamsStandings: TeamStanding[],
   simSettings: SimulationSettings
-): QualElimOutput<T> =>
+): QualElimOutput =>
   teamsStandings.reduce(
     (acc, team) => {
       if (team.wins >= simSettings.qualWins) acc.qualified.push(team);
@@ -402,26 +396,26 @@ const extractQualElims = <T extends string>(
       return acc;
     },
     {
-      qualified: [] as TeamStanding<T>[],
-      eliminated: [] as TeamStanding<T>[],
-      competitors: [] as TeamStanding<T>[],
+      qualified: [] as TeamStanding[],
+      eliminated: [] as TeamStanding[],
+      competitors: [] as TeamStanding[],
     }
   );
 
-const simulateEvent = (
+export const simulateEvent = (
   seedOrder: string[],
-  probabilities: MatchupProbability<string>[],
+  probabilities: MatchupProbability[],
   simSettings: SimulationSettings
-): QualElimOutput<string> => {
-  let competitors: TeamStanding<string>[] = seedOrder.map((teamName, index) => ({
+): QualElimOutput => {
+  let competitors: TeamStanding[] = seedOrder.map((teamName, index) => ({
     name: teamName,
     seed: index + 1,
     wins: 0,
     losses: 0,
     pastOpponents: [],
   }));
-  const qualified: TeamStanding<string>[] = [];
-  const eliminated: TeamStanding<string>[] = [];
+  const qualified: TeamStanding[] = [];
+  const eliminated: TeamStanding[] = [];
   while (competitors.length) {
     const matchups = calculateMatchups(competitors);
     const standings = simulateMatchups(matchups, probabilities, simSettings);
@@ -494,22 +488,78 @@ export const formatResultsCounts = (
   };
 };
 
-export const simulateEvents = (
+export interface SimulationEventMessage {
+  seedOrder: string[];
+  probabilities: MatchupProbability[];
+  simSettings: SimulationSettings;
+  iterations: number;
+}
+
+export const simulateEvents = async (
   seedOrder: string[],
-  probabilities: MatchupProbability<string>[],
+  probabilities: MatchupProbability[],
   simSettings: SimulationSettings,
   iterations = 10000
-): SimulationResults => {
-  let allTeamResults = new Map<string, TeamResultCounts>();
-  for (let i = 0; i < iterations; i += 1) {
-    const { qualified, eliminated } = simulateEvent(seedOrder, probabilities, simSettings);
-    const results = [...qualified, ...eliminated];
-    allTeamResults = categorizeResults(
-      results,
-      simSettings.qualWins,
-      simSettings.elimLosses,
-      allTeamResults
-    );
+): Promise<SimulationResults> => {
+  const workerCount = window.navigator.hardwareConcurrency;
+  const iterationsPerWorker = Math.floor(iterations / workerCount);
+  const runningWorkers: Promise<Map<string, TeamResultCounts>>[] = [];
+  for (let i = 0; i < workerCount; i += 1) {
+    const promise = new Promise<Map<string, TeamResultCounts>>((resolve, reject) => {
+      const worker = new Worker(new URL('./worker/simulation-worker.js', import.meta.url), {
+        type: 'module',
+      });
+      worker.addEventListener('message', (evt: MessageEvent<Map<string, TeamResultCounts>>) => {
+        resolve(evt.data);
+      });
+      worker.addEventListener('error', (evt: ErrorEvent) => {
+        reject(evt.error);
+      });
+      const message: SimulationEventMessage = {
+        seedOrder,
+        probabilities,
+        simSettings,
+        iterations: iterationsPerWorker,
+      };
+      worker.postMessage(message);
+    });
+    runningWorkers.push(promise);
   }
+  const allTeamResults = new Map<string, TeamResultCounts>();
+  const workerResults = await Promise.all(runningWorkers);
+  workerResults.forEach((teamResults) => {
+    teamResults.forEach((teamCounts, teamName) => {
+      const prevTotal = allTeamResults.get(teamName);
+      if (!prevTotal) {
+        allTeamResults.set(teamName, teamCounts);
+      } else {
+        const newOpponents = new Map<string, OpponentCounts>();
+        teamCounts.opponents.forEach((opponentCounts, opponentName) => {
+          const prevOpponent = newOpponents.get(opponentName);
+          if (!prevOpponent) {
+            newOpponents.set(opponentName, opponentCounts);
+          } else {
+            const newOpponentCounts: OpponentCounts = {
+              total: prevOpponent.total + opponentCounts.total,
+              won: prevOpponent.won + opponentCounts.won,
+              bo1: prevOpponent.bo1 + opponentCounts.bo1,
+              bo3: prevOpponent.bo3 + opponentCounts.bo3,
+            };
+            newOpponents.set(opponentName, newOpponentCounts);
+          }
+        });
+        const newTotal: TeamResultCounts = {
+          qualified: prevTotal.qualified + teamCounts.qualified,
+          allWins: prevTotal.allWins + teamCounts.allWins,
+          allLosses: prevTotal.allLosses + teamCounts.allLosses,
+          wins: prevTotal.wins + teamCounts.wins,
+          losses: prevTotal.losses + teamCounts.losses,
+          opponents: newOpponents,
+        };
+        allTeamResults.set(teamName, newTotal);
+      }
+    });
+  });
+
   return formatResultsCounts(allTeamResults, simSettings, iterations);
 };

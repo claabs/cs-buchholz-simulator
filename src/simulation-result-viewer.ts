@@ -17,7 +17,7 @@ export class SimulationResultViewer extends LitElement {
   public seedOrder: string[];
 
   @property({ type: Array, noAccessor: true })
-  public matchupProbabilities: MatchupProbability<string>[];
+  public matchupProbabilities: MatchupProbability[];
 
   @state()
   private simulationResults: SimulationResults;
@@ -25,8 +25,8 @@ export class SimulationResultViewer extends LitElement {
   @state()
   private simHelpTooltipOpened = false;
 
-  public simulate(iterations: number): void {
-    this.simulationResults = simulateEvents(
+  public async simulate(iterations: number): Promise<void> {
+    this.simulationResults = await simulateEvents(
       this.seedOrder,
       this.matchupProbabilities,
       {
