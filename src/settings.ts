@@ -6,7 +6,7 @@ export interface MatchupProbability {
 }
 
 export const presetTeamLists: Record<string, string[]> = {
-  '2024 Copenhagen Major Europe RMR Closed Qualifier A': [
+  '2024 Copenhagen EU RMR Closed Qual A': [
     'Natus Vincere',
     'Virtus.pro',
     'Cloud9',
@@ -24,7 +24,7 @@ export const presetTeamLists: Record<string, string[]> = {
     'TBD7',
     'TBD8',
   ],
-  '2024 Copenhagen Major Europe RMR Closed Qualifier B': [
+  '2024 Copenhagen EU RMR Qual B': [
     'MOUZ',
     'Spirit',
     'Eternal Fire',
