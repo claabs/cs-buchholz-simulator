@@ -55,7 +55,7 @@ export class TeamRatingsChart extends LitElement {
   }
 
   override render() {
-    return html`<vaadin-horizontal-layout theme="spacing" style="justify-content: center">
+    return html`<vaadin-horizontal-layout theme="spacing" style="justify-content: left">
       <google-chart
         type="column"
         .data=${this.chartData}

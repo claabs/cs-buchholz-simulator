@@ -8,5 +8,6 @@ Make accurate CS:GO Major Pick'Em predictions by providing head-to-head matchup 
 - [ ] Save progress to local storage
 - [ ] Warn of progress loss on when re-adjusting ratings
 - [ ] Add team logos/colors
-- [ ] New panel to customize teams/seeding
 - [ ] Add sim progress bar
+- [ ] Scheduled job to update HLTV points
+- [ ] Convert tooltips to info panels

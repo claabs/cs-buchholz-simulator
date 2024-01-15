@@ -8,6 +8,10 @@ import type { SelectItem, SelectValueChangedEvent } from '@vaadin/select';
 import '@vaadin/grid/theme/lumo/vaadin-grid.js';
 import '@vaadin/select/theme/lumo/vaadin-select.js';
 import '@vaadin/combo-box/theme/lumo/vaadin-combo-box.js';
+import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
+import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
+import '@vaadin/icon';
+import '@vaadin/icons';
 import { presetTeamLists } from './settings.js';
 import masterRating from './hltv-team-points.js';
 
@@ -37,7 +41,18 @@ export class TeamList extends LitElement {
   @state()
   private presetListValue: string | undefined = this.presetListNames[0]?.value;
 
-  static override styles = css``;
+  @state()
+  private teamListHelpTooltipOpened = false;
+
+  static override styles = css`
+    .list-presets {
+      width: 30em;
+    }
+    .team-list {
+      max-width: 448px;
+      width: 300px;
+    }
+  `;
 
   private dispatchTeamListChanged() {
     const options: CustomEventInit<string[]> = {
@@ -116,14 +131,32 @@ export class TeamList extends LitElement {
 
   override render() {
     return html`
+      <vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
+        <h3>Adjust team list or seeding</h3>
+        <vaadin-tooltip
+          for="rating-help-icon"
+          text="Select a preset team list for an event, or customize the names and drag-and-drop to adjust seeding."
+          manual
+          .opened="${this.teamListHelpTooltipOpened}"
+        ></vaadin-tooltip>
+        <vaadin-icon
+          id="rating-help-icon"
+          icon="vaadin:question-circle"
+          @click="${() => {
+            this.teamListHelpTooltipOpened = !this.teamListHelpTooltipOpened;
+          }}"
+        ></vaadin-icon>
+      </vaadin-horizontal-layout>
       <vaadin-select
-        label="Team List"
+        class="list-presets"
+        label="Team list presets"
         .items="${this.presetListNames}"
         .value="${this.presetListValue}"
         @value-changed=${this.onListPresetChange}
       ></vaadin-select>
       <vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
         <vaadin-grid
+          class="team-list"
           all-rows-visible
           theme="wrap-cell-content column-borders"
           rows-draggable
@@ -135,10 +168,14 @@ export class TeamList extends LitElement {
         >
           <vaadin-grid-column
             path="seed"
+            auto-width
+            flex-grow="0"
             ${columnBodyRenderer(this.seedColumnRenderer)}
           ></vaadin-grid-column>
           <vaadin-grid-column
             path="teamName"
+            auto-width
+            flex-grow="0"
             ${columnBodyRenderer(this.teamNameColumnRenderer)}
           ></vaadin-grid-column>
         </vaadin-grid>
