@@ -24,7 +24,7 @@ export const presetTeamLists: Record<string, string[]> = {
     'TBD7',
     'TBD8',
   ],
-  '2024 Copenhagen EU RMR Qual B': [
+  '2024 Copenhagen EU RMR Closed Qual B': [
     'MOUZ',
     'Spirit',
     'Eternal Fire',
