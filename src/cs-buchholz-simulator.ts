@@ -105,7 +105,7 @@ export class CsBuchholzSimulato extends LitElement {
 
   private async selectedTabChanged(event: TabSheetSelectedChangedEvent) {
     this.selectedTab = event.detail.value;
-    if (event.detail.value === 2) {
+    if (event.detail.value === 3) {
       await this.simulationResultViewer.simulate(10000);
     }
   }
