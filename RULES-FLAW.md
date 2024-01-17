@@ -14,16 +14,16 @@ There's no clarity in the ruleset how this matchup problem should be resolved, s
 
 Here's an example round 3 1-1 matchup pool, ordered by difficulty then initial seed:
 
-| Team          | Seed | Diff | Previous Opponents                  |
-|---------------|------|------|-------------------------------------|
-| Cloud9        |    3 |    2 | OG (1-1), Nexus (2-0)               |
-| SAW           |    5 |    2 | Zero Tenacity (1-1), Permitta (2-0) |
-| BetBoom       |    6 |    2 | JANO (1-1), SINNERS (2-0)           |
-| fnatic        |   16 |    2 | 9 Pandas (1-1), Natus Vincere (2-0) |
-| 9 Pandas      |    8 |   -2 | fnatic (1-1), ECSTATIC (0-2)        |
-| OG            |   11 |   -2 | Cloud9 (1-1), 3DMAX (0-2)           |
-| Zero Tenacity |   13 |   -2 | SAW (1-1), BIG (0-2)                |
-| JANO          |   14 |   -2 | BetBoom (1-1), Virtus.pro (0-2)     |
+| Team          | Seed | Difficulty | Previous Opponents                  |
+|---------------|------|------------|-------------------------------------|
+| Cloud9        | 3    | 2          | OG (1-1), Nexus (2-0)               |
+| SAW           | 5    | 2          | Zero Tenacity (1-1), Permitta (2-0) |
+| BetBoom       | 6    | 2          | JANO (1-1), SINNERS (2-0)           |
+| fnatic        | 16   | 2          | 9 Pandas (1-1), Natus Vincere (2-0) |
+| 9 Pandas      | 8    | -2         | fnatic (1-1), ECSTATIC (0-2)        |
+| OG            | 11   | -2         | Cloud9 (1-1), 3DMAX (0-2)           |
+| Zero Tenacity | 13   | -2         | SAW (1-1), BIG (0-2)                |
+| JANO          | 14   | -2         | BetBoom (1-1), Virtus.pro (0-2)     |
 
 The matchups are created from highest seed first, picking the lowest seed that doesn't result in a rematch:
 
