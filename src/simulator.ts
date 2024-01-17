@@ -224,7 +224,7 @@ export const simulateEvents = async (
       } else {
         const newOpponents = new Map<string, OpponentCounts>();
         teamCounts.opponents.forEach((opponentCounts, opponentName) => {
-          const prevOpponent = newOpponents.get(opponentName);
+          const prevOpponent = prevTotal.opponents.get(opponentName);
           if (!prevOpponent) {
             newOpponents.set(opponentName, opponentCounts);
           } else {
