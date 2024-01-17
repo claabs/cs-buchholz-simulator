@@ -183,6 +183,7 @@ const sixTeamMatchupPriority: [[number, number], [number, number], [number, numb
 
 const matchRecordGroup = (recordGroup: TeamStandingWithDifficulty[]): Matchup[] => {
   const sortedGroup = sortRecordGroup(recordGroup);
+  const sortedGroupCopy = sortedGroup.map((x) => x);
   const matchups: Matchup[] = [];
   if (sortedGroup.length === 6) {
     // In other rounds, refer to the following table and select the top-most row that does not result in a rematch:
@@ -202,6 +203,17 @@ const matchRecordGroup = (recordGroup: TeamStandingWithDifficulty[]): Matchup[] 
     });
     if (!foundValid) throw new Error('No valid matchups without rematches!');
     matchups.push(...validMatchups);
+  } else if (sortedGroup.every((team) => team.pastOpponents.length === 0)) {
+    // Use initial matchup list (1 vs 9, 2 vs 10, etc)
+    const halfSize = sortedGroup.length / 2;
+    for (let i = 0; i < halfSize; i += 1) {
+      const teamA = sortedGroup[i];
+      const teamB = sortedGroup[i + halfSize];
+      if (!teamA || !teamB) {
+        throw new Error(`Missing team in initial matchup: ${i + 1} vs ${i + 1 + halfSize}`);
+      }
+      matchups.push({ teamA, teamB });
+    }
   } else {
     // Matchups shall be determined by seed. In round 3, the highest seeded team faces the lowest seeded team available that does not result in a rematch within the stage.
     while (sortedGroup.length) {
@@ -213,7 +225,10 @@ const matchRecordGroup = (recordGroup: TeamStandingWithDifficulty[]): Matchup[] 
 
       while (!validLowTeam) {
         lowTeam = sortedGroup.pop();
-        if (!lowTeam) throw new Error('Missing low seed team');
+        if (!lowTeam) {
+          console.log(sortedGroupCopy);
+          throw new Error('Missing low seed team');
+        }
         const lowTeamName = lowTeam.name;
         if (!highTeam.pastOpponents.some((opp) => opp.teamName === lowTeamName)) {
           validLowTeam = true;
@@ -325,13 +340,20 @@ export const simulateEvent = (
   }));
   const qualified: TeamStanding[] = [];
   const eliminated: TeamStanding[] = [];
+  const archivedMatchups = [];
   while (competitors.length) {
-    const matchups = calculateMatchups(competitors);
-    const standings = simulateMatchups(matchups, probabilities, simSettings);
-    const qualElimResult = extractQualElims(standings, simSettings);
-    competitors = qualElimResult.competitors;
-    qualified.push(...qualElimResult.qualified);
-    eliminated.push(...qualElimResult.eliminated);
+    try {
+      const matchups = calculateMatchups(competitors);
+      archivedMatchups.push(matchups);
+      const standings = simulateMatchups(matchups, probabilities, simSettings);
+      const qualElimResult = extractQualElims(standings, simSettings);
+      competitors = qualElimResult.competitors;
+      qualified.push(...qualElimResult.qualified);
+      eliminated.push(...qualElimResult.eliminated);
+    } catch (err) {
+      console.log(archivedMatchups);
+      throw new Error('bad event');
+    }
   }
   return {
     qualified,
@@ -344,23 +366,30 @@ const onMessage = (evt: MessageEvent<SimulationEventMessage>) => {
   const { iterations, seedOrder, probabilities, simSettings } = evt.data;
   const progressInterval = Math.floor(iterations / 5);
   let allTeamResults = new Map<string, TeamResultCounts>();
+  let badEvents = 0;
   for (let i = 0; i < iterations; i += 1) {
-    const { qualified, eliminated } = simulateEvent(seedOrder, probabilities, simSettings);
-    const results = [...qualified, ...eliminated];
-    allTeamResults = categorizeResults(
-      results,
-      simSettings.qualWins,
-      simSettings.elimLosses,
-      allTeamResults
-    );
-    if (i % progressInterval === 0) {
-      const progressMessage: MessageFromWorkerProgress = {
-        data: i,
-        type: 'progress',
-      };
-      self.postMessage(progressMessage);
+    try {
+      const { qualified, eliminated } = simulateEvent(seedOrder, probabilities, simSettings);
+      const results = [...qualified, ...eliminated];
+      allTeamResults = categorizeResults(
+        results,
+        simSettings.qualWins,
+        simSettings.elimLosses,
+        allTeamResults
+      );
+      if (i % progressInterval === 0) {
+        const progressMessage: MessageFromWorkerProgress = {
+          data: i,
+          type: 'progress',
+        };
+        self.postMessage(progressMessage);
+      }
+    } catch (err) {
+      badEvents += 1;
     }
   }
+
+  console.log('badEvents:', badEvents);
 
   const finishMessage: MessageFromWorkerFinish = {
     data: allTeamResults,
