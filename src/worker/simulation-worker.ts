@@ -226,8 +226,9 @@ const matchRecordGroup = (recordGroup: TeamStandingWithDifficulty[]): Matchup[] 
       while (!validLowTeam) {
         lowTeam = sortedGroup.pop();
         if (!lowTeam) {
-          console.log(sortedGroupCopy);
-          throw new Error('Missing low seed team');
+          // eslint-disable-next-line no-console
+          console.warn('Simulation failed, failed group:', sortedGroupCopy);
+          throw new Error('No valid matchups for seeding found');
         }
         const lowTeamName = lowTeam.name;
         if (!highTeam.pastOpponents.some((opp) => opp.teamName === lowTeamName)) {
@@ -342,18 +343,13 @@ export const simulateEvent = (
   const eliminated: TeamStanding[] = [];
   const archivedMatchups = [];
   while (competitors.length) {
-    try {
-      const matchups = calculateMatchups(competitors);
-      archivedMatchups.push(matchups);
-      const standings = simulateMatchups(matchups, probabilities, simSettings);
-      const qualElimResult = extractQualElims(standings, simSettings);
-      competitors = qualElimResult.competitors;
-      qualified.push(...qualElimResult.qualified);
-      eliminated.push(...qualElimResult.eliminated);
-    } catch (err) {
-      console.log(archivedMatchups);
-      throw new Error('bad event');
-    }
+    const matchups = calculateMatchups(competitors);
+    archivedMatchups.push(matchups);
+    const standings = simulateMatchups(matchups, probabilities, simSettings);
+    const qualElimResult = extractQualElims(standings, simSettings);
+    competitors = qualElimResult.competitors;
+    qualified.push(...qualElimResult.qualified);
+    eliminated.push(...qualElimResult.eliminated);
   }
   return {
     qualified,
@@ -389,10 +385,9 @@ const onMessage = (evt: MessageEvent<SimulationEventMessage>) => {
     }
   }
 
-  console.log('badEvents:', badEvents);
-
   const finishMessage: MessageFromWorkerFinish = {
     data: allTeamResults,
+    errors: badEvents,
     type: 'finish',
   };
   self.postMessage(finishMessage);

@@ -109,6 +109,12 @@ export class SimulationResultViewer extends LitElement {
                 }}"
               ></vaadin-icon>
             </vaadin-horizontal-layout>
+            <h4 class="sim-error-header">
+              ${this.simulationResults.failedSimulations.toLocaleString()} simulations failed due to
+              <a href="https://github.com/claabs/cs-buchholz-simulator/blob/master/RULES-FLAW.md"
+                >rules issues</a
+              >
+            </h4>
             <vaadin-form-layout .responsiveSteps=${this.responsiveSteps}>
               <vaadin-accordion>
                 <h3 class="sim-header">${this.simulationResults.qualWins}-0 Teams</h3>

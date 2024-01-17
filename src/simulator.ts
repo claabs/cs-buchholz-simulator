@@ -72,6 +72,7 @@ export interface SimulationResults {
   qualified: TeamResults[];
   allWins: TeamResults[];
   allLosses: TeamResults[];
+  failedSimulations: number;
 }
 
 export interface SimulationEventMessage {
@@ -83,6 +84,7 @@ export interface SimulationEventMessage {
 
 export interface MessageFromWorkerFinish {
   data: Map<string, TeamResultCounts>;
+  errors: number;
   type: 'finish';
 }
 
@@ -122,7 +124,8 @@ export const generateEasyProbabilities = (
 export const formatResultsCounts = (
   categorizedResults: Map<string, TeamResultCounts>,
   simSettings: SimulationSettings,
-  iterations: number
+  iterations: number,
+  failedSimulations: number
 ): SimulationResults => {
   const { qualified, allWins, allLosses } = Array.from(categorizedResults.entries()).reduce(
     (acc, [teamName, resultCounts]) => {
@@ -173,6 +176,7 @@ export const formatResultsCounts = (
     allLosses: allLosses.sort((a, b) => b.rate - a.rate),
     iterations,
     ...simSettings,
+    failedSimulations,
   };
 };
 
@@ -185,17 +189,17 @@ export const simulateEvents = async (
 ): Promise<SimulationResults> => {
   const workerCount = window.navigator.hardwareConcurrency;
   const iterationsPerWorker = Math.floor(iterations / workerCount);
-  const runningWorkers: Promise<Map<string, TeamResultCounts>>[] = [];
+  const runningWorkers: Promise<MessageFromWorkerFinish>[] = [];
   let progressTotal = 0;
   for (let i = 0; i < workerCount; i += 1) {
     // eslint-disable-next-line @typescript-eslint/no-loop-func
-    const promise = new Promise<Map<string, TeamResultCounts>>((resolve, reject) => {
+    const promise = new Promise<MessageFromWorkerFinish>((resolve, reject) => {
       const worker = new Worker(new URL('./worker/simulation-worker.js', import.meta.url), {
         type: 'module',
       });
       worker.addEventListener('message', (evt: MessageEvent<MessageFromWorker>) => {
         if (evt.data.type === 'finish') {
-          resolve(evt.data.data);
+          resolve(evt.data);
         } else {
           progressTotal += evt.data.data;
           progress(progressTotal / iterations);
@@ -215,9 +219,11 @@ export const simulateEvents = async (
     runningWorkers.push(promise);
   }
   const allTeamResults = new Map<string, TeamResultCounts>();
+  let failedSimulations = 0;
   const workerResults = await Promise.all(runningWorkers);
-  workerResults.forEach((teamResults) => {
-    teamResults.forEach((teamCounts, teamName) => {
+  workerResults.forEach((workerResult) => {
+    failedSimulations += workerResult.errors;
+    workerResult.data.forEach((teamCounts, teamName) => {
       const prevTotal = allTeamResults.get(teamName);
       if (!prevTotal) {
         allTeamResults.set(teamName, teamCounts);
@@ -250,5 +256,5 @@ export const simulateEvents = async (
     });
   });
 
-  return formatResultsCounts(allTeamResults, simSettings, iterations);
+  return formatResultsCounts(allTeamResults, simSettings, iterations, failedSimulations);
 };
