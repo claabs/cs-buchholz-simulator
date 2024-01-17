@@ -111,7 +111,9 @@ export class SimulationResultViewer extends LitElement {
             </vaadin-horizontal-layout>
             <h4 class="sim-error-header">
               ${this.simulationResults.failedSimulations.toLocaleString()} simulations failed due to
-              <a href="https://github.com/claabs/cs-buchholz-simulator/blob/master/RULES-FLAW.md"
+              <a
+                href="https://github.com/claabs/cs-buchholz-simulator/blob/master/RULES-FLAW.md"
+                target="_blank"
                 >rules issues</a
               >
             </h4>
