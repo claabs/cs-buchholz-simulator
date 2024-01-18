@@ -183,7 +183,13 @@ const sixTeamMatchupPriority: [[number, number], [number, number], [number, numb
 
 const matchRecordGroup = (recordGroup: TeamStandingWithDifficulty[]): Matchup[] => {
   const sortedGroup = sortRecordGroup(recordGroup);
-  const sortedGroupCopy = sortedGroup.map((x) => x);
+  const sortedGroupInfo = sortedGroup.map(
+    (t) =>
+      // Cloud9 2 1 win,loss
+      `${t.name}\t${t.difficulty}\t${t.seed}\t${t.pastOpponents
+        .map((o) => (o.won ? 'win' : 'loss'))
+        .join(',')}`
+  );
   const matchups: Matchup[] = [];
   if (sortedGroup.length === 6) {
     // In other rounds, refer to the following table and select the top-most row that does not result in a rematch:
@@ -227,7 +233,11 @@ const matchRecordGroup = (recordGroup: TeamStandingWithDifficulty[]): Matchup[] 
         lowTeam = sortedGroup.pop();
         if (!lowTeam) {
           // eslint-disable-next-line no-console
-          console.warn('Simulation failed, failed group:', sortedGroupCopy);
+          console.info(
+            `Simulation failed, failed group:\nteam\tdifficulty\tseed\trecord\n${sortedGroupInfo.join(
+              '\n'
+            )}`
+          );
           throw new Error('No valid matchups for seeding found');
         }
         const lowTeamName = lowTeam.name;
