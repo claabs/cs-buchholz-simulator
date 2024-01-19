@@ -142,7 +142,7 @@ export class CsBuchholzSimulato extends LitElement {
   }
 
   private async simulateLongButtonClicked() {
-    await this.simulationResultViewer.simulate(100000);
+    await this.simulationResultViewer.simulate(1000000);
   }
 
   private updateMobileView() {

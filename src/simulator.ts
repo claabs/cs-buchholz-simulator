@@ -84,7 +84,7 @@ export interface SimulationEventMessage {
 
 export interface MessageFromWorkerFinish {
   data: Map<string, TeamResultCounts>;
-  errors: number;
+  errors: string[];
   type: 'finish';
 }
 
@@ -219,10 +219,12 @@ export const simulateEvents = async (
     runningWorkers.push(promise);
   }
   const allTeamResults = new Map<string, TeamResultCounts>();
-  let failedSimulations = 0;
+  const failedSimulations = new Set<string>();
   const workerResults = await Promise.all(runningWorkers);
   workerResults.forEach((workerResult) => {
-    failedSimulations += workerResult.errors;
+    workerResult.errors.forEach((msg) => {
+      failedSimulations.add(msg);
+    });
     workerResult.data.forEach((teamCounts, teamName) => {
       const prevTotal = allTeamResults.get(teamName);
       if (!prevTotal) {
@@ -255,6 +257,7 @@ export const simulateEvents = async (
       }
     });
   });
-
-  return formatResultsCounts(allTeamResults, simSettings, iterations, failedSimulations);
+  // eslint-disable-next-line no-console
+  console.info(failedSimulations);
+  return formatResultsCounts(allTeamResults, simSettings, iterations, failedSimulations.size);
 };

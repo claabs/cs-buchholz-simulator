@@ -1,0 +1,1511 @@
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+ECSTATIC	-2	10	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+fnatic	-2	16	loss,win
+
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+ECSTATIC	-2	10	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+9 Pandas	2	8	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+fnatic	-2	16	loss,win
+
+Cloud9	2	3	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+OG	-2	11	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+9 Pandas	2	8	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+fnatic	-2	16	loss,win
+
+Cloud9	2	3	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+OG	-2	11	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+9 Pandas	2	8	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+fnatic	-2	16	loss,win
+
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+9 Pandas	2	8	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+fnatic	-2	16	loss,win
+
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+3DMAX	2	7	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Virtus.pro	2	1	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+SINNERS	-2	9	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+3DMAX	2	7	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+Nexus	-2	15	loss,win
+
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+9 Pandas	2	8	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+fnatic	-2	16	loss,win
+
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+9 Pandas	2	8	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+fnatic	-2	16	loss,win
+
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Virtus.pro	2	1	win,loss
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+SINNERS	-2	9	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+
+Virtus.pro	2	1	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+3DMAX	2	7	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+
+Virtus.pro	2	1	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+SINNERS	-2	9	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+SINNERS	-2	9	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+9 Pandas	2	8	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+ECSTATIC	-2	10	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+
+Virtus.pro	2	1	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+SINNERS	-2	9	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+3DMAX	2	7	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+3DMAX	2	7	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+BetBoom	2	6	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+ECSTATIC	-2	10	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Cloud9	2	3	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+OG	-2	11	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+3DMAX	2	7	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+Nexus	-2	15	loss,win
+
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+3DMAX	2	7	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+Nexus	-2	15	loss,win
+
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+SINNERS	-2	9	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+ECSTATIC	-2	10	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+3DMAX	2	7	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+Nexus	-2	15	loss,win
+
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+SINNERS	-2	9	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+
+Virtus.pro	2	1	win,loss
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+SINNERS	-2	9	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+3DMAX	2	7	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+
+Natus Vincere	2	2	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+ECSTATIC	-2	10	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+
+Virtus.pro	2	1	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+9 Pandas	2	8	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+3DMAX	2	7	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+Nexus	-2	15	loss,win
+
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+SINNERS	-2	9	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+
+Virtus.pro	2	1	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+SINNERS	-2	9	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+9 Pandas	2	8	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+fnatic	-2	16	loss,win
+
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+ECSTATIC	2	10	win,loss
+Natus Vincere	-2	2	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+3DMAX	2	7	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+Nexus	-2	15	loss,win
+
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+BetBoom	2	6	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+BIG	2	4	win,loss
+SAW	2	5	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+ECSTATIC	-2	10	loss,win
+Permitta	-2	12	loss,win
+Zero Tenacity	-2	13	loss,win
+
+Cloud9	2	3	win,loss
+BIG	2	4	win,loss
+9 Pandas	2	8	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+OG	-2	11	loss,win
+Permitta	-2	12	loss,win
+fnatic	-2	16	loss,win
+
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Cloud9	2	3	win,loss
+3DMAX	2	7	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+SINNERS	-2	9	loss,win
+OG	-2	11	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+BetBoom	2	6	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+JANO	-2	14	loss,win
+
+Virtus.pro	2	1	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Cloud9	2	3	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+OG	-2	11	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+9 Pandas	2	8	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+fnatic	-2	16	loss,win
+
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+SINNERS	2	9	win,loss
+Virtus.pro	-2	1	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+BetBoom	2	6	win,loss
+OG	2	11	win,loss
+Cloud9	-2	3	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+ECSTATIC	-2	10	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Cloud9	2	3	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+OG	-2	11	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+Zero Tenacity	2	13	win,loss
+SAW	-2	5	loss,win
+ECSTATIC	-2	10	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+fnatic	2	16	win,loss
+9 Pandas	-2	8	loss,win
+ECSTATIC	-2	10	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+SAW	2	5	win,loss
+3DMAX	2	7	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+ECSTATIC	-2	10	loss,win
+Zero Tenacity	-2	13	loss,win
+Nexus	-2	15	loss,win
+
+Natus Vincere	2	2	win,loss
+BetBoom	2	6	win,loss
+9 Pandas	2	8	win,loss
+Nexus	2	15	win,loss
+3DMAX	-2	7	loss,win
+ECSTATIC	-2	10	loss,win
+JANO	-2	14	loss,win
+fnatic	-2	16	loss,win
+
+Virtus.pro	2	1	win,loss
+Natus Vincere	2	2	win,loss
+BetBoom	2	6	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+SINNERS	-2	9	loss,win
+ECSTATIC	-2	10	loss,win
+JANO	-2	14	loss,win
+
+Natus Vincere	2	2	win,loss
+3DMAX	2	7	win,loss
+9 Pandas	2	8	win,loss
+JANO	2	14	win,loss
+BetBoom	-2	6	loss,win
+ECSTATIC	-2	10	loss,win
+Nexus	-2	15	loss,win
+fnatic	-2	16	loss,win
+
+Natus Vincere	2	2	win,loss
+BetBoom	2	6	win,loss
+3DMAX	2	7	win,loss
+Permitta	2	12	win,loss
+BIG	-2	4	loss,win
+ECSTATIC	-2	10	loss,win
+JANO	-2	14	loss,win
+Nexus	-2	15	loss,win

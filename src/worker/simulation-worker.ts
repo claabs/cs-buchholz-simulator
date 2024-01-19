@@ -238,7 +238,7 @@ const matchRecordGroup = (recordGroup: TeamStandingWithDifficulty[]): Matchup[] 
               '\n'
             )}`
           );
-          throw new Error('No valid matchups for seeding found');
+          throw new Error(sortedGroupInfo.join('\n'));
         }
         const lowTeamName = lowTeam.name;
         if (!highTeam.pastOpponents.some((opp) => opp.teamName === lowTeamName)) {
@@ -372,7 +372,7 @@ const onMessage = (evt: MessageEvent<SimulationEventMessage>) => {
   const { iterations, seedOrder, probabilities, simSettings } = evt.data;
   const progressInterval = Math.floor(iterations / 5);
   let allTeamResults = new Map<string, TeamResultCounts>();
-  let badEvents = 0;
+  const badEvents: string[] = [];
   for (let i = 0; i < iterations; i += 1) {
     try {
       const { qualified, eliminated } = simulateEvent(seedOrder, probabilities, simSettings);
@@ -391,7 +391,7 @@ const onMessage = (evt: MessageEvent<SimulationEventMessage>) => {
         self.postMessage(progressMessage);
       }
     } catch (err) {
-      badEvents += 1;
+      badEvents.push((err as Error).message);
     }
   }
 
