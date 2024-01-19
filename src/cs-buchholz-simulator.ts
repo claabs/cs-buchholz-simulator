@@ -29,6 +29,19 @@ const filterTeamRating = (seedOrder: string[]): Record<string, number> => {
   return teamRating;
 };
 
+const matchupProbabilitiesEqual = (a: MatchupProbability[], b: MatchupProbability[]): boolean => {
+  return a.every((aProb, index) => {
+    const bProb = b[index];
+    if (!bProb) return false;
+    return (
+      aProb.teamA === bProb.teamA &&
+      aProb.teamB === bProb.teamB &&
+      aProb.bo1TeamAWinrate === bProb.bo1TeamAWinrate &&
+      aProb.bo3TeamAWinrate === bProb.bo3TeamAWinrate
+    );
+  });
+};
+
 @customElement('cs-buchholz-simulator')
 export class CsBuchholzSimulato extends LitElement {
   @property({ type: Array })
@@ -41,11 +54,14 @@ export class CsBuchholzSimulato extends LitElement {
   private bo1Skew = 0.5;
 
   @state()
-  private matchupProbabilities: MatchupProbability[] = generateEasyProbabilities(
+  private startingMatchupProbabilities: MatchupProbability[] = generateEasyProbabilities(
     this.seedOrder,
     this.teamRating,
     this.bo1Skew
   );
+
+  @state()
+  private matchupProbabilities = this.startingMatchupProbabilities;
 
   @state()
   private isMobileView: boolean;
@@ -58,6 +74,8 @@ export class CsBuchholzSimulato extends LitElement {
 
   @query('team-ratings-chart')
   private teamRatingsChart: TeamRatingsChart;
+
+  private matchupTableCustomized = false;
 
   static override styles = css`
     /* :host {
@@ -82,25 +100,34 @@ export class CsBuchholzSimulato extends LitElement {
   private teamListChanged(event: CustomEvent<string[]>) {
     this.seedOrder = event.detail;
     this.teamRating = filterTeamRating(this.seedOrder);
-    this.matchupProbabilities = generateEasyProbabilities(
+    this.startingMatchupProbabilities = generateEasyProbabilities(
       this.seedOrder,
       this.teamRating,
       this.bo1Skew
     );
+    this.matchupProbabilities = this.startingMatchupProbabilities;
+    this.matchupTableCustomized = false;
   }
 
   private teamRatingValueChanged(event: CustomEvent<TeamRatingDetails>) {
     this.teamRating = event.detail.teamRating;
     this.bo1Skew = event.detail.bo1Skew;
-    this.matchupProbabilities = generateEasyProbabilities(
+    this.startingMatchupProbabilities = generateEasyProbabilities(
       this.seedOrder,
       this.teamRating,
       this.bo1Skew
     );
+    this.matchupProbabilities = this.startingMatchupProbabilities;
+
+    this.matchupTableCustomized = false;
   }
 
   private probabilityValueChanged(event: CustomEvent<MatchupProbability[]>) {
     this.matchupProbabilities = event.detail;
+    this.matchupTableCustomized = !matchupProbabilitiesEqual(
+      this.matchupProbabilities,
+      this.startingMatchupProbabilities
+    );
   }
 
   private async selectedTabChanged(event: TabSheetSelectedChangedEvent) {
@@ -137,6 +164,7 @@ export class CsBuchholzSimulato extends LitElement {
   override render() {
     const teamListTemplate = html`<team-list
       .teamList=${this.seedOrder}
+      .matchupTableCustomized=${this.matchupTableCustomized}
       @teamListChanged=${this.teamListChanged}
     ></team-list>`;
 
@@ -144,6 +172,7 @@ export class CsBuchholzSimulato extends LitElement {
         .seedOrder=${this.seedOrder}
         .teamRating=${this.teamRating}
         .bo1Skew=${0.5}
+        .matchupTableCustomized=${this.matchupTableCustomized}
         @teamRatingValueChanged=${this.teamRatingValueChanged}
       ></team-ratings>
       <team-ratings-chart .teamRating=${this.teamRating}></team-ratings-chart>`;

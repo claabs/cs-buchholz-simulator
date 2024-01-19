@@ -24,7 +24,7 @@ export interface TeamRatingDetails {
 }
 
 /**
- * @event {CustomEvent<Record<T, number>>} teamRatingValueChanged - Fired when the team rating value changes
+ * @event {CustomEvent<Record<string, number>>} teamRatingValueChanged - Fired when the team rating value changes
  */
 @customElement('team-ratings')
 export class TeamRatings extends LitElement {
@@ -36,6 +36,9 @@ export class TeamRatings extends LitElement {
 
   @property({ type: Number })
   public bo1Skew = 0.5;
+
+  @property({ type: Boolean })
+  public matchupTableCustomized = false;
 
   @state()
   private ratingHelpTooltipOpened = false;
@@ -52,6 +55,10 @@ export class TeamRatings extends LitElement {
 
     .slider-label {
       margin-block-end: 0;
+    }
+
+    .alert {
+      color: var(--lumo-error-color);
     }
   `;
 
@@ -105,6 +112,9 @@ export class TeamRatings extends LitElement {
           }}"
         ></vaadin-icon>
       </vaadin-horizontal-layout>
+      ${this.matchupTableCustomized
+        ? html`<h4 class="alert">Any changes here will undo your matchup table customizations!</h4>`
+        : ''}
       <vaadin-form-layout .responsiveSteps=${this.responsiveSteps}>
         ${this.seedOrder.map(
           (teamName, index) => html` <vaadin-number-field

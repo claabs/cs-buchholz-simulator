@@ -7,6 +7,7 @@ import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
 import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
 import '@vaadin/icon';
 import '@vaadin/icons';
+import { produce } from 'immer';
 import type { MatchupProbability } from './settings.js';
 import type { MatchupCellData } from './matchup-cell.js';
 import './matchup-cell.js';
@@ -39,14 +40,17 @@ const matchupProbabilitiesToGridItems = (
       return {
         teamA: matchup?.teamA || 'Team A',
         teamB: matchup?.teamB || 'Team B',
-        bo1TeamAWinrate: matchup?.bo1TeamAWinrate || 0,
-        bo3TeamAWinrate: matchup?.bo3TeamAWinrate || 0,
-        index: matchup?.index || -1,
+        bo1TeamAWinrate: matchup?.bo1TeamAWinrate ?? 0,
+        bo3TeamAWinrate: matchup?.bo3TeamAWinrate ?? 0,
+        index: matchup?.index ?? -1,
       };
     });
   });
 };
 
+/**
+ * @event {CustomEvent<MatchupProbability[]>} probabilityValueChanged - Fired when the probability values change
+ */
 @customElement('matchup-table')
 export class MatchupTable extends LitElement {
   @property({
@@ -95,7 +99,7 @@ export class MatchupTable extends LitElement {
     _model,
     column
   ) => {
-    const matchup = item[parseInt(column.getAttribute('index') || '-1', 10)];
+    const matchup = item[parseInt(column.getAttribute('index') ?? '-1', 10)];
     if (!matchup) return html``;
 
     return html`<matchup-cell
@@ -122,11 +126,14 @@ export class MatchupTable extends LitElement {
   };
 
   private onMatchupValueChanged(e: CustomEvent<MatchupCellData>) {
-    const prob = this.matchupProbabilities[e.detail.index];
-    if (prob) {
-      prob.bo1TeamAWinrate = e.detail.bo1TeamAWinrate;
-      prob.bo3TeamAWinrate = e.detail.bo3TeamAWinrate;
-    }
+    this.matchupProbabilities = produce<MatchupProbability[], [MatchupCellData]>((mps, detail) => {
+      const mp = mps[detail.index];
+      if (mp) {
+        mp.bo1TeamAWinrate = detail.bo1TeamAWinrate;
+        mp.bo3TeamAWinrate = detail.bo3TeamAWinrate;
+      }
+      return mps;
+    })(this.matchupProbabilities, e.detail);
     this.dispatchProbabilityValueChanged();
   }
 

@@ -29,6 +29,9 @@ export class TeamList extends LitElement {
   @property({ type: Array })
   public teamList: string[] = [];
 
+  @property({ type: Boolean })
+  public matchupTableCustomized = false;
+
   private draggedItem: string | undefined;
 
   @state()
@@ -51,6 +54,9 @@ export class TeamList extends LitElement {
     .team-list {
       max-width: 448px;
       width: 300px;
+    }
+    .alert {
+      color: var(--lumo-error-color);
     }
   `;
 
@@ -147,6 +153,9 @@ export class TeamList extends LitElement {
           }}"
         ></vaadin-icon>
       </vaadin-horizontal-layout>
+      ${this.matchupTableCustomized
+        ? html`<h4 class="alert">Any changes here will undo your matchup table customizations!</h4>`
+        : ''}
       <vaadin-select
         class="list-presets"
         label="Team list presets"
