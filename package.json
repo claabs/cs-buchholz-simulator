@@ -22,6 +22,7 @@
     "@vaadin/accordion": "^24.0.3",
     "@vaadin/button": "^24.0.2",
     "@vaadin/combo-box": "24.0",
+    "@vaadin/details": "24.0",
     "@vaadin/dialog": "^24.0.2",
     "@vaadin/form-layout": "^24.0.2",
     "@vaadin/grid": "^24.0.2",

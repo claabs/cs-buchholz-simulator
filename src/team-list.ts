@@ -9,7 +9,6 @@ import '@vaadin/grid/theme/lumo/vaadin-grid.js';
 import '@vaadin/select/theme/lumo/vaadin-select.js';
 import '@vaadin/combo-box/theme/lumo/vaadin-combo-box.js';
 import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
-import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
 import '@vaadin/number-field/theme/lumo/vaadin-number-field';
 import '@vaadin/icon';
 import '@vaadin/icons';
@@ -54,9 +53,6 @@ export class TeamList extends LitElement {
   private presetListValue: string | undefined = this.presetListNames[0]?.value;
 
   @state()
-  private teamListHelpTooltipOpened = false;
-
-  @state()
   private winsForQuali = 3;
 
   @state()
@@ -71,10 +67,18 @@ export class TeamList extends LitElement {
       width: 300px;
     }
     .alert {
-      color: var(--lumo-error-color);
+      color: var(--lumo-error-text-color);
     }
     .count-setting {
       max-width: 300px;
+    }
+    .help {
+      background-color: var(--lumo-contrast-5pct);
+      border-radius: var(--lumo-border-radius-m);
+      padding: var(--lumo-space-xs) var(--lumo-space-s);
+    }
+    .trim-header {
+      margin-block-end: 0;
     }
   `;
 
@@ -176,24 +180,21 @@ export class TeamList extends LitElement {
 
   override render() {
     return html`
-      <vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
-        <h3>Adjust team list or seeding</h3>
-        <vaadin-tooltip
-          for="rating-help-icon"
-          text="Select a preset team list for an event, or customize the names and drag-and-drop to adjust seeding. If the event has different number of losses for elimination (e.g. Americas RMR), you can adjust that setting."
-          manual
-          .opened="${this.teamListHelpTooltipOpened}"
-        ></vaadin-tooltip>
-        <vaadin-icon
-          id="rating-help-icon"
-          icon="vaadin:question-circle"
-          @click="${() => {
-            this.teamListHelpTooltipOpened = !this.teamListHelpTooltipOpened;
-          }}"
-        ></vaadin-icon>
-      </vaadin-horizontal-layout>
+      <h3 class="trim-header">Adjust team list or seeding</h3>
+      <vaadin-details>
+        <vaadin-details-summary slot="summary">
+          <vaadin-icon id="sim-help-icon" icon="vaadin:question-circle"></vaadin-icon>
+        </vaadin-details-summary>
+        <div class="help">
+          Select a preset team list for an event, or customize the names and drag-and-drop to adjust
+          seeding. If the event has different number of losses for elimination (e.g. Americas RMR),
+          you can adjust that setting.
+        </div>
+      </vaadin-details>
       ${this.matchupTableCustomized
-        ? html`<h4 class="alert">Any changes here will undo your matchup table customizations!</h4>`
+        ? html`<h4 class="alert trim-header">
+            Any changes here will undo your matchup table customizations!
+          </h4>`
         : ''}
       <vaadin-form-layout
         .responsiveSteps=${[

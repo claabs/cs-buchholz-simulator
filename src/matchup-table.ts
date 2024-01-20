@@ -3,8 +3,6 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { columnBodyRenderer, GridColumnBodyLitRenderer } from '@vaadin/grid/lit.js';
 import type { GridCellPartNameGenerator } from '@vaadin/grid';
 import '@vaadin/grid/theme/lumo/vaadin-grid.js';
-import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
-import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
 import '@vaadin/icon';
 import '@vaadin/icons';
 import { produce } from 'immer';
@@ -66,9 +64,6 @@ export class MatchupTable extends LitElement {
   @state()
   private gridItems: (MatchupCellData | undefined)[][] = [];
 
-  @state()
-  private tableHelpTooltipOpened = false;
-
   static override styles = css`
     vaadin-grid-cell-content {
       padding: var(--lumo-space-xs);
@@ -85,6 +80,16 @@ export class MatchupTable extends LitElement {
     vaadin-grid::part(first-column-cell) {
       writing-mode: horizontal-tb;
       text-orientation: mixed;
+    }
+
+    .help {
+      background-color: var(--lumo-contrast-5pct);
+      border-radius: var(--lumo-border-radius-m);
+      padding: var(--lumo-space-xs) var(--lumo-space-s);
+    }
+
+    .trim-header {
+      margin-block-end: 0;
     }
   `;
 
@@ -147,22 +152,18 @@ export class MatchupTable extends LitElement {
   }
 
   override render() {
-    return html`<vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
-        <h3>Adjust matchup odds</h3>
-        <vaadin-tooltip
-          for="table-help-icon"
-          text="The table cells can be edited to fine tune any matchup odds. The values are the win percentage for the team in the row; with the top being best-of-1 and bottom being best-of-3. After editing any cells, careful adjusting the rating scores as your custom cell data can be overwritten."
-          manual
-          .opened="${this.tableHelpTooltipOpened}"
-        ></vaadin-tooltip>
-        <vaadin-icon
-          id="table-help-icon"
-          icon="vaadin:question-circle"
-          @click="${() => {
-            this.tableHelpTooltipOpened = !this.tableHelpTooltipOpened;
-          }}"
-        ></vaadin-icon>
-      </vaadin-horizontal-layout>
+    return html`<h3 class="trim-header">Adjust matchup odds</h3>
+      <vaadin-details>
+        <vaadin-details-summary slot="summary">
+          <vaadin-icon id="sim-help-icon" icon="vaadin:question-circle"></vaadin-icon>
+        </vaadin-details-summary>
+        <div class="help">
+          The table cells can be edited to fine tune any matchup odds. The values are the win
+          percentage for the team in the row; with the top being best-of-1 and bottom being
+          best-of-3. After editing any cells, careful adjusting the rating scores as your custom
+          cell data can be overwritten.
+        </div>
+      </vaadin-details>
       <vaadin-grid
         all-rows-visible
         theme="wrap-cell-content column-borders"

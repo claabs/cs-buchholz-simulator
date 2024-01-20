@@ -3,9 +3,8 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { FormLayoutResponsiveStep } from '@vaadin/form-layout';
 import '@vaadin/accordion/theme/lumo/vaadin-accordion';
 import '@vaadin/form-layout';
-import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
-import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
 import '@vaadin/progress-bar/theme/lumo/vaadin-progress-bar';
+import '@vaadin/details/theme/lumo/vaadin-details';
 import '@vaadin/icon';
 import '@vaadin/icons';
 import '@vaadin/progress-bar';
@@ -23,9 +22,6 @@ export class SimulationResultViewer extends LitElement {
 
   @state()
   private simulationResults: SimulationResults;
-
-  @state()
-  private simHelpTooltipOpened = false;
 
   @state()
   private percentCompleted = 0;
@@ -74,7 +70,7 @@ export class SimulationResultViewer extends LitElement {
   }
 
   static override styles = css`
-    .sim-header {
+    .trim-header {
       margin-block-end: 0;
     }
 
@@ -82,30 +78,32 @@ export class SimulationResultViewer extends LitElement {
       color: black;
       font-weight: bold;
     }
+
+    .help {
+      background-color: var(--lumo-contrast-5pct);
+      border-radius: var(--lumo-border-radius-m);
+      padding: var(--lumo-space-xs) var(--lumo-space-s);
+    }
   `;
 
   override render() {
     return html`
       <vaadin-progress-bar value="${this.percentCompleted}"></vaadin-progress-bar>
       ${this.simulationResults
-        ? html` <vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
-              <h3 class="sim-header">
-                Simulated ${this.simulationResults.iterations.toLocaleString()} events
-              </h3>
-              <vaadin-tooltip
-                for="sim-help-icon"
-                text="The percentage next to the team name in the dropdown title is how often out of all the simulations that the team achieved that result. You can open the dropdown for each team to see how often they play each opponent in an event, and within that, how often they play as a best-of-1 or best-of-3."
-                manual
-                .opened="${this.simHelpTooltipOpened}"
-              ></vaadin-tooltip>
-              <vaadin-icon
-                id="sim-help-icon"
-                icon="vaadin:question-circle"
-                @click="${() => {
-                  this.simHelpTooltipOpened = !this.simHelpTooltipOpened;
-                }}"
-              ></vaadin-icon>
-            </vaadin-horizontal-layout>
+        ? html`<h3 class="trim-header">
+              Simulated ${this.simulationResults.iterations.toLocaleString()} events
+            </h3>
+            <vaadin-details>
+              <vaadin-details-summary slot="summary">
+                <vaadin-icon id="sim-help-icon" icon="vaadin:question-circle"></vaadin-icon>
+              </vaadin-details-summary>
+              <div class="help">
+                The percentage next to the team name in the dropdown title is how often out of all
+                the simulations that the team achieved that result. You can open the dropdown for
+                each team to see how often they play each opponent in an event, and within that, how
+                often they play as a best-of-1 or best-of-3.
+              </div>
+            </vaadin-details>
             <h4 class="sim-error-header">
               ${this.simulationResults.failedSimulations.toLocaleString()} simulations failed due to
               <a
