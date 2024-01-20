@@ -10,10 +10,19 @@ import '@vaadin/select/theme/lumo/vaadin-select.js';
 import '@vaadin/combo-box/theme/lumo/vaadin-combo-box.js';
 import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
 import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
+import '@vaadin/number-field/theme/lumo/vaadin-number-field';
 import '@vaadin/icon';
 import '@vaadin/icons';
-import { presetTeamLists } from './settings.js';
+import '@vaadin/form-layout';
+import type { NumberFieldValueChangedEvent } from '@vaadin/number-field';
+import { eventPresets } from './settings.js';
 import masterRating from './hltv-team-points.js';
+
+export interface TeamListSettings {
+  teamList: string[];
+  winsForQuali: number;
+  lossesForElim: number;
+}
 
 const allTeamNames = Object.entries(masterRating)
   .sort((a, b) => {
@@ -22,7 +31,7 @@ const allTeamNames = Object.entries(masterRating)
   .map(([team]) => team);
 
 /**
- * @event {CustomEvent<string[]>} teamListChanged - Fired when the team list changes
+ * @event {CustomEvent<TeamListSettings>} teamListChanged - Fired when the team list changes
  */
 @customElement('team-list')
 export class TeamList extends LitElement {
@@ -35,7 +44,7 @@ export class TeamList extends LitElement {
   private draggedItem: string | undefined;
 
   @state()
-  private presetListNames: SelectItem[] = Object.keys(presetTeamLists).map((name) => ({
+  private presetListNames: SelectItem[] = Object.keys(eventPresets).map((name) => ({
     label: name,
     value: name,
     disabled: name === 'Custom',
@@ -46,6 +55,12 @@ export class TeamList extends LitElement {
 
   @state()
   private teamListHelpTooltipOpened = false;
+
+  @state()
+  private winsForQuali = 3;
+
+  @state()
+  private lossesForElim = 3;
 
   static override styles = css`
     .list-presets {
@@ -58,15 +73,22 @@ export class TeamList extends LitElement {
     .alert {
       color: var(--lumo-error-color);
     }
+    .count-setting {
+      max-width: 300px;
+    }
   `;
 
   private dispatchTeamListChanged() {
-    const options: CustomEventInit<string[]> = {
-      detail: this.teamList,
+    const options: CustomEventInit<TeamListSettings> = {
+      detail: {
+        teamList: this.teamList,
+        winsForQuali: this.winsForQuali,
+        lossesForElim: this.lossesForElim,
+      },
       bubbles: true,
       composed: true,
     };
-    this.dispatchEvent(new CustomEvent<string[]>('teamListChanged', options));
+    this.dispatchEvent(new CustomEvent<TeamListSettings>('teamListChanged', options));
   }
 
   private onDragStart(e: GridDragStartEvent<string>) {
@@ -97,13 +119,11 @@ export class TeamList extends LitElement {
   private onListPresetChange(e: SelectValueChangedEvent) {
     this.presetListValue = e.detail.value;
     if (this.presetListValue === 'Custom') return;
-    const presetList = presetTeamLists[this.presetListValue];
-    if (presetList) {
-      this.teamList = produce<string[]>(this.teamList, (teamList) => {
-        // eslint-disable-next-line no-param-reassign
-        teamList = presetList;
-        return teamList;
-      });
+    const eventPreset = eventPresets[this.presetListValue];
+    if (eventPreset) {
+      this.teamList = produce<string[]>(eventPreset.teamList, (teamList) => teamList);
+      this.winsForQuali = eventPreset.winsForQuali ?? 3;
+      this.lossesForElim = eventPreset.lossesForElim ?? 3;
     }
     this.dispatchTeamListChanged();
   }
@@ -116,7 +136,26 @@ export class TeamList extends LitElement {
       // eslint-disable-next-line no-param-reassign
       teamList[index] = e.target.value;
     });
+    this.presetListValue = 'Custom';
     this.dispatchTeamListChanged();
+  }
+
+  private onWinCountChange(e: NumberFieldValueChangedEvent) {
+    const value = parseInt(e.detail.value, 10);
+    if (value !== this.winsForQuali) {
+      this.winsForQuali = value;
+      this.presetListValue = 'Custom';
+      this.dispatchTeamListChanged();
+    }
+  }
+
+  private onLossCountChange(e: NumberFieldValueChangedEvent) {
+    const value = parseInt(e.detail.value, 10);
+    if (value !== this.lossesForElim) {
+      this.lossesForElim = value;
+      this.presetListValue = 'Custom';
+      this.dispatchTeamListChanged();
+    }
   }
 
   private seedColumnRenderer: GridColumnBodyLitRenderer<string> = (_item, model) => {
@@ -141,7 +180,7 @@ export class TeamList extends LitElement {
         <h3>Adjust team list or seeding</h3>
         <vaadin-tooltip
           for="rating-help-icon"
-          text="Select a preset team list for an event, or customize the names and drag-and-drop to adjust seeding. WARNING: Changing any value here will undo any work done later on the rating scores or matchup table."
+          text="Select a preset team list for an event, or customize the names and drag-and-drop to adjust seeding. If the event has different number of losses for elimination (e.g. Americas RMR), you can adjust that setting."
           manual
           .opened="${this.teamListHelpTooltipOpened}"
         ></vaadin-tooltip>
@@ -156,13 +195,42 @@ export class TeamList extends LitElement {
       ${this.matchupTableCustomized
         ? html`<h4 class="alert">Any changes here will undo your matchup table customizations!</h4>`
         : ''}
-      <vaadin-select
-        class="list-presets"
-        label="Team list presets"
-        .items="${this.presetListNames}"
-        .value="${this.presetListValue}"
-        @value-changed=${this.onListPresetChange}
-      ></vaadin-select>
+      <vaadin-form-layout
+        .responsiveSteps=${[
+          // Use one column by default
+          { minWidth: 0, columns: 1 },
+          // Use two columns, if layout's width exceeds 500px
+          { minWidth: '625px', columns: 3 },
+        ]}
+      >
+        <vaadin-select
+          class="list-presets"
+          label="Team list presets"
+          .items="${this.presetListNames}"
+          .value="${this.presetListValue}"
+          @value-changed=${this.onListPresetChange}
+        ></vaadin-select>
+        <vaadin-number-field
+          id="qualify-wins"
+          class="count-setting"
+          label="Wins for qualification"
+          step-buttons-visible
+          .value=${this.winsForQuali}
+          @value-changed=${this.onWinCountChange}
+          .min=${1}
+          .max=${3}
+        ></vaadin-number-field>
+        <vaadin-number-field
+          id="eliminate-losses"
+          class="count-setting"
+          label="Losses for elimination"
+          step-buttons-visible
+          .value=${this.lossesForElim}
+          @value-changed=${this.onLossCountChange}
+          .min=${1}
+          .max=${3}
+        ></vaadin-number-field>
+      </vaadin-form-layout>
       <vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
         <vaadin-grid
           class="team-list"

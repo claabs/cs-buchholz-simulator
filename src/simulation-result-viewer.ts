@@ -9,7 +9,7 @@ import '@vaadin/progress-bar/theme/lumo/vaadin-progress-bar';
 import '@vaadin/icon';
 import '@vaadin/icons';
 import '@vaadin/progress-bar';
-import { simulateEvents, SimulationResults, TeamResults } from './simulator.js';
+import { simulateEvents, SimulationResults, SimulationSettings, TeamResults } from './simulator.js';
 import { rateToPctString } from './util.js';
 import type { MatchupProbability } from './settings.js';
 
@@ -34,15 +34,12 @@ export class SimulationResultViewer extends LitElement {
     this.percentCompleted = pct;
   }
 
-  public async simulate(iterations: number): Promise<void> {
+  public async simulate(iterations: number, simSettings: SimulationSettings): Promise<void> {
     this.percentCompleted = 0;
     this.simulationResults = await simulateEvents(
       this.seedOrder,
       this.matchupProbabilities,
-      {
-        qualWins: 3,
-        elimLosses: 3,
-      },
+      simSettings,
       this.updateProgress.bind(this),
       iterations
     );

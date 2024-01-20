@@ -1,9 +1,9 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state, query, property } from 'lit/decorators.js';
 import type { TabSheetSelectedChangedEvent } from '@vaadin/tabsheet';
-import { MatchupProbability, presetTeamLists } from './settings.js';
+import { MatchupProbability, eventPresets } from './settings.js';
 import masterRating from './hltv-team-points.js';
-import { generateEasyProbabilities } from './simulator.js';
+import { generateEasyProbabilities, SimulationSettings } from './simulator.js';
 import './team-list.js';
 import './matchup-table.js';
 import './team-ratings.js';
@@ -19,6 +19,7 @@ import '@vaadin/tooltip/theme/lumo/vaadin-tooltip';
 import type { SimulationResultViewer } from './simulation-result-viewer.js';
 import type { TeamRatingsChart } from './team-ratings-chart.js';
 import type { TeamRatingDetails } from './team-ratings.js';
+import type { TeamListSettings } from './team-list.js';
 
 const filterTeamRating = (seedOrder: string[]): Record<string, number> => {
   const teamRating: Record<string, number> = {};
@@ -45,7 +46,7 @@ const matchupProbabilitiesEqual = (a: MatchupProbability[], b: MatchupProbabilit
 @customElement('cs-buchholz-simulator')
 export class CsBuchholzSimulato extends LitElement {
   @property({ type: Array })
-  private seedOrder: string[] = Object.values(presetTeamLists)[0] || [];
+  private seedOrder: string[] = Object.values(eventPresets)[0]?.teamList || [];
 
   @state()
   private teamRating: Record<string, number> = filterTeamRating(this.seedOrder);
@@ -77,6 +78,8 @@ export class CsBuchholzSimulato extends LitElement {
 
   private matchupTableCustomized = false;
 
+  private simSettings: SimulationSettings = { qualWins: 3, elimLosses: 3 };
+
   static override styles = css`
     /* :host {
       min-height: 100vh;
@@ -97,8 +100,12 @@ export class CsBuchholzSimulato extends LitElement {
     }
   `;
 
-  private teamListChanged(event: CustomEvent<string[]>) {
-    this.seedOrder = event.detail;
+  private teamListChanged(event: CustomEvent<TeamListSettings>) {
+    this.seedOrder = event.detail.teamList;
+    this.simSettings = {
+      qualWins: event.detail.winsForQuali,
+      elimLosses: event.detail.lossesForElim,
+    };
     this.teamRating = filterTeamRating(this.seedOrder);
     this.startingMatchupProbabilities = generateEasyProbabilities(
       this.seedOrder,
@@ -133,16 +140,16 @@ export class CsBuchholzSimulato extends LitElement {
   private async selectedTabChanged(event: TabSheetSelectedChangedEvent) {
     this.selectedTab = event.detail.value;
     if (event.detail.value === 3) {
-      await this.simulationResultViewer.simulate(10000);
+      await this.simulationResultViewer.simulate(10000, this.simSettings);
     }
   }
 
   private async simulateButtonClicked() {
-    await this.simulationResultViewer.simulate(10000);
+    await this.simulationResultViewer.simulate(10000, this.simSettings);
   }
 
   private async simulateLongButtonClicked() {
-    await this.simulationResultViewer.simulate(100000);
+    await this.simulationResultViewer.simulate(100000, this.simSettings);
   }
 
   private updateMobileView() {
