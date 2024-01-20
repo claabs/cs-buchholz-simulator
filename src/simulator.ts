@@ -127,15 +127,16 @@ export const formatResultsCounts = (
   iterations: number,
   failedSimulations: number
 ): SimulationResults => {
+  const successfulIterations = iterations - failedSimulations;
   const { qualified, allWins, allLosses } = Array.from(categorizedResults.entries()).reduce(
     (acc, [teamName, resultCounts]) => {
       const formattedOpponents: OpponentRate[] = Array.from(
         resultCounts.opponents.entries(),
         ([oppTeam, oppCounts]) => ({
           teamName: oppTeam,
-          totalRate: oppCounts.total / iterations,
-          bo1Rate: oppCounts.bo1 / iterations,
-          bo3Rate: oppCounts.bo3 / iterations,
+          totalRate: oppCounts.total / successfulIterations,
+          bo1Rate: oppCounts.bo1 / successfulIterations,
+          bo3Rate: oppCounts.bo3 / successfulIterations,
           winRate: oppCounts.won / oppCounts.total,
         })
       ).sort((a, b) => b.totalRate - a.totalRate);
@@ -143,7 +144,7 @@ export const formatResultsCounts = (
       if (resultCounts.qualified) {
         acc.qualified.push({
           teamName,
-          rate: resultCounts.qualified / iterations,
+          rate: resultCounts.qualified / successfulIterations,
           opponents: formattedOpponents,
           winRate,
         });
@@ -151,7 +152,7 @@ export const formatResultsCounts = (
       if (resultCounts.allWins) {
         acc.allWins.push({
           teamName,
-          rate: resultCounts.allWins / iterations,
+          rate: resultCounts.allWins / successfulIterations,
           opponents: formattedOpponents,
           winRate,
         });
@@ -159,7 +160,7 @@ export const formatResultsCounts = (
       if (resultCounts.allLosses) {
         acc.allLosses.push({
           teamName,
-          rate: resultCounts.allLosses / iterations,
+          rate: resultCounts.allLosses / successfulIterations,
           opponents: formattedOpponents,
           winRate,
         });
