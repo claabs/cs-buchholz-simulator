@@ -1,0 +1,56 @@
+name: Update HLTV ranking points
+
+on:
+  schedule:
+    # 19:00 CET/CEST
+    # 17:00/18:00 UTC
+    - cron: '11 17,18 * * *'
+  workflow_dispatch:
+  
+jobs:
+  check-run:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.check_local_time.outputs.run }}
+    steps:
+      - name: Check local time
+        id: check_local_time
+        env: 
+          TRIGGER: ${{ github.event_name }}
+        run: |
+          echo "Trigger: ${TRIGGER}"
+          if [[ ${TRIGGER} == 'schedule' ]]; then
+            echo "Checking daylight saving time"
+            if [ $(date --date='TZ="Europe/Copenhagen" now' +%H) -eq '19' ]; then 
+              echo 'Time to run!'
+              echo "run=True" >> "$GITHUB_OUTPUT"
+            else
+              echo "It's not 19:11 local time in Europe/Copenhagen. Waiting for next execution..."
+              echo "run=False" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo 'Trigger is not cron, ommiting time check!'
+            echo "run=True" >> "$GITHUB_OUTPUT"
+          fi
+  
+  update-points:
+    runs-on: ubuntu-latest
+    if: needs.check-run.outputs.run == 'True'
+    needs: check-run
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+      - name: npm install
+        run: npm ci
+      - name: update-points
+        run: npm run update-points
+      - uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: 'Updated HLTV team ranking points'
+          add: 'src/hltv-team-points.ts'
