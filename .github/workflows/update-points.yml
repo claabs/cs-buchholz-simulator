@@ -42,7 +42,9 @@ jobs:
     needs: check-run
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
