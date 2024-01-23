@@ -58,6 +58,9 @@ export class TeamList extends LitElement {
   @state()
   private lossesForElim = 3;
 
+  @state()
+  private seedingPending = false;
+
   static override styles = css`
     .list-presets {
       width: 350px;
@@ -68,6 +71,9 @@ export class TeamList extends LitElement {
     }
     .alert {
       color: var(--lumo-error-text-color);
+    }
+    .warning {
+      color: #a33c00;
     }
     .count-setting {
       max-width: 300px;
@@ -128,6 +134,7 @@ export class TeamList extends LitElement {
       this.teamList = produce<string[]>(eventPreset.teamList, (teamList) => teamList);
       this.winsForQuali = eventPreset.winsForQuali ?? 3;
       this.lossesForElim = eventPreset.lossesForElim ?? 3;
+      this.seedingPending = eventPreset.seedingPending ?? false;
     }
     this.dispatchTeamListChanged();
   }
@@ -232,6 +239,11 @@ export class TeamList extends LitElement {
           .max=${3}
         ></vaadin-number-field>
       </vaadin-form-layout>
+      ${this.seedingPending
+        ? html`<h4 class="warning">
+            Warning: Official seeding for this event is not available yet!
+          </h4>`
+        : ''}
       <vaadin-horizontal-layout style="align-items: baseline" theme="spacing-s">
         <vaadin-grid
           class="team-list"

@@ -7,12 +7,14 @@ export interface MatchupProbability {
 
 export interface EventPreset {
   teamList: string[];
+  seedingPending?: boolean;
   winsForQuali?: number;
   lossesForElim?: number;
 }
 
 export const eventPresets: Record<string, EventPreset> = {
   '2024 Copenhagen EU RMR A': {
+    seedingPending: true,
     teamList: [
       'FaZe',
       'G2',
@@ -33,6 +35,7 @@ export const eventPresets: Record<string, EventPreset> = {
     ],
   },
   '2024 Copenhagen EU RMR B': {
+    seedingPending: true,
     teamList: [
       'Vitality',
       'Monte',
@@ -53,6 +56,7 @@ export const eventPresets: Record<string, EventPreset> = {
     ],
   },
   '2024 Copenhagen Americas RMR': {
+    seedingPending: true,
     lossesForElim: 2,
     teamList: [
       'FURIA',
