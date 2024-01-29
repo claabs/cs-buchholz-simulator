@@ -24,7 +24,7 @@ jobs:
           echo "Trigger: ${TRIGGER}"
           if [[ ${TRIGGER} == 'schedule' ]]; then
             echo "Checking daylight saving time"
-            if [ $(date --date='TZ="Europe/Copenhagen" now' +%H) -eq '19' ]; then 
+            if [ $(TZ="Europe/Copenhagen" date +%H) -eq '19' ]; then 
               echo 'Time to run!'
               echo "run=True" >> "$GITHUB_OUTPUT"
             else
