@@ -13,6 +13,26 @@ export interface EventPreset {
 }
 
 export const eventPresets: Record<string, EventPreset> = {
+  '2024 Copenhagen Major Opening Stage': {
+    teamList: [
+      'Cloud9',
+      'Eternal Fire',
+      'ENCE',
+      'Apeks',
+      'HEROIC',
+      '9 Pandas',
+      'SAW',
+      'FURIA',
+      'ECSTATIC',
+      'TheMongolz',
+      'Imperial',
+      'paiN',
+      'Lynn Vision',
+      'AMKAL',
+      'KOI',
+      'Legacy',
+    ],
+  },
   '2024 Copenhagen EU RMR A': {
     teamList: [
       'FaZe',
@@ -50,7 +70,7 @@ export const eventPresets: Record<string, EventPreset> = {
       'PERA',
       'OG',
       'Nexus',
-      'Heroic',
+      'HEROIC',
     ],
   },
   '2024 Copenhagen Americas RMR': {
@@ -110,7 +130,7 @@ export const eventPresets: Record<string, EventPreset> = {
       'sYnck',
       'Entropiq',
       'IKLA',
-      'Heroic',
+      'HEROIC',
       'ex-ThunderFlash',
     ],
   },
@@ -140,7 +160,7 @@ export const eventPresets: Record<string, EventPreset> = {
       '9INE',
       'FURIA',
       'fnatic',
-      'Heroic',
+      'HEROIC',
       'Into the Breach',
       'Vitality',
       'Bad News Eagles',
