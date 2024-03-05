@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state, query, property } from 'lit/decorators.js';
 import type { TabSheetSelectedChangedEvent } from '@vaadin/tabsheet';
+import { Workbox } from 'workbox-window';
 import { MatchupProbability, eventPresets } from './settings.js';
 import masterRating from './hltv-team-points.js';
 import { generateEasyProbabilities, SimulationSettings } from './simulator.js';
@@ -9,6 +10,7 @@ import './matchup-table.js';
 import './team-ratings.js';
 import './team-ratings-chart.js';
 import './simulation-result-viewer.js';
+import './refresh-notification.js';
 import '@vaadin/tabs/theme/lumo/vaadin-tabs';
 import '@vaadin/tabsheet/theme/lumo/vaadin-tabsheet';
 import '@vaadin/split-layout/theme/lumo/vaadin-split-layout';
@@ -20,6 +22,7 @@ import type { SimulationResultViewer } from './simulation-result-viewer.js';
 import type { TeamRatingsChart } from './team-ratings-chart.js';
 import type { TeamRatingDetails } from './team-ratings.js';
 import type { TeamListSettings } from './team-list.js';
+import type { RefreshNotification } from './refresh-notification.js';
 
 const filterTeamRating = (seedOrder: string[]): Record<string, number> => {
   const teamRating: Record<string, number> = {};
@@ -75,6 +78,13 @@ export class CsBuchholzSimulato extends LitElement {
 
   @query('team-ratings-chart')
   private teamRatingsChart: TeamRatingsChart;
+
+  @query('refresh-notification')
+  private refreshNotification: RefreshNotification;
+
+  private workbox?: Workbox;
+
+  private registration?: ServiceWorkerRegistration;
 
   private matchupTableCustomized = false;
 
@@ -166,6 +176,21 @@ export class CsBuchholzSimulato extends LitElement {
     super.connectedCallback();
     window.addEventListener('resize', () => this.updateMobileView());
     this.updateMobileView();
+
+    if ('serviceWorker' in navigator) {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      window.addEventListener('load', this.waitForServiceWorkerUpdate.bind(this));
+    }
+  }
+
+  private openRefreshNotification() {
+    this.refreshNotification.open(this.workbox, this.registration);
+  }
+
+  private async waitForServiceWorkerUpdate(): Promise<void> {
+    this.workbox = new Workbox('./sw.js');
+    this.workbox.addEventListener('waiting', this.openRefreshNotification.bind(this));
+    this.registration = await this.workbox.register();
   }
 
   override render() {
@@ -280,6 +305,11 @@ export class CsBuchholzSimulato extends LitElement {
       </detail-content>
     </vaadin-split-layout>`;
 
-    return html` <main>${this.isMobileView ? mobileLayoutTemplate : desktopLayoutTemplate}</main> `;
+    return html`
+      <main>
+        <refresh-notification></refresh-notification>
+        ${this.isMobileView ? mobileLayoutTemplate : desktopLayoutTemplate}
+      </main>
+    `;
   }
 }

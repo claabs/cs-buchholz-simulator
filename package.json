@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "tsc --noEmit && eslint .",
     "build": "rimraf dist && tsc && rollup -c rollup.config.js && npm run analyze -- --exclude dist",
-    "start:build": "web-dev-server --root-dir dist --app-index index.html --open",
+    "start:build": "web-dev-server --root-dir dist --app-index index.html",
     "analyze": "cem analyze --litelement",
     "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
     "update-points": "vite-node update-rankings.ts"
@@ -29,6 +29,7 @@
     "@vaadin/horizontal-layout": "^24.0.2",
     "@vaadin/icon": "^24.0.3",
     "@vaadin/icons": "^24.0.3",
+    "@vaadin/notification": "24.0",
     "@vaadin/number-field": "^24.0.2",
     "@vaadin/progress-bar": "24.0",
     "@vaadin/select": "~24.0",
@@ -39,7 +40,8 @@
     "@vaadin/vertical-layout": "^24.0.2",
     "color-scales": "^3.0.2",
     "immer": "^10.0.1",
-    "lit": "^2.0.2"
+    "lit": "^2.0.2",
+    "workbox-window": "^6.6.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
