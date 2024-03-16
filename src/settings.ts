@@ -20,7 +20,7 @@ export const eventPresets: Record<string, EventPreset> = {
       'ENCE',
       'Apeks',
       'HEROIC',
-      '9 Pandas',
+      'GamerLegion',
       'SAW',
       'FURIA',
       'ECSTATIC',
