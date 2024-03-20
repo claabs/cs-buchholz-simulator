@@ -13,6 +13,26 @@ export interface EventPreset {
 }
 
 export const eventPresets: Record<string, EventPreset> = {
+  '2024 Copenhagen Major Elimination Stage': {
+    teamList: [
+      'FaZe',
+      'Spirit',
+      'Vitality',
+      'MOUZ',
+      'Complexity',
+      'Virtus.pro',
+      'Natus Vincere',
+      'G2',
+      'Cloud9',
+      'HEROIC',
+      'Eternal Fire',
+      'ECSTATIC',
+      'paiN',
+      'Imperial',
+      'TheMongolz',
+      'FURIA',
+    ],
+  },
   '2024 Copenhagen Major Opening Stage': {
     teamList: [
       'Cloud9',
