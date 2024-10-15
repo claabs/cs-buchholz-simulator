@@ -107,7 +107,7 @@ export class SimulationResultViewer extends LitElement {
             <h4 class="sim-error-header">
               ${this.simulationResults.failedSimulations.toLocaleString()} simulations failed due to
               <a
-                href="https://github.com/claabs/cs-buchholz-simulator/blob/master/RULES-FLAW.md"
+                href="https://github.com/ValveSoftware/counter-strike_rules_and_regs/pull/26"
                 target="_blank"
                 >rules issues</a
               >
