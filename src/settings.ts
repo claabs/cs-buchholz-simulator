@@ -13,6 +13,26 @@ export interface EventPreset {
 }
 
 export const eventPresets: Record<string, EventPreset> = {
+  '2024 Shanghai Major Opening Stage': {
+    teamList: [
+      'FURIA',
+      'Virtus.pro',
+      'Liquid',
+      'Complexity',
+      'BIG',
+      'fnatic',
+      'The MongolZ',
+      'paiN',
+      'GamerLegion',
+      'MIBR',
+      'Cloud9',
+      'FlyQuest',
+      'Passion UA',
+      'Wildcard',
+      'Rare Atom',
+      'Imperial',
+    ],
+  },
   '2024 Shanghai Major EU RMR A': {
     teamList: [
       'Natus Vincere',
