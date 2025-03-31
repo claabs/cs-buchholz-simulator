@@ -1,11 +1,11 @@
 name: Update HLTV ranking points
 
 on:
-  schedule:
+  # schedule:
     # Monday
     # 19:00 CET/CEST
     # 17:00/18:00 UTC
-    - cron: '11 17,18 * * MON'
+    # - cron: '11 17,18 * * MON'
   workflow_dispatch:
   
 permissions:
