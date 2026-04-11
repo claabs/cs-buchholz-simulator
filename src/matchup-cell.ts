@@ -8,16 +8,16 @@ import '@vaadin/dialog/theme/lumo/vaadin-dialog.js';
 import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '@vaadin-component-factory/vcf-slider';
 import type { ValueChangedEvent } from '@vaadin-component-factory/vcf-slider/out-tsc/src/vcf-slider.js';
-import ColorScale from 'color-scales';
+import chroma from 'chroma-js';
 import type { IndexedMatchupProbability } from './matchup-table.js';
 
 export type MatchupCellData = Omit<IndexedMatchupProbability, 'teamA' | 'teamB'>;
 
 // 'lightcoral', 'white', 'lightskyblue'
-const gradient = new ColorScale(0, 1, ['#F08080', '#FFFFFF', '#87CEFA']);
+const gradient = chroma.scale(['#F08080', '#FFFFFF', '#87CEFA']).mode('rgb');
 
 const rateToColor = (rate: number): string => {
-  return gradient.getColor(rate).toHexString();
+  return gradient(rate).hex();
 };
 
 /**
